@@ -45,7 +45,7 @@ update_m <- function(x,C,num_cluster){
 
 
 
-k_means <- function(x,num_cluster, m0, max_iter = 10, tol = 1e-3){
+k_means <- function(x,num_cluster, m0, max_iter = 20, tol = 1e-5){
   # x: dxn - Matrix mit Daten, num_cluster: Anzahl der Cluster, m0: Anfangswerte
   n_iter <- 0L # zählt Iterationen
   m <- m0
@@ -56,7 +56,7 @@ k_means <- function(x,num_cluster, m0, max_iter = 10, tol = 1e-3){
     m <- update_m(x,current_arg_mins,num_cluster) # update means
     if(norm(m-m_old)<tol){
       # prüfe konvergenz
-      return(list(means=m, msg="Methode knovergiert"))
+      return(list(means=m, msg=sprintf("Methode knovergiert nach %i Iterationen", n_iter)))
     }
     n_iter <- n_iter + 1L
   }
