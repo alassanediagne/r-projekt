@@ -75,27 +75,3 @@ k_means <- function(x, num_cluster, m0, save_history = FALSE, max_iter = 20L, to
   }
 }
 
-
-
-# Set the seed for reproducibility
-set.seed(42)
-
-# Generate data for cluster 1
-cluster_1 <- matrix(rnorm(100, mean = 5, sd = 1), ncol = 2) + cbind(rep(5, 50), rep(5, 50))
-
-# Generate data for cluster 2
-cluster_2 <- matrix(rnorm(100, mean = 0, sd = 1), ncol = 2) + cbind(rep(0, 50), rep(0, 50))
-
-# Generate data for cluster 3
-cluster_3 <- matrix(rnorm(100, mean = 5, sd = 1), ncol = 2) + cbind(rep(5, 50), rep(0, 50))
-
-# Combine the clusters to create the dataset
-data <- rbind(cluster_1, cluster_2, cluster_3)
-data <- t(data)
-
-
-m0 <- matrix(c(0,0,1,0,3,3),nrow=2)
-
-
-k_means(data,3,m0)
-
