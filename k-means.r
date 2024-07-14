@@ -1,10 +1,5 @@
 library(tidyverse)
 
-manhattan_dist <- function(a,b){
-  
-}
-
-
 update_C <- function(x, m){
   # x dxn Matrix mit Daten, m dxK Matrix mit aktuellen means
   
@@ -92,3 +87,10 @@ data
 plot(t(data))
 k_means(data, 3,m0 = matrix(c(-5,-5,0,0,-5,10),nrow=2)) #teste
 kmeans(t(data),3) #vergleiche mit kmeans in R
+
+y <- genRandomClust(7)  # generiere test cluster
+data2 <- t(y$datList$test_1)
+
+plot(t(data2))
+k_means(data2, 7,m0 = matrix(1:14,nrow=2)) #teste
+kmeans(t(data2),7) #vergleiche mit kmeans in R
