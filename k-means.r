@@ -44,7 +44,7 @@ update_m <- function(x,C,num_cluster){
 
 
 
-k_means <- function(x, num_cluster, m0, save_history = FALSE, max_iter = 20L, tol = 1e-8){
+k_means <- function(x, num_cluster, m0, save_history = FALSE, max_iter = 50L, tol = 1e-8){
   # x: dxn - Matrix mit Daten, num_cluster: Anzahl der Cluster, m0: Anfangswerte
   n_iter <- 0L # zählt Iterationen
   m <- m0
@@ -88,9 +88,24 @@ plot(t(data))
 k_means(data, 3,m0 = matrix(c(-5,-5,0,0,-5,10),nrow=2)) #teste
 kmeans(t(data),3) #vergleiche mit kmeans in R
 
-y <- genRandomClust(7)  # generiere test cluster
+y <- genRandomClust(7,sepVal = 0.1)  # generiere test cluster
 data2 <- t(y$datList$test_1)
-
-plot(t(data2))
-k_means(data2, 7,m0 = matrix(1:14,nrow=2)) #teste
+means <- k_means(data2, 7,m0 = matrix(1:14,nrow=2))$means #teste
+means <- tibble(x=means[1,], y=means[2,])
 kmeans(t(data2),7) #vergleiche mit kmeans in R
+
+data2 <- tibble(x=data2[1,], y= data2[2,])
+
+data2 %>% ggplot(mapping = aes(x=x, y= y)) +
+  geom_point(size=1) +
+  theme_bw()
+means %>% ggplot(mapping = aes(x=x, y=y)) +
+  geom_point(colour="red")
+
+
+ggplot() +
+  geom_point(data = data2, aes(x = x, y = y), size=1) + 
+  geom_point(data = means, aes(x = x, y = y), color="red", shape="x", size=5) +
+  theme_bw()
+
+
