@@ -1,4 +1,9 @@
+# This is a file that tells git which files it should ignore
+
+# Mac thing
 .DS_Store
+
+# R-studio
 .Rproj.user
 .Rhistory
 .RData
