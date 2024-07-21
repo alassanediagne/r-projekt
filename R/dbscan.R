@@ -8,6 +8,10 @@
 #'@param minPts The minimum point count needed to form a dense region.
 #'@export
 dbscan <- function(data, eps, minPts) {
+  stopifnot(
+    "minPts has to be bigger than 1"=minPts>=1
+  )
+
   visited <- rep(FALSE, ncol(data))
   clusters <- list()
 
