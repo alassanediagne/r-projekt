@@ -121,7 +121,7 @@ library(clusterGeneration)
 
 plot_2d_clusters <- function(data, means){
   data <- tibble(x=data[,1], y= data[,2])
-  means <- tibble(x=means[,1], y= means[,1])
+  means <- tibble(x=means[,1], y= means[,2])
   ggplot() +
     geom_point(data = data, aes(x = x, y = y), size=1) + 
     geom_point(data = means, aes(x = x, y = y), color="red", shape="x", size=5) +
@@ -130,6 +130,7 @@ plot_2d_clusters <- function(data, means){
 
 data <- genRandomClust(3,sepVal = 0.7)  # generiere test cluster
 data <- data$datList$test_3
+plot_2d_clusters(data,k_means(data,3)$means)
 plot_2d_clusters(data,kmeans(data,3)$centers)
 
 
