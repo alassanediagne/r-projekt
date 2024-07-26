@@ -1,5 +1,37 @@
 library(tidyverse)
 
+
+k_means_pp <- function(data, num_cluster){
+  n <- nrow(data)
+  d <- ncol(data)
+  
+  init_vals <- matrix(0, ncol=d, nrow=num_cluster) #hier werden die Anfangswerte gespeichert
+  
+  random_idx <- sample(1:n, 1) 
+  init_vals[1,] <- data[random_idx, ] # erster Anfangswert ist ein zufälliger Punkt
+  
+  eucl_dist <- function(data, point) {
+    # Funktion zur Berechnung des Abstands
+    return(sqrt(rowSums((data - point) ^ 2)))
+  }
+  
+  min_distances <- eucl_dist(data, init_vals[1,])
+  
+  for(i in 2:num_cluster){
+    prob <- min_distances^2
+    prob <- prob/sum(prob) 
+    new_idx <- sample(1:n, 1, prob = prob) 
+    # Wahrscheinlichkeit ist gewichtet, proportianal zu quadriertener Distanz
+    init_vals[i,] <- data[new_idx,]
+    current_distances <- eucl_dist(data, init_vals[i,])
+    dist_to_update <- current_distances < min_distances
+    min_distances[dist_to_update] <- current_distances[dist_to_update]
+  }
+  return(init_vals)
+}
+
+
+
 update_C <- function(x, m){
   # x dxn Matrix mit Daten, m dxK Matrix mit aktuellen means
   
@@ -44,35 +76,42 @@ update_m <- function(x,C,num_cluster){
 
 
 
-k_means <- function(x, num_cluster, m0, save_history = FALSE, max_iter = 50L, tol = 1e-8){
-  # x: dxn - Matrix mit Daten, num_cluster: Anzahl der Cluster, m0: Anfangswerte
+k_means <- function(data, num_cluster, m0 = NULL, save_history = FALSE, max_iter = 50L, tol = 1e-8){
+  # x: nxd - Matrix mit Daten, num_cluster: Anzahl der Cluster, m0: Anfangswerte
+  if(is.null(m0)){
+    m0 <- k_means_pp(data, num_cluster)
+  }
+  data <- t(data)
   n_iter <- 0L # zählt Iterationen
-  m <- m0
+  m <- t(m0)
   if(save_history){
     history <- list()
   }
   
   while(n_iter <= max_iter){
     m_old <- m # speichere m zum vergleichen
-    current_arg_mins <- update_C(x,m) # update argmins
-    m <- update_m(x,current_arg_mins,num_cluster) # update means
+    current_arg_mins <- update_C(data,m) # update argmins
+    m <- update_m(data,current_arg_mins,num_cluster) # update means
     if(save_history){
-      history <- append(history,list(iteration = n_iter, means = m, argmins=current_arg_mins))
+      history <- append(history,list(iteration = n_iter, means = t(m), argmins=current_arg_mins))
     }
     if(norm(m-m_old, type='1')<tol){
       # prüfe konvergenz
-      return(list(means=m, msg=sprintf("Methode konvergiert nach %i Iterationen", n_iter)))
+      return(list(means=t(m), msg=sprintf("Methode konvergiert nach %i Iterationen", n_iter)))
     }
     n_iter <- n_iter + 1L
   }
   
   if(save_history){
-    return(return(list(means=m, msg="Maximale Anzahl der Iterationen erreicht", history = history)))
+    return(return(list(means=t(m), msg="Maximale Anzahl der Iterationen erreicht", history = history)))
   }
   else{
-    return(list(means=m, msg="Maximale Anzahl der Iterationen erreicht"))
+    return(list(means=t(m), msg="Maximale Anzahl der Iterationen erreicht"))
   }
 }
+
+
+
 
 
 
@@ -80,32 +119,26 @@ k_means <- function(x, num_cluster, m0, save_history = FALSE, max_iter = 50L, to
 
 library(clusterGeneration)
 
-x <- genRandomClust(3)  # generiere test cluster
-data <- t(x$datList$test_1)
-data
+plot_2d_clusters <- function(data, means){
+  data <- tibble(x=data[,1], y= data[,2])
+  means <- tibble(x=means[,1], y= means[,1])
+  ggplot() +
+    geom_point(data = data, aes(x = x, y = y), size=1) + 
+    geom_point(data = means, aes(x = x, y = y), color="red", shape="x", size=5) +
+    theme_bw()
+}
 
-plot(t(data))
-k_means(data, 3,m0 = matrix(c(-5,-5,0,0,-5,10),nrow=2)) #teste
-kmeans(t(data),3) #vergleiche mit kmeans in R
+data <- genRandomClust(3,sepVal = 0.7)  # generiere test cluster
+data <- data$datList$test_3
+plot_2d_clusters(data,kmeans(data,3)$centers)
+
+
+
+
 
 y <- genRandomClust(7,sepVal = 0.1)  # generiere test cluster
-data2 <- t(y$datList$test_1)
-means <- k_means(data2, 7,m0 = matrix(1:14,nrow=2))$means #teste
-means <- tibble(x=means[1,], y=means[2,])
-kmeans(t(data2),7) #vergleiche mit kmeans in R
-
-data2 <- tibble(x=data2[1,], y= data2[2,])
-
-data2 %>% ggplot(mapping = aes(x=x, y= y)) +
-  geom_point(size=1) +
-  theme_bw()
-means %>% ggplot(mapping = aes(x=x, y=y)) +
-  geom_point(colour="red")
-
-
-ggplot() +
-  geom_point(data = data2, aes(x = x, y = y), size=1) + 
-  geom_point(data = means, aes(x = x, y = y), color="red", shape="x", size=5) +
-  theme_bw()
-
-
+data2 <- y$datList$test_1
+means2 <- k_means(data2, 7)$means #teste
+k_means(data2, 7)
+plot_2d_clusters(data2,means2)
+plot_2d_clusters(data2,kmeans(data2,7)$centers)
