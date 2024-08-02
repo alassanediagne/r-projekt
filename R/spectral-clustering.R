@@ -1,4 +1,11 @@
 #erster Draft
+circleFun <- function(center = c(0,0),diameter = 1, npoints = 100){
+    r = diameter / 2
+    tt <- seq(0,2*pi,length.out = npoints)
+    xx <- center[1] + r * cos(tt)
+    yy <- center[2] + r * sin(tt)
+    return(data.frame(x = xx, y = yy))
+}
 
 gausskernel <- function(x,y) {exp(-h*(norm(x-y, type="2"))^2)}
 h <- 10
@@ -32,7 +39,7 @@ spectral_clustering <- function(data, f_kernel, k){
         {with(eigen(x), vectors %*% (values^q * t(vectors)))}
    
     
-    eigen_L <- eigen((diagonal_matrix%^%(-0.5))*laplace_matrix*(diagonal_matrix%^%(-0.5))) #Eigenwerte und -vektoren der Laplacematrix bestimmen
+    eigen_L <- eigen((diagonal_matrix%^%(-0.5))%*%laplace_matrix%*%(diagonal_matrix%^%(-0.5))) #Eigenwerte und -vektoren der Laplacematrix bestimmen
     eigenvectors_L <- eigen_L$vectors[,order(eigen_L$values)] #Eigenvektoren von L nach aufsteigender Größe der Eigenwerte sortieren
     eigenvectors_logical_L <- logical(n) #Wahrheitsvektor für genormte Eigenvektoren initialisieren
     
@@ -42,10 +49,10 @@ spectral_clustering <- function(data, f_kernel, k){
         }
     eigenvectors_norm_L <- eigen_L$vectors[,eigenvectors_logical_L] #Matrix mit Eigenvektoren der Länge 1 als Spalten erstellen       
     
-    spectral_projections <- matrix(0,nrow=n, ncol=n) #Matrix mit optimalen Projektionen initialisieren
+    spectral_projections <- matrix(0,nrow=ncol(eigenvectors_norm_L), ncol=n) #Matrix mit optimalen Projektionen initialisieren
     
     i <- 1
-    for (i in 1:length(eigenvectors_logical_L)) #Matrix mit optimalen Projektionen erstellen
+    for (i in 1:ncol(eigenvectors_norm_L)) #Matrix mit optimalen Projektionen erstellen
         {spectral_projections[i,] = (n^(1/2))*(diagonal_matrix%^%(-0.5))%*%eigenvectors_norm_L[,i]}        
     
     
