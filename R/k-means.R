@@ -1,4 +1,5 @@
 library(tidyverse)
+library("viridis")
 
 
 k_means_pp <- function(data, num_cluster){
@@ -76,17 +77,33 @@ update_m <- function(x,C,num_cluster){
 
 
 
-k_means <- function(data, num_cluster, m0 = NULL, save_history = FALSE, max_iter = 50L, tol = 1e-8){
-  # x: nxd - Matrix mit Daten, num_cluster: Anzahl der Cluster, m0: Anfangswerte
+k_means <- function(data, num_cluster, m0 = NULL, save_history = FALSE, 
+                    return_clusters=FALSE, max_iter = 50L, tol = 1e-8){
+  
+  # k-Means-Algorithmus
+  # x: nxd - Matrix mit Daten (n: Anzahl an Messwerten, d: Dimension), 
+  # num_cluster: int, Anzahl der Cluster, 
+  # m0: num_cluster x d - Matrix, Anfangswerte zur Initialisierung des Algorithmus (optional)
+  # save_history: logical, gibt Iterationen zurück (optional)
+  # return_clusters: logical, gibt zu jedem Messwert das Cluster zurück (optional)
+  # max_iter: int, maximale Anzahl an Iterationen (optional)
+  # tol: float, Toleranz zur Festlegung der Konvergenz (optional)
+  
   if(is.null(m0)){
     m0 <- k_means_pp(data, num_cluster)
   }
+  
   data <- t(data)
+  
   n_iter <- 0L # zählt Iterationen
+  
   m <- t(m0)
+  
   if(save_history){
     history <- list()
   }
+  
+  converged <- FALSE
   
   while(n_iter <= max_iter){
     m_old <- m # speichere m zum vergleichen
@@ -97,21 +114,46 @@ k_means <- function(data, num_cluster, m0 = NULL, save_history = FALSE, max_iter
     }
     if(norm(m-m_old, type='1')<tol){
       # prüfe konvergenz
-      return(list(means=t(m), msg=sprintf("Methode konvergiert nach %i Iterationen", n_iter)))
+      converged <- TRUE
+      break
     }
     n_iter <- n_iter + 1L
   }
   
-  if(save_history){
-    return(return(list(means=t(m), msg="Maximale Anzahl der Iterationen erreicht", history = history)))
+  out <- list()
+  
+  if(converged){
+    out$msg <- sprintf("Methode konvergiert nach %i Iterationen", n_iter)
   }
   else{
-    return(list(means=t(m), msg="Maximale Anzahl der Iterationen erreicht"))
+    out$msg <- sprintf("Maximale Anzahl an Iterationen erreicht")
   }
+  
+  out$means <- t(m)
+  
+  if(save_history){
+    out$history <- history
+  }
+  
+  if(return_clusters){
+    out$clusters <- current_arg_mins
+  }
+  
+  return(out)
 }
 
 
 
+plot_2d_clusters <- function(data, num_cluster){
+  clustering <- k_means(data, num_cluster, return_clusters = T)
+  data <- tibble(x=data[,1], y= data[,2])
+  means <- tibble(x=clustering$means[,1], y= clustering$means[,2])
+  ggplot() +
+    geom_point(data = data, aes(x = x, y = y, color = clustering$clusters), size=1) + 
+    geom_point(data = means, aes(x = x, y = y), color="red", shape="x", size=5) +
+    theme(legend.position="none")
+    theme_bw()
+}
 
 
 
@@ -119,27 +161,22 @@ k_means <- function(data, num_cluster, m0 = NULL, save_history = FALSE, max_iter
 
 library(clusterGeneration)
 
-plot_2d_clusters <- function(data, means){
-  data <- tibble(x=data[,1], y= data[,2])
-  means <- tibble(x=means[,1], y= means[,2])
-  ggplot() +
-    geom_point(data = data, aes(x = x, y = y), size=1) + 
-    geom_point(data = means, aes(x = x, y = y), color="red", shape="x", size=5) +
-    theme_bw()
-}
 
-data <- genRandomClust(3,sepVal = 0.7)  # generiere test cluster
+data <- genRandomClust(3,sepVal = 0.3)  # generiere test cluster
 data <- data$datList$test_3
-plot_2d_clusters(data,k_means(data,3)$means)
+k_means(data,3, return_clusters = T)
+plot_2d_clusters(data,3)
 plot_2d_clusters(data,kmeans(data,3)$centers)
 
 
+rbind(NULL, c(1,2,3))
 
 
 
-y <- genRandomClust(7,sepVal = 0.1)  # generiere test cluster
-data2 <- y$datList$test_1
+data2[4,]
 means2 <- k_means(data2, 7)$means #teste
+predict_cluster(matrix(c(10,10,3,3),ncol=2),means2)
+matrix(c(10,10,3,3),ncol=2,nrow=4)
 k_means(data2, 7)
 plot_2d_clusters(data2,means2)
 plot_2d_clusters(data2,kmeans(data2,7)$centers)
