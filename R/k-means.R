@@ -174,16 +174,3 @@ data <- genRandomClust(9,sepVal = 0.12)  # generiere test cluster
 data <- data$datList$test_3
 plot_2d_clusters(data,9)
 k_means(data,9, save_history = T)
-
-
-rbind(NULL, c(1,2,3))
-
-
-
-data2[4,]
-means2 <- k_means(data2, 7)$means #teste
-predict_cluster(matrix(c(10,10,3,3),ncol=2),means2)
-matrix(c(10,10,3,3),ncol=2,nrow=4)
-k_means(data2, 7)
-plot_2d_clusters(data2,means2)
-plot_2d_clusters(data2,kmeans(data2,7)$centers)
