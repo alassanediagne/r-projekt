@@ -1,5 +1,5 @@
 library(tidyverse)
-library("viridis")
+library(R6)
 
 
 k_means_pp <- function(data, num_cluster){
@@ -78,14 +78,14 @@ update_m <- function(x,C,num_cluster){
 
 
 k_means <- function(data, num_cluster, m0 = NULL, save_history = FALSE, 
-                    return_clusters=FALSE, max_iter = 50L, tol = 1e-8){
+                    return_labels=FALSE, max_iter = 50L, tol = 1e-8){
   
   # k-Means-Algorithmus
   # x: nxd - Matrix mit Daten (n: Anzahl an Messwerten, d: Dimension), 
   # num_cluster: int, Anzahl der Cluster, 
   # m0: num_cluster x d - Matrix, Anfangswerte zur Initialisierung des Algorithmus (optional)
   # save_history: logical, gibt Iterationen zurück (optional)
-  # return_clusters: logical, gibt zu jedem Messwert das Cluster zurück (optional)
+  # return_labels: logical, gibt zu jedem Messwert das Clusterlabel zurück (optional)
   # max_iter: int, maximale Anzahl an Iterationen (optional)
   # tol: float, Toleranz zur Festlegung der Konvergenz (optional)
   
@@ -109,14 +109,17 @@ k_means <- function(data, num_cluster, m0 = NULL, save_history = FALSE,
     m_old <- m # speichere m zum vergleichen
     current_arg_mins <- update_C(data,m) # update argmins
     m <- update_m(data,current_arg_mins,num_cluster) # update means
+    
     if(save_history){
       history <- append(history,list(iteration = n_iter, means = t(m), argmins=current_arg_mins))
     }
+    
     if(norm(m-m_old, type='1')<tol){
       # prüfe konvergenz
       converged <- TRUE
       break
     }
+    
     n_iter <- n_iter + 1L
   }
   
@@ -135,12 +138,14 @@ k_means <- function(data, num_cluster, m0 = NULL, save_history = FALSE,
     out$history <- history
   }
   
-  if(return_clusters){
-    out$clusters <- current_arg_mins
+  if(return_labels){
+    out$labels <- current_arg_mins
   }
   
   return(out)
 }
+
+
 
 
 
@@ -151,9 +156,12 @@ plot_2d_clusters <- function(data, num_cluster){
   ggplot() +
     geom_point(data = data, aes(x = x, y = y, color = clustering$clusters), size=1) + 
     geom_point(data = means, aes(x = x, y = y), color="red", shape="x", size=5) +
+    theme_bw() + 
     theme(legend.position="none")
-    theme_bw()
 }
+
+KMeans <- R6Class(classname = "KMeans",
+                  public = list())
 
 
 
@@ -162,11 +170,10 @@ plot_2d_clusters <- function(data, num_cluster){
 library(clusterGeneration)
 
 
-data <- genRandomClust(3,sepVal = 0.3)  # generiere test cluster
+data <- genRandomClust(9,sepVal = 0.12)  # generiere test cluster
 data <- data$datList$test_3
-k_means(data,3, return_clusters = T)
-plot_2d_clusters(data,3)
-plot_2d_clusters(data,kmeans(data,3)$centers)
+plot_2d_clusters(data,9)
+k_means(data,9, save_history = T)
 
 
 rbind(NULL, c(1,2,3))
