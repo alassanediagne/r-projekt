@@ -150,7 +150,7 @@ k_means <- function(data, num_cluster, m0 = NULL, save_history = FALSE,
 
 
 plot_2d_clusters <- function(data, num_cluster){
-  clustering <- k_means(data, num_cluster, return_clusters = T)
+  clustering <- k_means(data, num_cluster, return_labels = T)
   data <- tibble(x=data[,1], y= data[,2])
   means <- tibble(x=clustering$means[,1], y= clustering$means[,2])
   ggplot() +
@@ -160,8 +160,6 @@ plot_2d_clusters <- function(data, num_cluster){
     theme(legend.position="none")
 }
 
-KMeans <- R6Class(classname = "KMeans",
-                  public = list())
 
 
 
