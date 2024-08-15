@@ -161,8 +161,6 @@ plot_2d_clusters <- function(data, num_cluster){
 }
 
 
-
-
 # Test
 
 library(clusterGeneration)
