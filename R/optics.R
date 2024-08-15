@@ -38,7 +38,7 @@ optics <- function(data, eps, minPts) {
   }
   
   # Main loop to process each point
-  for (i in 1:n) {
+  for (i in 1:ncol(data)) {
     if (!processed[i]) {
       neighbors <- which(sqrt(colSums((data - data[, i])^2)) <= eps)
       processed[i] <- TRUE
