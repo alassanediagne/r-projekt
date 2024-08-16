@@ -11,7 +11,7 @@ optics <- function(data, eps, minPts) {
   ordered_list <- intger(0) #List to maintain the order of points
   
   #First we define a function to calculate the core distance of a given point.
-  #It is by definition the 'smallest distance' w.r.t. eps, s.t. the givern point is a core point.
+  #It is by definition the 'smallest distance' w.r.t. eps, s.t. the given point is a core point.
   
   core_distance <- function(point) {
     distances <- sqrt(colSums((data - data[,point])^2))
