@@ -1,35 +1,40 @@
-optics <- function(data, eps, minPts) { 
+# TODO: One can optimize runtime by using "Spatial Indexing", but how? - keyword: k-d trees?
+
+
+optics <- function(data, eps, minPts) {
+  n <- ncol(data)
   
-  # Initialize reachability distances to infinity
-  reachability <- rep(Inf, ncol(data))
+  reachability <- rep(Inf, n) #Initializing the reachability of each point as "Inf" (UNDEFINED)
   
-  # Track processed points
-  processed <- rep(FALSE, ncol(data))
+  processed <- rep(FALSE, n) #Keeping track of which points have been processed
   
-  # List to maintain the order of points
-  ordered_list <- integer(0)
+  ordered_list <- intger(0) #List to maintain the order of points
   
-  # Calculate the core distance for a given point
+  #First we define a function to calculate the core distance of a given point.
+  #It is by definition the 'smallest distance' w.r.t. eps, s.t. the givern point is a core point.
+  
   core_distance <- function(point) {
-    distances <- sqrt(colSums((data - data[, point])^2))
+    distances <- sqrt(colSums((data - data[,point])^2))
     sorted_distances <- sort(distances)
     if (sorted_distances[minPts] <= eps) {
-      return(sorted_distances[minPts])
+      return(sorted_distances[minPts]) # This is the 'smallest distance' in question, if the given point is in fact a core point
     } else {
-      return(Inf)
+      return(Inf) # This is the case if the point is either a 'border point' or 'NOISE'
     }
   }
   
-  # Update the reachability distances of the neighbors of a point
-  update <- function(neighbors, point, seeds, reach_dist) {
+  #Function to update the reachability distances of the neighbors of a point
+  
+  update <- function(neighbors, point, seeds, eps, reach_dist) {
     core_dist <- core_distance(point)
-    for (i in neighbors) {
+    for (i in neigbors) {
       if (!processed[i]) {
-        new_reach_dist <- max(core_dist, sqrt(sum((data[, point] - data[, i])^2)))
+        new_reach_dist <- max(core_dist, sqrt(sum((data[,point]-data[,i])^2)))
         if (is.infinite(reach_dist[i])) {
           reach_dist[i] <- new_reach_dist
-          seeds <- c(seeds, i)
-        } else if (new_reach_dist < reach_dist[i]) {
+          seeds <- c(seeds,i)
+        }
+        else if (new_reach_dist < reach_dist[i]) {
           reach_dist[i] <- new_reach_dist
         }
       }
@@ -37,13 +42,14 @@ optics <- function(data, eps, minPts) {
     return(seeds)
   }
   
-  # Main loop to process each point
-  for (i in 1:ncol(data)) {
+  #Main loop to process each point 
+  
+  for (i in 1:n) {
     if (!processed[i]) {
-      neighbors <- which(sqrt(colSums((data - data[, i])^2)) <= eps)
+      neighbors <- which(sqrt(colSums((data - data[,i])^2)) <= eps)
       processed[i] <- TRUE
       ordered_list <- c(ordered_list, i)
-      if (length(neighbors) >= minPts) {
+      if (length(neighbors) >= minPts) { 
         seeds <- update(neighbors, i, integer(0), reachability)
         while (length(seeds) > 0) {
           seeds <- seeds[order(reachability[seeds])]
@@ -59,29 +65,7 @@ optics <- function(data, eps, minPts) {
       }
     }
   }
-  
   return(list(ordered_list = ordered_list, reachability = reachability))
 }
-
-# Test area:
-library(ggplot2)
-library(reshape2)
-library(tidyverse)
-
-set.seed(42)
-data <- rbind(
-  matrix(rnorm(100, mean = 0, sd = 0.3), ncol = 2),
-  matrix(rnorm(100, mean = 3, sd = 0.3), ncol = 2),
-  matrix(rnorm(100, mean = 6, sd = 0.3), ncol = 2)
-)
-data <- t(data)
-
-eps <- 0.5
-minPts <- 5
-
-optics_result <- optics(data, eps, minPts)
-
-reachability_distances <- optics_result$reachability
-ordered_indices <- optics_result$ordered_list
 
 
