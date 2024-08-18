@@ -2,13 +2,14 @@
 
 
 optics <- function(data, eps, minPts) {
+  
   n <- ncol(data)
   
   reachability <- rep(Inf, n) #Initializing the reachability of each point as "Inf" (UNDEFINED)
   
   processed <- rep(FALSE, n) #Keeping track of which points have been processed
   
-  ordered_list <- intger(0) #List to maintain the order of points
+  ordered_list <- integer(0) #List to maintain the order of points
   
   #First we define a function to calculate the core distance of a given point.
   #It is by definition the 'smallest distance' w.r.t. eps, s.t. the given point is a core point.
@@ -25,17 +26,17 @@ optics <- function(data, eps, minPts) {
   
   #Function to update the reachability distances of the neighbors of a point
   
-  update <- function(neighbors, point, seeds, eps, reach_dist) {
+  update <- function(neighbors, point, seeds, reachability) {
     core_dist <- core_distance(point)
-    for (i in neigbors) {
+    for (i in neighbors) {
       if (!processed[i]) {
         new_reach_dist <- max(core_dist, sqrt(sum((data[,point]-data[,i])^2)))
-        if (is.infinite(reach_dist[i])) {
-          reach_dist[i] <- new_reach_dist
+        if (is.infinite(reachability[i])) {
+          reachability[i] <<- new_reach_dist
           seeds <- c(seeds,i)
         }
-        else if (new_reach_dist < reach_dist[i]) {
-          reach_dist[i] <- new_reach_dist
+        else if (new_reach_dist < reachability[i]) {
+          reachability[i] <<- new_reach_dist
         }
       }
     }
@@ -67,5 +68,4 @@ optics <- function(data, eps, minPts) {
   }
   return(list(ordered_list = ordered_list, reachability = reachability))
 }
-
 
