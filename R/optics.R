@@ -1,7 +1,12 @@
 # TODO: One can optimize runtime by using "Spatial Indexing", but how? - keyword: k-d trees?
 
+# First we implement the OPTICS algorithm, which returns a clustering of given data, w.r.t eps and minPts.
+# The return is an 'ordered list' and  a 'reachability list'.
 
 optics <- function(data, eps, minPts) {
+  stopifnot(
+    "minPts has to be equal or bigger than 1"= minPts>=1
+    )
   
   n <- ncol(data)
   
@@ -12,8 +17,7 @@ optics <- function(data, eps, minPts) {
   ordered_list <- integer(0) #List to maintain the order of points
   
   #First we define a function to calculate the core distance of a given point.
-  #It is by definition the 'smallest distance' w.r.t. eps, s.t. the given point is a core point.
-  
+
   core_distance <- function(point) {
     distances <- sqrt(colSums((data - data[,point])^2))
     sorted_distances <- sort(distances)
@@ -66,6 +70,42 @@ optics <- function(data, eps, minPts) {
       }
     }
   }
+  optics_r <<- list(ordered_list = ordered_list, reachability = reachability)
   return(list(ordered_list = ordered_list, reachability = reachability))
 }
+
+
+
+# Second we implement a function 'extract_dbscan' which returns a clustering w.r.t the minPts from above
+# and and eps_prime being a value between 0 and our original eps.
+
+extract_dbscan <- function(optics_result = optics_r, eps_prime = eps) {
+  
+  stopifnot(eps_prime <= eps)
+  
+  reachability <- optics_result$reachability
+  ordered_list <- optics_result$ordered_list
+  
+  clusters <<- rep(0, length(reachability))
+  cluster_id <- 0
+  
+  for (i in seq_along(ordered_list)) {
+    point <- ordered_list[i]
+    if (reachability[point] > eps) {
+      #new cluster, if reachability distance is larger than eps
+      if (i > 1 && clusters[ordered_list[(i-1)]] > 0) {
+        cluster_id <- (cluster_id+1)
+        
+      }
+    } else {
+      #point is assigned to current cluster
+      clusters[point] <<- cluster_id
+    }
+  }
+  
+  return(clusters)
+}
+
+
+extract_dbscan(optics_r, eps_prime = 0.3) 
 
