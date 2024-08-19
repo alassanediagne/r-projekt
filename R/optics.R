@@ -59,9 +59,9 @@ optics <- function(data, eps, minPts) {
         while (length(seeds) > 0) {
           seeds <- seeds[order(reachability[seeds])]
           current <- seeds[1]
-          #seeds <- seeds[-1]
+          seeds <- seeds[-1]
           neighbors <- which(sqrt(colSums((data - data[, current])^2)) <= eps)
-          #processed[current] <- TRUE
+          processed[current] <- TRUE
           ordered_list <- c(ordered_list, current)
           if (length(neighbors) >= minPts) {
             seeds <- update(neighbors, current, seeds, reachability)
