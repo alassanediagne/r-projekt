@@ -28,8 +28,6 @@ i <- 2
 eps <- 0.3
 
 
-which(sqrt(colSums((data - data[,i])^2)) <= eps)
-
 optics(get_more_complex_sample_data(), eps=0.3, minPts=2)
 dbscan(get_more_complex_sample_data(), eps=0.05, minPts=0)
 
@@ -44,3 +42,16 @@ y_1 <- data[2,which(optics_r$reachability<eps)]
 
 plot(x = x_1, y = y_1, xlim = c(-3,3), ylim= c(-3,3), pch = 3)
 length(data[1,which(optics_r$reachability<eps)])
+
+plot_reachability <- function(optics_result = optics_r) {
+  ordered_reachability <- optics_result$reachability[optics_result$ordered_list]
+  barplot(height = ordered_reachability, width = (length(ordered_reachability)/4) , xlim=c(0,4), ylim=c(0,2*optics_result$eps))
+}
+
+plot_reachability()
+
+optcis_result <- optics_r
+
+optics_result
+
+optics_r

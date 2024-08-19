@@ -70,36 +70,37 @@ optics <- function(data, eps, minPts) {
       }
     }
   }
-  optics_r <<- list(ordered_list = ordered_list, reachability = reachability)
   return(list(ordered_list = ordered_list, reachability = reachability))
 }
 
+
+#Problem: 
 
 
 # Second we implement a function 'extract_dbscan' which returns a clustering w.r.t the minPts from above
 # and and eps_prime being a value between 0 and our original eps.
 
-extract_dbscan <- function(optics_result = optics_r, eps_prime = eps) {
+extract_dbscan <- function(optics_result = optics_r, eps_prime = optics_r$eps) {
   
-  stopifnot(eps_prime <= eps)
+  stopifnot(eps_prime <= optics_r$eps)
   
   reachability <- optics_result$reachability
   ordered_list <- optics_result$ordered_list
   
-  clusters <<- rep(0, length(reachability))
+  clusters <- rep(0, length(ordered_list))
   cluster_id <- 0
   
   for (i in seq_along(ordered_list)) {
     point <- ordered_list[i]
-    if (reachability[point] > eps) {
+    if (reachability[point] > eps_prime) {
       #new cluster, if reachability distance is larger than eps
       if (i > 1 && clusters[ordered_list[(i-1)]] > 0) {
-        cluster_id <- (cluster_id+1)
+        cluster_id <- add(cluster_id,1)
         
       }
     } else {
       #point is assigned to current cluster
-      clusters[point] <<- cluster_id
+      clusters[point] <- cluster_id
     }
   }
   
@@ -109,3 +110,4 @@ extract_dbscan <- function(optics_result = optics_r, eps_prime = eps) {
 
 extract_dbscan(optics_r, eps_prime = 0.3) 
 
+reachability
