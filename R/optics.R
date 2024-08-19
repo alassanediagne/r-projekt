@@ -107,8 +107,3 @@ extract_dbscan <- function(optics_result = optics_r, eps_prime = optics_r$eps) {
   return(clusters)
 }
 
-
-extract_dbscan(optics_r, eps_prime = 0.3) 
-
-reachability
-

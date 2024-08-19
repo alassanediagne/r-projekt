@@ -26,20 +26,28 @@ get_more_complex_sample_data <- function() {
 
 
 
-optics(get_more_complex_sample_data(), eps=0.3, minPts=2)
+
 #dbscan(get_more_complex_sample_data(), eps=0.05, minPts=0)
+
+
+optics_r <- optics(get_more_complex_sample_data(), eps=0.3, minPts=2)
+
+optics_result <- optics_r
+
+length(optics_result$reachability[optics_result$ordered_list])
+
 
 data <- get_more_complex_sample_data()
 
-x <- data[1,]
-y <- data[2,]
-plot(x = data[1,], y = data[2,], xlim = c(-3,3), ylim= c(-3,3))
+#x <- data[1,]
+#y <- data[2,]
+#plot(x = data[1,], y = data[2,], xlim = c(-3,3), ylim= c(-3,3))
 
-x_1 <- data[1,which(optics_r$reachability<eps)]
-y_1 <- data[2,which(optics_r$reachability<eps)]
+#x_1 <- data[1,which(optics_r$reachability<eps)]
+#y_1 <- data[2,which(optics_r$reachability<eps)]
 
-plot(x = x_1, y = y_1, xlim = c(-3,3), ylim= c(-3,3), pch = 3)
-length(data[1,which(optics_r$reachability<eps)])
+#plot(x = x_1, y = y_1, xlim = c(-3,3), ylim= c(-3,3), pch = 3)
+
 
 plot_reachability <- function(optics_result = optics_r) {
   ordered_reachability <- optics_result$reachability[optics_result$ordered_list]
@@ -54,10 +62,5 @@ plot_reachability <- function(optics_result = optics_r) {
 
 plot_reachability()
 
-optics_r <- optics(get_more_complex_sample_data(), eps=0.3, minPts=2)
-
-optics_result <- optics_r
-
-length(optics_result$reachability[optics_result$ordered_list])
 
 
