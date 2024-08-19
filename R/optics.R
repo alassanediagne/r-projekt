@@ -59,9 +59,9 @@ optics <- function(data, eps, minPts) {
         while (length(seeds) > 0) {
           seeds <- seeds[order(reachability[seeds])]
           current <- seeds[1]
-          seeds <- seeds[-1]
+          #seeds <- seeds[-1]
           neighbors <- which(sqrt(colSums((data - data[, current])^2)) <= eps)
-          processed[current] <- TRUE
+          #processed[current] <- TRUE
           ordered_list <- c(ordered_list, current)
           if (length(neighbors) >= minPts) {
             seeds <- update(neighbors, current, seeds, reachability)
@@ -80,9 +80,38 @@ optics <- function(data, eps, minPts) {
 # Second we implement a function 'extract_dbscan' which returns a clustering w.r.t the minPts from above
 # and and eps_prime being a value between 0 and our original eps.
 
-extract_dbscan <- function(optics_result = optics_r, eps_prime = optics_r$eps) {
+
+get_more_complex_sample_data <- function() {
+  cbind(
+    c(1,0),
+    c(1.1,0),
+    c(1.3,0),
+    c(1.4,0),
+    c(1,0.2),
+    c(1.1,0.2),
+    c(1.3,0.4),
+    c(1.4,-0.2),
+    c(2,0),
+    c(2.1,0),
+    c(2,0.4),
+    c(2.1,0.6),
+    c(2,0.3),
+    c(2.1,0.1),
+    c(2.3,0),
+    c(-3,2),
+    c(1.6, 3)
+  )
+}
+
+
+optics_r <- optics(get_more_complex_sample_data(), eps=0.3, minPts=2)
+
+
+eps <- 0.3
+
+extract_dbscan <- function(optics_result = optics_r, eps_prime = eps) {
   
-  stopifnot(eps_prime <= optics_r$eps)
+  stopifnot(eps_prime <= eps)
   
   reachability <- optics_result$reachability
   ordered_list <- optics_result$ordered_list

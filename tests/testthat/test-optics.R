@@ -32,12 +32,7 @@ get_more_complex_sample_data <- function() {
 
 optics_r <- optics(get_more_complex_sample_data(), eps=0.3, minPts=2)
 
-optics_result <- optics_r
-
-length(optics_result$reachability[optics_result$ordered_list])
-
-
-data <- get_more_complex_sample_data()
+#data <- get_more_complex_sample_data()
 
 #x <- data[1,]
 #y <- data[2,]
