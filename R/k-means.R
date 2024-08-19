@@ -1,5 +1,18 @@
+#'
+#'k-Menas-Algorithmus
+#'
+#'
+#'
+#'@param data Matrix mit Daten die geclustered werden sollen. Jede Zeile enthält einen Messwert in R^d
+#'@param num_cluster int. Anzahl der Cluster
+#'@param m0 (optional) Matrix mit Anfangswerten zur Initialisierung des Algorithmus. Falls nicht angegeben werden die Startwerte automatisch gewählt
+#'@param save_history (optional) logical. Gibt Cluster-Mittelpunkte und Labels in jeder Iteration zurück. Default: FALSE
+#'@param return_labels (optional) logical. Gibt zu jedem Messwert das Clusterlabel zurück. Default: FALSE
+#'@param max_iter (optinal) int. Legt maximale Anzahl an Iterationen fest. Default: 50
+#'@param tol: (optinal) float. Toleranz zur Festlegung der Konvergenz. Default: 1e-8
+#'@export
+
 library(tidyverse)
-library(R6)
 
 
 k_means_pp <- function(data, num_cluster){
@@ -30,7 +43,6 @@ k_means_pp <- function(data, num_cluster){
   }
   return(init_vals)
 }
-
 
 
 update_C <- function(x, m){
@@ -81,7 +93,7 @@ k_means <- function(data, num_cluster, m0 = NULL, save_history = FALSE,
                     return_labels=FALSE, max_iter = 50L, tol = 1e-8){
   
   # k-Means-Algorithmus
-  # x: nxd - Matrix mit Daten (n: Anzahl an Messwerten, d: Dimension), 
+  # data: nxd - Matrix mit Daten (n: Anzahl an Messwerten, d: Dimension), 
   # num_cluster: int, Anzahl der Cluster, 
   # m0: num_cluster x d - Matrix, Anfangswerte zur Initialisierung des Algorithmus (optional)
   # save_history: logical, gibt Iterationen zurück (optional)
@@ -160,13 +172,9 @@ plot_2d_clusters <- function(data, num_cluster){
     theme(legend.position="none")
 }
 
-
 # Test
 
 library(clusterGeneration)
 
 
-data <- genRandomClust(9,sepVal = 0.12)  # generiere test cluster
-data <- data$datList$test_3
-plot_2d_clusters(data,9)
-k_means(data,9, save_history = T)
+data <- matrix(runif(100),ncol=2)
