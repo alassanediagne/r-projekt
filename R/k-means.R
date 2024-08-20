@@ -1,5 +1,5 @@
 #'
-#'k-Menas-Algorithmus
+#'k-Means-Algorithmus
 #'
 #'
 #'
@@ -13,33 +13,35 @@
 #'
 #'@return Liste mit Clustermittelpunkten, sowie, falls erwünscht der Itera
 #'
-#'@examples data <- matrix(runif(100), ncol = 2); k_means(data, 5)
 #'
 #'@export
+#'@examples data <- matrix(runif(100), ncol = 2); k_means(data, 5)
 
-library(tidyverse)
-
+require(magrittr)
+require(tibble)
+require(ggplot2)
+require(dplyr)
 
 k_means_pp <- function(data, num_cluster){
   n <- nrow(data)
   d <- ncol(data)
-  
+
   init_vals <- matrix(0, ncol=d, nrow=num_cluster) #hier werden die Anfangswerte gespeichert
-  
-  random_idx <- sample(1:n, 1) 
+
+  random_idx <- sample(1:n, 1)
   init_vals[1,] <- data[random_idx, ] # erster Anfangswert ist ein zufälliger Punkt
-  
+
   eucl_dist <- function(data, point) {
     # Funktion zur Berechnung des Abstands
     return(sqrt(rowSums((data - point) ^ 2)))
   }
-  
+
   min_distances <- eucl_dist(data, init_vals[1,])
-  
+
   for(i in 2:num_cluster){
     prob <- min_distances^2
-    prob <- prob/sum(prob) 
-    new_idx <- sample(1:n, 1, prob = prob) 
+    prob <- prob/sum(prob)
+    new_idx <- sample(1:n, 1, prob = prob)
     # Wahrscheinlichkeit ist gewichtet, proportianal zu quadriertener Distanz
     init_vals[i,] <- data[new_idx,]
     current_distances <- eucl_dist(data, init_vals[i,])
@@ -52,17 +54,17 @@ k_means_pp <- function(data, num_cluster){
 
 update_C <- function(x, m){
   # x dxn Matrix mit Daten, m dxK Matrix mit aktuellen means
-  
+
   n <- ncol(x)
   d <- nrow(x)
   num_cluster <- ncol(m)
-  
+
   # initalisiere Variablen
   # Wir setzen die aktuellen argmins und minimalen Distanzen auf das erste mean
   current_arg_mins <- rep(1L, times=n) # hier speichern wir die aktuellen argmins
   current_min_dist <- x - matrix(m[,1], nrow = d, ncol = n)
   current_min_dist <- apply(current_min_dist, 2, \(x) sum(x^2,na.rm = TRUE)) # hier speichern wir die aktuellen minimalen Distanzen
-  
+
   for(k in 2:num_cluster){
     # gehe alle means ab dem zweiten durch
     current_mean <- matrix(m[,k], nrow = d, ncol = n)
@@ -82,7 +84,7 @@ update_m <- function(x,C,num_cluster){
   n <- ncol(x)
   d <- nrow(x)
   m <- matrix(nrow=d, ncol=num_cluster)
-  
+
   for(k in 1:num_cluster){
     mask <- C == k # prüfe für welche der x_i ob k aktuelles argmin ist
     mask <- mask %>% rep(each=d) %>% matrix(ncol=n, nrow=d)
@@ -94,71 +96,71 @@ update_m <- function(x,C,num_cluster){
 
 
 
-k_means <- function(data, num_cluster, m0 = NULL, save_history = FALSE, 
+k_means <- function(data, num_cluster, m0 = NULL, save_history = FALSE,
                     return_labels=FALSE, max_iter = 50L, tol = 1e-8){
-  
+
   # k-Means-Algorithmus
-  # data: nxd - Matrix mit Daten (n: Anzahl an Messwerten, d: Dimension), 
-  # num_cluster: int, Anzahl der Cluster, 
+  # data: nxd - Matrix mit Daten (n: Anzahl an Messwerten, d: Dimension),
+  # num_cluster: int, Anzahl der Cluster,
   # m0: num_cluster x d - Matrix, Anfangswerte zur Initialisierung des Algorithmus (optional)
   # save_history: logical, gibt Iterationen zurück (optional)
   # return_labels: logical, gibt zu jedem Messwert das Clusterlabel zurück (optional)
   # max_iter: int, maximale Anzahl an Iterationen (optional)
   # tol: float, Toleranz zur Festlegung der Konvergenz (optional)
-  
+
   if(is.null(m0)){
     m0 <- k_means_pp(data, num_cluster)
   }
-  
+
   data <- t(data)
-  
+
   n_iter <- 0L # zählt Iterationen
-  
+
   m <- t(m0)
-  
+
   if(save_history){
     history <- list()
   }
-  
+
   converged <- FALSE
-  
+
   while(n_iter <= max_iter){
     m_old <- m # speichere m zum vergleichen
     current_arg_mins <- update_C(data,m) # update argmins
     m <- update_m(data,current_arg_mins,num_cluster) # update means
-    
+
     if(save_history){
       history <- append(history,list(iteration = n_iter, means = t(m), argmins=current_arg_mins))
     }
-    
+
     if(norm(m-m_old, type='1')<tol){
       # prüfe konvergenz
       converged <- TRUE
       break
     }
-    
+
     n_iter <- n_iter + 1L
   }
-  
+
   out <- list()
-  
+
   if(converged){
     out$msg <- sprintf("Methode konvergiert nach %i Iterationen", n_iter)
   }
   else{
     out$msg <- sprintf("Maximale Anzahl an Iterationen erreicht")
   }
-  
+
   out$means <- t(m)
-  
+
   if(save_history){
     out$history <- history
   }
-  
+
   if(return_labels){
     out$labels <- current_arg_mins
   }
-  
+
   return(out)
 }
 
@@ -166,20 +168,41 @@ k_means <- function(data, num_cluster, m0 = NULL, save_history = FALSE,
 
 
 
-plot_2d_clusters <- function(data, num_cluster){
+plot_k_means_2d <- function(data, num_cluster){
   clustering <- k_means(data, num_cluster, return_labels = T)
   data <- tibble(x=data[,1], y= data[,2])
-  means <- tibble(x=clustering$means[,1], y= clustering$means[,2])
+  means <- tibble(x=clustering$means[,1], y = clustering$means[,2])
   ggplot() +
-    geom_point(data = data, aes(x = x, y = y, color = clustering$clusters), size=1) + 
+    geom_point(data = data, aes(x = x, y = y, color = clustering$labels), size=1) +
     geom_point(data = means, aes(x = x, y = y), color="red", shape="x", size=5) +
-    theme_bw() + 
+    theme_bw() +
     theme(legend.position="none")
 }
 
-# Test
 
-library(clusterGeneration)
+#' gen_clusters
+#'
+#' @param n Anzahl an Punkten pro Cluster
+#' @param means Mittelpunkte der Cluster
+#' @param deviation Standardabweichung bei Lärm
+#'
+#' @return data
+#' @export
+#'
+gen_clusters <- function(n, means, deviation){
 
+  data <- NULL
+  for(i in 1:nrow(means)){
+    x <- matrix(rep(means[i,],each=n), ncol=ncol(means), nrow=n) + matrix(rnorm(n*ncol(means), sd=deviation), nrow=n)
+    data <- rbind(data, x)
+  }
+  return(data)
+}
 
-data <- matrix(runif(100),ncol=2)
+data <- gen_clusters(100, matrix(c(0,0,1,1,1,0,0,1), ncol=2),0.3)
+plot_k_means_2d(data,4)
+
+iris
+ggplot() + geom_point(data=iris, aes(x=Petal.Length, y = Petal.Width, color=Species))
+irisPetals <- iris %>% select(c(Petal.Length,Petal.Width)) %>% data.matrix()
+plot_k_means_2d(irisPetals,3)
