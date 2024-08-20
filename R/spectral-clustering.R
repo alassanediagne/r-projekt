@@ -1,16 +1,15 @@
-#erster Draft
 
 gausskernel <- function(x,y) {exp(-h*(norm(x-y, type="2"))^2)} #Gausskern definieren
 h <- 100
 
 spectral_clustering <- function(data, f_kernel, k){
     
-    n <- ncol(data) 
+    n <- nrow(data) 
     affinity_matrix <- matrix(0, nrow=n, ncol=n) #Gewichtsmatrix initialisieren
    
     for (i in 1:n){
         for (j in 1:n)
-            {affinity_matrix[i,j]=f_kernel(data[,i], data[,j])} #Gewichte zwischen Daten bestimmen
+            {affinity_matrix[i,j]=f_kernel(data[i,], data[j,])} #Gewichte zwischen Daten bestimmen
     }
     
     
@@ -19,7 +18,7 @@ spectral_clustering <- function(data, f_kernel, k){
     for(i in 1:n){
         a <- 0
         for (j in 1:n){
-            a <- a+f_kernel(data[,i],data[,j]) #Werte der Diagonalmatrix bestimmen
+            a <- a+f_kernel(data[i,],data[j,]) #Werte der Diagonalmatrix bestimmen
             diagonal_matrix[i,i]=a
         }
     }
@@ -40,14 +39,14 @@ spectral_clustering <- function(data, f_kernel, k){
         }
     eigenvectors_norm_L <- eigen_L$vectors[,eigenvectors_logical_L] #Matrix mit Eigenvektoren der Länge 1 als Spalten erstellen       
     
-    spectral_projections <- matrix(0,nrow=ncol(eigenvectors_norm_L), ncol=n) #Matrix mit optimalen Projektionen initialisieren
+    spectral_projections <- matrix(0,  nrow=n, ncol=ncol(eigenvectors_norm_L)) #Matrix mit optimalen Projektionen initialisieren
     
     for (i in 1:ncol(eigenvectors_norm_L)) #Matrix mit optimalen Projektionen erstellen
-        {spectral_projections[i,] = (n^(1/2))*(diagonal_matrix%^%(-0.5))%*%eigenvectors_norm_L[,i]}        
+        {spectral_projections[,i] = (n^(1/2))*(diagonal_matrix%^%(-0.5))%*%eigenvectors_norm_L[,i]}        
     
     
-    k_spectral_projections <- spectral_projections[2:(k+1),] #optimale k-dimensionale Projektionen bestimmen
+    k_spectral_projections <- spectral_projections[,2:(k+1)] #optimale k-dimensionale Projektionen bestimmen
     return(k_spectral_projections)
 }
 
-#anschließend z.B. k-means clusterings
+#anschließend z.B. k-means clustering
