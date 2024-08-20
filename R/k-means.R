@@ -205,4 +205,4 @@ plot_k_means_2d(data,4)
 iris
 ggplot() + geom_point(data=iris, aes(x=Petal.Length, y = Petal.Width, color=Species))
 irisPetals <- iris %>% select(c(Petal.Length,Petal.Width)) %>% data.matrix()
-plot_k_means_2d(irisPetals,3)
+plot_k_means_2d(irisPetals, 3)
