@@ -1,9 +1,16 @@
-# TODO: One can optimize runtime by using "Spatial Indexing", but how? - keyword: k-d trees?
+#'
+#' This is an implementation of the OPTICS Algorithm
+#' 
+#' @param data The data to be clustered.
+#' @param eps The distance defining the neighborhood of a point.
+#' @param minPts The minimum point count needed to form a dense region.
+#' 
+#' @return Returns a list of 2 elements. 
+#' @export
 
 # First we implement the OPTICS algorithm, which returns a clustering of given data, w.r.t eps and minPts.
 # The return is an 'ordered list' and  a 'reachability list'.
-
-optics <- function(data, eps, minPts) {
+optics1 <- function(data, eps, minPts) {
   stopifnot(
     "minPts has to be equal or bigger than 1"= minPts>=1
     )
@@ -59,9 +66,9 @@ optics <- function(data, eps, minPts) {
         while (length(seeds) > 0) {
           seeds <- seeds[order(reachability[seeds])]
           current <- seeds[1]
-          #seeds <- seeds[-1]
+          seeds <- seeds[-1]
           neighbors <- which(sqrt(colSums((data - data[, current])^2)) <= eps)
-          #processed[current] <- TRUE
+          processed[current] <- TRUE
           ordered_list <- c(ordered_list, current)
           if (length(neighbors) >= minPts) {
             seeds <- update(neighbors, current, seeds, reachability)
@@ -104,12 +111,12 @@ get_more_complex_sample_data <- function() {
 }
 
 
-optics_r <- optics(get_more_complex_sample_data(), eps=0.3, minPts=2)
+optics_r <- optics1(get_more_complex_sample_data(), eps=0.3, minPts=2)
 
 
 eps <- 0.3
 
-extract_dbscan <- function(optics_result = optics_r, eps_prime = eps) {
+extract_dbscan <- function(optics_result = optics_r, eps = eps, eps_prime = eps) {
   
   stopifnot(eps_prime <= eps)
   
@@ -135,4 +142,17 @@ extract_dbscan <- function(optics_result = optics_r, eps_prime = eps) {
   
   return(clusters)
 }
+
+
+plot_reachability <- function(optics_result = optics_r) {
+  ordered_reachability <- optics_result$reachability[optics_result$ordered_list]
+  ordered_reachability[ordered_reachability == Inf] <- 1
+  n <- length(ordered_reachability)
+  barplot(height = ordered_reachability, 
+          width = (4/n), 
+          space = 0, 
+          xlim=c(0,4), 
+          ylim=c(0,1))
+}
+
 

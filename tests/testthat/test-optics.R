@@ -52,7 +52,7 @@ plot_reachability <- function(optics_result = optics_r) {
           width = (4/n), 
           space = 0, 
           xlim=c(0,4), 
-          ylim=c(0,1))
+          ylim=c(0,1))q
 }
 
 plot_reachability()
