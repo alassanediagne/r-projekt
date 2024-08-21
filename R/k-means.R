@@ -80,15 +80,14 @@ update_m <- function(x,C,num_cluster){
 #'@param return_labels (optional) logical. Gibt zu jedem Messwert das Clusterlabel zurueck. Default: FALSE
 #'@param max_iter (optinal) int. Legt maximale Anzahl an Iterationen fest. Default: 50
 #'@param tol (optinal) float. Toleranz zur Festlegung der Konvergenz. Default: 1e-8
-#'@return Liste mit Konvergenznachricht, Clustermittelpunkten, sowie, falls erwuenscht Labels und Iterationen
-#'@importFrom tibble "tibble"
-#'@importFrom magrittr |>
+#'@param verbose (optional) logical. Falls TRUE wird die Anzahl der Iterationen und Konvergenz als Nachricht ausgegeben
+#'@return Liste mit Konvergenz logical, Anzahl an Iterationen, Clustermittelpunkten, sowie, falls erwuenscht Labels, einzelnen Iterationen und Nachricht
 #'@examples data <- gen_clusters(50, matrix(c(0,1,2,1,0,1,2,0),ncol=2), 0.3)
 #' k_means(data,4)
 #'@export
 
 k_means <- function(data, num_cluster, m0 = NULL, save_history = FALSE,
-                    return_labels=FALSE, max_iter = 50L, tol = 1e-8){
+                    return_labels=FALSE, max_iter = 50L, tol = 1e-8, verbose = FALSE){
 
 
   if(is.null(m0)){
@@ -127,12 +126,9 @@ k_means <- function(data, num_cluster, m0 = NULL, save_history = FALSE,
 
   out <- list()
 
-  if(converged){
-    out$msg <- sprintf("Methode konvergiert nach %i Iterationen", n_iter)
-  }
-  else{
-    out$msg <- sprintf("Maximale Anzahl an Iterationen erreicht")
-  }
+  out$converged <- converged
+
+  out$niter <- n_iter
 
   out$means <- t(m)
 
@@ -142,6 +138,15 @@ k_means <- function(data, num_cluster, m0 = NULL, save_history = FALSE,
 
   if(return_labels){
     out$labels <- current_arg_mins
+  }
+
+  if(verbose){
+    if(converged){
+      out$msg <- sprintf("Methode konvergiert nach %i Iterationen", n_iter)
+    }
+    else{
+      out$msg <- sprintf("Maximale Anzahl an Iterationen erreicht")
+    }
   }
 
   return(out)
@@ -187,45 +192,13 @@ k_means_predict <- function(x, means){
 }
 
 
-plot_k_means_2d <- function(data, num_cluster){
-  clustering <- k_means(data, num_cluster, return_labels = T)
+plot_k_means_2d <- function(data, num_cluster, max_iter=50L){
+  clustering <- k_means(data, num_cluster, return_labels = T, max_iter = max_iter)
   data <- tibble::tibble(x=data[,1], y= data[,2])
   means <- tibble::tibble(x=clustering$means[,1], y = clustering$means[,2])
   ggplot2::ggplot() +
-    ggplot2::geom_point(data = data, aes(x = x, y = y, color = factor(clustering$labels)), size=1) +
-    ggplot2::geom_point(data = means, aes(x = x, y = y), color="red", shape="x", size=5) +
+    ggplot2::geom_point(data = data, ggplot2::aes(x = x, y = y, color = factor(clustering$labels)), size=1) +
+    ggplot2::geom_point(data = means, ggplot2::aes(x = x, y = y), color="red", shape="x", size=5) +
     ggplot2::theme_bw() +
     ggplot2::theme(legend.position="none")
 }
-
-
-data <- gen_clusters(100, matrix(c(0,0,1,1,1,0,0,1), ncol=2),0.3)
-plot_k_means_2d(data,4)
-
-iris
-
-ggplot() +
-  geom_point(data=iris, aes(x=Petal.Length, y = Petal.Width, color=Species)) +
-  theme_light()
-
-irisPetals <- iris |>
-  dplyr::select(c(Petal.Length, Petal.Width)) |>
-  data.matrix()
-
-k_means_iris <- k_means(irisPetals, 3, return_labels = TRUE)
-
-is(irisPetals, "matrix")
-is.atomic(irisPetals[1,])
-
-plot_k_means_2d(irisPetals, 3)
-source("/Users/alassanediagne/Documents/Uni/Master/SS24/R-Vorlesung/r-projekt/R/gen_clusters.R")
-data <- gen_clusters(50, matrix(c(0,1,2,1,0,1,2,0),ncol=2), 0.3)
-clustering <- k_means(data,4)
-clustering
-
-k_means_predict(c(4,1), k_means_iris$means)
-k_means_iris$means
-k_means_iris$labels
-irisPetals
-
-k_means_iris
