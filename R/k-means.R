@@ -155,19 +155,43 @@ k_means <- function(data, num_cluster, m0 = NULL, save_history = FALSE,
 }
 
 
-k_means_predict <- function(x, means){
-  d <- length(x)
-  if(d != ncol(means)){
-    stop(sprintf("x hat nicht die richtige Dimension (%i vs %i)", ncol(means),d))
-  }
-  num_cluster <- nrow(means)
-  x <- matrix(rep(x, each=num_cluster), ncol=d)
-  dists <- abs(x-means)
-  dists <- dists %>% apply(1,\(x) sqrt(sum(x^2)))
-  pred_label <- which.min(dists)
-  return(pred_label)
-}
 
+
+#' k_means_predict
+#'
+#' @param x Ein atomarer Vektor oder eine Matrix mit Messwerten
+#' @param means Clustermittelpunkte (z.B. aus dem k-Means-Algorithmus)
+#'
+#' @return erwartete Klassenlabel der neuen Messwerte
+#' @export
+#'
+#' @examples data <- gen_clusters(50, matrix(0,1,2,0,1,2), 0.3)
+#'  clustering <- k_means(data,3)
+#'  k_means_predict(c(1.2,0.8), clustering$means)
+#'
+k_means_predict <- function(x, means){
+  predict_instance <- function(x, means){
+    d <- length(x)
+    if(d != ncol(means)){
+      stop(sprintf("x hat nicht die richtige Dimension (%i vs %i)", ncol(means),d))
+    }
+    num_cluster <- nrow(means)
+    x <- matrix(rep(x, each=num_cluster), ncol=d)
+    dists <- abs(x-means)
+    dists <- dists %>% apply(1,\(x) sqrt(sum(x^2)))
+    pred_label <- which.min(dists)
+    return(pred_label)
+  }
+  if(is.atomic(x) && !is.matrix(x)){
+    return(predict_instance(x,means))
+  }
+  else if(is.matrix(x)){
+    return(apply(x, 1, \(xi) predict_instance(xi,means)))
+  }
+  else{
+    stop(sprintf("x muss ein Vektor oder eine Matrix sein, ist jedoch von der Klasse %s", class(x)))
+  }
+}
 
 
 plot_k_means_2d <- function(data, num_cluster){
@@ -196,6 +220,9 @@ irisPetals <- iris %>%
   data.matrix()
 
 k_means_iris <- k_means(irisPetals, 3, return_labels = TRUE)
+
+is(irisPetals, "matrix")
+is.atomic(irisPetals[1,])
 
 plot_k_means_2d(irisPetals, 3)
 
