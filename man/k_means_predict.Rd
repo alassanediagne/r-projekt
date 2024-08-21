@@ -18,7 +18,7 @@ erwartete Klassenlabel der neuen Messwerte
 k_means_predict
 }
 \examples{
-data <- gen_clusters(50, matrix(0,1,2,0,1,2), 0.3)
+data <- gen_clusters(50, matrix(c(0,1,2,0,1,2)), 0.3)
  clustering <- k_means(data,3)
  k_means_predict(c(1.2,0.8), clustering$means)
 

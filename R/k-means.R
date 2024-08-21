@@ -63,8 +63,8 @@ update_m <- function(x,C,num_cluster){
 
   for(k in 1:num_cluster){
     mask <- C == k # pruefe fuer welche der x_i ob k aktuelles argmin ist
-    mask <- mask %>% rep(each=d) %>% matrix(ncol=n, nrow=d)
-    x_relevant <- x[mask] %>% matrix(nrow=d) # maskiere alle x_i deren aktuellen argmin nicht k ist
+    mask <- mask |> rep(each=d) |> matrix(ncol=n, nrow=d)
+    x_relevant <- x[mask] |> matrix(nrow=d) # maskiere alle x_i deren aktuellen argmin nicht k ist
     m[,k] <- apply(x_relevant, 1, mean,na.rm=TRUE) # update mean
   }
   return(m)
@@ -82,21 +82,14 @@ update_m <- function(x,C,num_cluster){
 #'@param tol (optinal) float. Toleranz zur Festlegung der Konvergenz. Default: 1e-8
 #'@return Liste mit Konvergenznachricht, Clustermittelpunkten, sowie, falls erwuenscht Labels und Iterationen
 #'@importFrom tibble "tibble"
-#'@importFrom magrittr %>%
-#'@examples data <- matrix(runif(100), ncol = 2); k_means(data, 5)
+#'@importFrom magrittr |>
+#'@examples data <- gen_clusters(50, matrix(c(0,1,2,1,0,1,2,0),ncol=2), 0.3)
+#' k_means(data,4)
 #'@export
 
 k_means <- function(data, num_cluster, m0 = NULL, save_history = FALSE,
                     return_labels=FALSE, max_iter = 50L, tol = 1e-8){
 
-  # k-Means-Algorithmus
-  # data: nxd - Matrix mit Daten (n: Anzahl an Messwerten, d: Dimension),
-  # num_cluster: int, Anzahl der Cluster,
-  # m0: num_cluster x d - Matrix, Anfangswerte zur Initialisierung des Algorithmus (optional)
-  # save_history: logical, gibt Iterationen zurueck (optional)
-  # return_labels: logical, gibt zu jedem Messwert das Clusterlabel zurueck (optional)
-  # max_iter: int, maximale Anzahl an Iterationen (optional)
-  # tol: float, Toleranz zur Festlegung der Konvergenz (optional)
 
   if(is.null(m0)){
     m0 <- k_means_pp(data, num_cluster)
@@ -165,7 +158,7 @@ k_means <- function(data, num_cluster, m0 = NULL, save_history = FALSE,
 #' @return erwartete Klassenlabel der neuen Messwerte
 #' @export
 #'
-#' @examples data <- gen_clusters(50, matrix(0,1,2,0,1,2), 0.3)
+#' @examples data <- gen_clusters(50, matrix(c(0,1,2,0,1,2)), 0.3)
 #'  clustering <- k_means(data,3)
 #'  k_means_predict(c(1.2,0.8), clustering$means)
 #'
@@ -178,7 +171,7 @@ k_means_predict <- function(x, means){
     num_cluster <- nrow(means)
     x <- matrix(rep(x, each=num_cluster), ncol=d)
     dists <- abs(x-means)
-    dists <- dists %>% apply(1,\(x) sqrt(sum(x^2)))
+    dists <- dists |> apply(1,\(x) sqrt(sum(x^2)))
     pred_label <- which.min(dists)
     return(pred_label)
   }
@@ -215,8 +208,8 @@ ggplot() +
   geom_point(data=iris, aes(x=Petal.Length, y = Petal.Width, color=Species)) +
   theme_light()
 
-irisPetals <- iris %>%
-  dplyr::select(c(Petal.Length, Petal.Width)) %>%
+irisPetals <- iris |>
+  dplyr::select(c(Petal.Length, Petal.Width)) |>
   data.matrix()
 
 k_means_iris <- k_means(irisPetals, 3, return_labels = TRUE)
@@ -225,6 +218,10 @@ is(irisPetals, "matrix")
 is.atomic(irisPetals[1,])
 
 plot_k_means_2d(irisPetals, 3)
+source("/Users/alassanediagne/Documents/Uni/Master/SS24/R-Vorlesung/r-projekt/R/gen_clusters.R")
+data <- gen_clusters(50, matrix(c(0,1,2,1,0,1,2,0),ncol=2), 0.3)
+clustering <- k_means(data,4)
+clustering
 
 k_means_predict(c(4,1), k_means_iris$means)
 k_means_iris$means
