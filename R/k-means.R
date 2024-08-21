@@ -11,8 +11,8 @@
 #'@param max_iter (optinal) int. Legt maximale Anzahl an Iterationen fest. Default: 50
 #'@param tol: (optinal) float. Toleranz zur Festlegung der Konvergenz. Default: 1e-8
 #'
-#'@return Liste mit Clustermittelpunkten, sowie, falls erwünscht der Itera
-#'
+#'@return Liste mit Konvergenznachricht, Clustermittelpunkten, sowie, falls erwünscht Labels und Iterationen
+#'@importFrom
 #'
 #'@export
 #'@examples data <- matrix(runif(100), ncol = 2); k_means(data, 5)
