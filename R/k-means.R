@@ -22,6 +22,8 @@ require(tibble)
 require(ggplot2)
 require(dplyr)
 
+
+
 k_means_pp <- function(data, num_cluster){
   n <- nrow(data)
   d <- ncol(data)
@@ -165,6 +167,18 @@ k_means <- function(data, num_cluster, m0 = NULL, save_history = FALSE,
 }
 
 
+k_means_predict <- function(x, means){
+  d <- length(x)
+  if(d != ncol(means)){
+    stop(sprintf("x hat nicht die richtige Dimension (%i vs %i)", ncol(means),d))
+  }
+  num_cluster <- nrow(means)
+  x <- matrix(rep(x, each=num_cluster), ncol=d)
+  dists <- abs(x-means)
+  dists <- dists %>% apply(1,\(x) sqrt(sum(x^2)))
+  pred_label <- which.min(dists)
+  return(pred_label)
+}
 
 
 
@@ -173,7 +187,7 @@ plot_k_means_2d <- function(data, num_cluster){
   data <- tibble(x=data[,1], y= data[,2])
   means <- tibble(x=clustering$means[,1], y = clustering$means[,2])
   ggplot() +
-    geom_point(data = data, aes(x = x, y = y, color = clustering$labels), size=1) +
+    geom_point(data = data, aes(x = x, y = y, color = factor(clustering$labels)), size=1) +
     geom_point(data = means, aes(x = x, y = y), color="red", shape="x", size=5) +
     theme_bw() +
     theme(legend.position="none")
@@ -193,7 +207,8 @@ gen_clusters <- function(n, means, deviation){
 
   data <- NULL
   for(i in 1:nrow(means)){
-    x <- matrix(rep(means[i,],each=n), ncol=ncol(means), nrow=n) + matrix(rnorm(n*ncol(means), sd=deviation), nrow=n)
+    x <- matrix(rep(means[i,],each=n), ncol=ncol(means), nrow=n) +
+      matrix(rnorm(n*ncol(means), sd=deviation), nrow=n)
     data <- rbind(data, x)
   }
   return(data)
@@ -203,6 +218,22 @@ data <- gen_clusters(100, matrix(c(0,0,1,1,1,0,0,1), ncol=2),0.3)
 plot_k_means_2d(data,4)
 
 iris
-ggplot() + geom_point(data=iris, aes(x=Petal.Length, y = Petal.Width, color=Species))
-irisPetals <- iris %>% select(c(Petal.Length,Petal.Width)) %>% data.matrix()
+
+ggplot() +
+  geom_point(data=iris, aes(x=Petal.Length, y = Petal.Width, color=Species)) +
+  theme_light()
+
+irisPetals <- iris %>%
+  select(c(Petal.Length,Petal.Width)) %>%
+  data.matrix()
+
+k_means_iris <- k_means(irisPetals, 3, return_labels = TRUE)
+
 plot_k_means_2d(irisPetals, 3)
+
+k_means_predict(c(4,1), k_means_iris$means)
+k_means_iris$means
+k_means_iris$labels
+irisPetals
+
+k_means_iris
