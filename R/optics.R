@@ -13,13 +13,20 @@
 #'
 #' @export
 
+require(magrittr)
+require(tibble)
+require(ggplot2)
+require(dplyr)
+
+
 # First we implement the OPTICS algorithm, which returns a clustering of given data, w.r.t eps and minPts.
 # The return is an 'ordered list' and  a 'reachability list'.
+
 optics <- function(data, eps, minPts) {
   stopifnot(
     "minPts has to be equal or bigger than 1"= minPts>=1
-    )
-
+  )
+  data <- t(data)
   n <- ncol(data)
 
   reachability <- rep(Inf, n) #Initializing the reachability of each point as "Inf" (UNDEFINED)
@@ -48,7 +55,7 @@ optics <- function(data, eps, minPts) {
       if (!processed[i]) {
         new_reach_dist <- max(core_dist, sqrt(sum((data[,point]-data[,i])^2)))
         if (is.infinite(reachability[i])) {
-          reachability[i] <<- new_reach_dist #since update() is a nested function, we need <<-
+          reachability[i] <<- new_reach_dist
           seeds <- c(seeds,i)
         }
         else if (new_reach_dist < reachability[i]) {
@@ -82,10 +89,14 @@ optics <- function(data, eps, minPts) {
       }
     }
   }
-  return(list(ordered_list = ordered_list, reachability = reachability))
+  return(list(ordered_list = ordered_list, reachability = reachability, eps = eps))
 }
 
-classify_cluster <- function(optics_result = optics_r, eps = 0.3) {
+
+# Function to extract clusters from the result of the OPTICS algorithm
+
+
+extract_dbscan <- function(optics_result = optics_r, eps = optics_r$eps) {
 
   ordered_reachability <- optics_result$reachability[optics_result$ordered_list]
   n <- length(ordered_reachability)
@@ -95,7 +106,7 @@ classify_cluster <- function(optics_result = optics_r, eps = 0.3) {
   for (point in seq_along(ordered_reachability)) {
     if (ordered_reachability[point] > eps) {
       #new cluster, if reachability distance is larger than eps and postprocessing a point, if its NOISE or not
-      if (point < n && ordered_reachability[point+1] <= eps) {
+      if (point < n && ordered_reachability[point+1] != Inf) {
         cluster_id <- cluster_id + 1
         clusters[point] <- cluster_id
 
@@ -108,18 +119,20 @@ classify_cluster <- function(optics_result = optics_r, eps = 0.3) {
     }
 
   }
-  return(clusters)
+  return(list(ordered_clusters = clusters, labels = clusters[sort(optics_result$ordered_list)] ))
 }
 
-extract_cluster <-function(data, optics_result = optics_r, res) {
-  num_clusters <- length(unique(res))-1
-  cluster <- list()
-  ordered_data <- data[,optics_result$ordered_list]
-  for (i in 1:num_clusters) {
-    cluster <- c(cluster, list(ordered_data[,res == i]))
-  }
-  return(cluster)
-}
+
+
+#extract_cluster <-function(data, optics_result = optics_r, res) {
+#  num_clusters <- length(unique(res))-1
+#  cluster <- list()
+#  ordered_data <- data[optics_result$ordered_list,]
+#  for (i in 1:num_clusters) {
+#    cluster <- c(cluster, list(ordered_data[res == i, ]))
+#  }
+#  return(cluster)
+#}
 
 plot_reachability <- function(optics_result = optics_r) {
   ordered_reachability <- optics_result$reachability[optics_result$ordered_list]
@@ -130,17 +143,27 @@ plot_reachability <- function(optics_result = optics_r) {
           width = (4/n),
           space = 0,
           xlim=c(0,4),
-          ylim=c(0,max_value))
+          ylim=c(0,max_value),
+          main = "OPTICS: Reachability Plot"
+          )
 }
 
-eps <- 0.3
+optics_r <- optics(irisPetals, 0.5, 2)
 
-optics_r <- optics(get_more_complex_sample_data(), eps, minPts=2)
+plot_optics_2d <- function(data, optics_result = optics_r ){
+  clustering <- extract_dbscan(optics_result)
+  data <- tibble(x = data[,1], y = data[,2])
+  ggplot() +
+    geom_point(data = data, aes(x = x, y = y, color = factor(clustering$labels)), size=1) +
+    theme_bw() +
+    theme(legend.position="none")
+}
 
-plot_reachability()
+iris
 
-classify_cluster()
+irisPetals <- iris %>%
+  select(c(Petal.Length,Petal.Width)) %>%
+  data.matrix()
 
-res <- classify_cluster()
-
-extract_cluster(get_more_complex_sample_data(), res= res)
+plot_optics_2d(irisPetals)
+extract_dbscan()
