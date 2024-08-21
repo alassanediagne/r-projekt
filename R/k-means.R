@@ -12,17 +12,14 @@
 #'@param tol: (optinal) float. Toleranz zur Festlegung der Konvergenz. Default: 1e-8
 #'
 #'@return Liste mit Konvergenznachricht, Clustermittelpunkten, sowie, falls erwünscht Labels und Iterationen
-#'@importFrom
+#'
+#'@importFrom tibble "tibble"
+#'@importFrom magrittr "%>%
 #'
 #'@export
 #'@examples data <- matrix(runif(100), ncol = 2); k_means(data, 5)
 
-require(magrittr)
-require(tibble)
-require(ggplot2)
-require(dplyr)
-
-
+usethis::use_pipe(export=F)
 
 k_means_pp <- function(data, num_cluster){
   n <- nrow(data)
@@ -184,8 +181,8 @@ k_means_predict <- function(x, means){
 
 plot_k_means_2d <- function(data, num_cluster){
   clustering <- k_means(data, num_cluster, return_labels = T)
-  data <- tibble(x=data[,1], y= data[,2])
-  means <- tibble(x=clustering$means[,1], y = clustering$means[,2])
+  data <- tibble::tibble(x=data[,1], y= data[,2])
+  means <- tibble::tibble(x=clustering$means[,1], y = clustering$means[,2])
   ggplot() +
     geom_point(data = data, aes(x = x, y = y, color = factor(clustering$labels)), size=1) +
     geom_point(data = means, aes(x = x, y = y), color="red", shape="x", size=5) +
@@ -224,7 +221,7 @@ ggplot() +
   theme_light()
 
 irisPetals <- iris %>%
-  select(c(Petal.Length,Petal.Width)) %>%
+  dplyr::select(c(Petal.Length, Petal.Width)) %>%
   data.matrix()
 
 k_means_iris <- k_means(irisPetals, 3, return_labels = TRUE)
