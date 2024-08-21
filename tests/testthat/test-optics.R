@@ -27,10 +27,7 @@ get_more_complex_sample_data <- function() {
 
 
 
-#dbscan(get_more_complex_sample_data(), eps=0.05, minPts=0)
-
-
-optics_r <- optics(get_more_complex_sample_data(), eps=0.3, minPts=2)
+optics(get_more_complex_sample_data(), eps=0.3, minPts=2)
 
 #data <- get_more_complex_sample_data()
 
@@ -48,10 +45,10 @@ plot_reachability <- function(optics_result = optics_r) {
   ordered_reachability <- optics_result$reachability[optics_result$ordered_list]
   ordered_reachability[ordered_reachability == Inf] <- 1
   n <- length(ordered_reachability)
-  barplot(height = ordered_reachability, 
-          width = (4/n), 
-          space = 0, 
-          xlim=c(0,4), 
+  barplot(height = ordered_reachability,
+          width = (4/n),
+          space = 0,
+          xlim=c(0,4),
           ylim=c(0,1))q
 }
 

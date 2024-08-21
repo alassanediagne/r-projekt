@@ -48,7 +48,7 @@ optics <- function(data, eps, minPts) {
       if (!processed[i]) {
         new_reach_dist <- max(core_dist, sqrt(sum((data[,point]-data[,i])^2)))
         if (is.infinite(reachability[i])) {
-          reachability[i] <<- new_reach_dist
+          reachability[i] <<- new_reach_dist #since update() is a nested function, we need <<-
           seeds <- c(seeds,i)
         }
         else if (new_reach_dist < reachability[i]) {
@@ -85,84 +85,62 @@ optics <- function(data, eps, minPts) {
   return(list(ordered_list = ordered_list, reachability = reachability))
 }
 
+classify_cluster <- function(optics_result = optics_r, eps = 0.3) {
 
-#Problem:
-
-
-# Second we implement a function 'extract_dbscan' which returns a clustering w.r.t the minPts from above
-# and and eps_prime being a value between 0 and our original eps.
-
-
-get_more_complex_sample_data <- function() {
-  cbind(
-    c(1,0),
-    c(1.1,0),
-    c(1.3,0),
-    c(1.4,0),
-    c(1,0.2),
-    c(1.1,0.2),
-    c(1.3,0.4),
-    c(1.4,-0.2),
-    c(2,0),
-    c(2.1,0),
-    c(2,0.4),
-    c(2.1,0.6),
-    c(2,0.3),
-    c(2.1,0.1),
-    c(2.3,0),
-    c(-3,2),
-    c(1.6, 3)
-  )
-}
-
-
-optics_r <- optics(get_more_complex_sample_data(), eps=0.3, minPts=2)
-
-
-eps <- 0.3
-
-extract_dbscan <- function(optics_result = optics_r, eps = eps, eps_prime = eps) {
-
-  stopifnot(eps_prime <= eps)
-
-  reachability <- optics_result$reachability
-  ordered_list <- optics_result$ordered_list
-
-  clusters <- rep(0, length(ordered_list))
+  ordered_reachability <- optics_result$reachability[optics_result$ordered_list]
+  n <- length(ordered_reachability)
+  clusters <- rep(0,n)
   cluster_id <- 0
 
-  for (i in seq_along(ordered_list)) {
-    point <- ordered_list[i]
-    if (reachability[point] > eps_prime) {
-      #new cluster, if reachability distance is larger than eps
-      if (i > 1 && clusters[ordered_list[(i-1)]] > 0) {
-        cluster_id <- add(cluster_id,1)
+  for (point in seq_along(ordered_reachability)) {
+    if (ordered_reachability[point] > eps) {
+      #new cluster, if reachability distance is larger than eps and postprocessing a point, if its NOISE or not
+      if (point < n && ordered_reachability[point+1] <= eps) {
+        cluster_id <- cluster_id + 1
+        clusters[point] <- cluster_id
 
+      } else {
+        clusters[point] <- 0 #point is in cluster "0" if noise
       }
     } else {
       #point is assigned to current cluster
       clusters[point] <- cluster_id
     }
-  }
 
+  }
   return(clusters)
 }
 
+extract_cluster <-function(data, optics_result = optics_r, res) {
+  num_clusters <- length(unique(res))-1
+  cluster <- list()
+  ordered_data <- data[,optics_result$ordered_list]
+  for (i in 1:num_clusters) {
+    cluster <- c(cluster, list(ordered_data[,res == i]))
+  }
+  return(cluster)
+}
 
 plot_reachability <- function(optics_result = optics_r) {
   ordered_reachability <- optics_result$reachability[optics_result$ordered_list]
-  ordered_reachability[ordered_reachability == Inf] <- 1
+  max_value <- 2*max(ordered_reachability[!ordered_reachability == Inf])
+  ordered_reachability[ordered_reachability == Inf] <- max_value
   n <- length(ordered_reachability)
   barplot(height = ordered_reachability,
           width = (4/n),
           space = 0,
           xlim=c(0,4),
-          ylim=c(0,1))
+          ylim=c(0,max_value))
 }
 
+eps <- 0.3
 
+optics_r <- optics(get_more_complex_sample_data(), eps, minPts=2)
 
+plot_reachability()
 
+classify_cluster()
 
+res <- classify_cluster()
 
-
+extract_cluster(get_more_complex_sample_data(), res= res)
