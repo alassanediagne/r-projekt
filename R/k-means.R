@@ -1,27 +1,3 @@
-#'
-#'k-Means-Algorithmus
-#'
-#'
-#'
-#'@param data Matrix mit Daten die geclustered werden sollen. Jede Zeile enthält einen Messwert in R^d
-#'@param num_cluster int. Anzahl der Cluster
-#'@param m0 (optional) Matrix mit Anfangswerten zur Initialisierung des Algorithmus. Falls nicht angegeben werden die Startwerte automatisch gewählt
-#'@param save_history (optional) logical. Gibt Cluster-Mittelpunkte und Labels in jeder Iteration zurück. Default: FALSE
-#'@param return_labels (optional) logical. Gibt zu jedem Messwert das Clusterlabel zurück. Default: FALSE
-#'@param max_iter (optinal) int. Legt maximale Anzahl an Iterationen fest. Default: 50
-#'@param tol: (optinal) float. Toleranz zur Festlegung der Konvergenz. Default: 1e-8
-#'
-#'@return Liste mit Konvergenznachricht, Clustermittelpunkten, sowie, falls erwünscht Labels und Iterationen
-#'
-#'@importFrom tibble "tibble"
-#'@importFrom magrittr "%>%
-#'
-#'@export
-#'@examples data <- matrix(runif(100), ncol = 2); k_means(data, 5)
-
-usethis::use_package_doc(open = rlang::is_interactive())
-usethis::use_pipe(export=F)
-
 k_means_pp <- function(data, num_cluster){
   n <- nrow(data)
   d <- ncol(data)
@@ -29,7 +5,7 @@ k_means_pp <- function(data, num_cluster){
   init_vals <- matrix(0, ncol=d, nrow=num_cluster) #hier werden die Anfangswerte gespeichert
 
   random_idx <- sample(1:n, 1)
-  init_vals[1,] <- data[random_idx, ] # erster Anfangswert ist ein zufälliger Punkt
+  init_vals[1,] <- data[random_idx, ] # erster Anfangswert ist ein zufaelliger Punkt
 
   eucl_dist <- function(data, point) {
     # Funktion zur Berechnung des Abstands
@@ -86,7 +62,7 @@ update_m <- function(x,C,num_cluster){
   m <- matrix(nrow=d, ncol=num_cluster)
 
   for(k in 1:num_cluster){
-    mask <- C == k # prüfe für welche der x_i ob k aktuelles argmin ist
+    mask <- C == k # pruefe fuer welche der x_i ob k aktuelles argmin ist
     mask <- mask %>% rep(each=d) %>% matrix(ncol=n, nrow=d)
     x_relevant <- x[mask] %>% matrix(nrow=d) # maskiere alle x_i deren aktuellen argmin nicht k ist
     m[,k] <- apply(x_relevant, 1, mean,na.rm=TRUE) # update mean
@@ -94,7 +70,21 @@ update_m <- function(x,C,num_cluster){
   return(m)
 }
 
-
+#'@name k_means
+#'@title k-Means-Algorithmus
+#'@description Implementierung des k-Means-Algorithmus aus Richter mit zusaetzlich automatischer Startwertwahl
+#'@param data Matrix mit Daten die geclustered werden sollen. Jede Zeile enthaelt einen Messwert in R^d
+#'@param num_cluster int. Anzahl der Cluster
+#'@param m0 (optional) Matrix mit Anfangswerten zur Initialisierung des Algorithmus. Falls nicht angegeben werden die Startwerte automatisch gewaehlt
+#'@param save_history (optional) logical. Gibt Cluster-Mittelpunkte und Labels in jeder Iteration zurueck. Default: FALSE
+#'@param return_labels (optional) logical. Gibt zu jedem Messwert das Clusterlabel zurueck. Default: FALSE
+#'@param max_iter (optinal) int. Legt maximale Anzahl an Iterationen fest. Default: 50
+#'@param tol (optinal) float. Toleranz zur Festlegung der Konvergenz. Default: 1e-8
+#'@return Liste mit Konvergenznachricht, Clustermittelpunkten, sowie, falls erwuenscht Labels und Iterationen
+#'@importFrom tibble "tibble"
+#'@importFrom magrittr %>%
+#'@examples data <- matrix(runif(100), ncol = 2); k_means(data, 5)
+#'@export
 
 k_means <- function(data, num_cluster, m0 = NULL, save_history = FALSE,
                     return_labels=FALSE, max_iter = 50L, tol = 1e-8){
@@ -103,8 +93,8 @@ k_means <- function(data, num_cluster, m0 = NULL, save_history = FALSE,
   # data: nxd - Matrix mit Daten (n: Anzahl an Messwerten, d: Dimension),
   # num_cluster: int, Anzahl der Cluster,
   # m0: num_cluster x d - Matrix, Anfangswerte zur Initialisierung des Algorithmus (optional)
-  # save_history: logical, gibt Iterationen zurück (optional)
-  # return_labels: logical, gibt zu jedem Messwert das Clusterlabel zurück (optional)
+  # save_history: logical, gibt Iterationen zurueck (optional)
+  # return_labels: logical, gibt zu jedem Messwert das Clusterlabel zurueck (optional)
   # max_iter: int, maximale Anzahl an Iterationen (optional)
   # tol: float, Toleranz zur Festlegung der Konvergenz (optional)
 
@@ -114,7 +104,7 @@ k_means <- function(data, num_cluster, m0 = NULL, save_history = FALSE,
 
   data <- t(data)
 
-  n_iter <- 0L # zählt Iterationen
+  n_iter <- 0L # zaehlt Iterationen
 
   m <- t(m0)
 
@@ -133,8 +123,8 @@ k_means <- function(data, num_cluster, m0 = NULL, save_history = FALSE,
       history <- append(history,list(iteration = n_iter, means = t(m), argmins=current_arg_mins))
     }
 
-    if(norm(m-m_old, type='1')<tol){
-      # prüfe konvergenz
+    if(norm(m-m_old, type='1') < tol) {
+      # pruefe konvergenz
       converged <- TRUE
       break
     }
