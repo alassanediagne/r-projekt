@@ -1,13 +1,13 @@
 #'
-#' This is an implementation of the OPTICS Algorithm
+#' optics
 #'
-#' This is an implementation of the OPTICS (Ordering Points To Identify Clustering Structure) Algorithm
+#' This is an implementation of the OPTICS (Ordering Points To Identify Clustering Structure) algorithm
 #'
 #' @param data The data to be clustered. A matrix, each row being a point in R^d.
 #' @param eps The distance defining the neighborhood of a point.
 #' @param minPts The minimum point count needed to form a dense region.
 #'
-#' @return Returns a list of 2 elements \code{list(ordered_list, reachability)}.
+#' @return Returns a list of 2 elements \code{list(ordered_list, reachability)}.\cr
 #' The \code{ordered_list} being an indices vector, of the ordering obtained by the OPTICS algorithm and
 #' the \code{reachability} being a vector of the reachability distances for each point of \code{data} as obtained by the OPTICS algorithm.
 #'
@@ -17,7 +17,7 @@
 #' optics(data, eps, minPts)
 #'
 #' @section Source:
-#' For more information visit [this website](https://de.wikipedia.org/wiki/OPTICS).
+#' For more information visit \href{https://de.wikipedia.org/wiki/OPTICS}{this website}.
 #'
 #' @export
 
@@ -106,13 +106,21 @@ optics <- function(data, eps, minPts) {
 #'
 #'extract_dbscan
 #'
-#'Extracts clusters from the result of OPTICS algorithm. Clusters are found by 'horizontally cutting' the
+#'Extract clusters from the result of OPTICS algorithm. Clusters are found by 'horizontally cutting' the
 #'reachability plot with an eps_prime value.
 #'
 #'@param optics_result Uses the result of the OPTIC algorithm (see 'optics')
 #'@param eps_prime (optional) value to extract clusters, default is \code{eps} of optics_result.
 #'
 #'@return Returns a list of 2 elements \code{ordered_labels} and \code{labels}
+#'
+#'@examples data <- gen_clusters(50, matrix(c(0,1,2,1,0,1,2,0),ncol=2), 0.3)
+#' eps <- 0.5
+#' minPts <- 3
+#' #Obtain an optics result
+#' optics_result <- optics(data, eps, minPts)
+#' #execute function with default eps_prime
+#' extract_dbscan(optics_result)
 #'
 #'@export
 
@@ -171,6 +179,15 @@ extract_dbscan <- function(optics_result, eps_prime = optics_result$eps) {
 #'
 #'@return Barplot with height given by \code{reachability} of \code{optics_result} and each
 #'bar representing a datapoint, they are orderd by \code{ordered_list} of \code{optics_result}
+#'
+#'@examples data <- gen_clusters(50, matrix(c(0,1,2,1,0,1,2,0),ncol=2), 0.3)
+#' eps <- 0.5
+#' minPts <- 3
+#' #Obtain an optics result
+#' optics_result <- optics(data, eps, minPts)
+#' #Plot reachability:
+#' plot_reachability(optics_result)
+#'
 #'@export
 
 plot_reachability <- function(optics_result) {
@@ -186,6 +203,8 @@ plot_reachability <- function(optics_result) {
           space = 0,
           xlim=c(0,4),
           ylim=c(0,max_value),
+          xlab="ordered data",
+          ylab="reachability",
           main = "OPTICS: Reachability Plot"
           )
 }
@@ -200,6 +219,9 @@ plot_reachability <- function(optics_result) {
 #'@param eps_prime (optional) value to extract clusters, default is \code{eps} of optics_result.
 #'
 #'@return Plot using \code{ggplot2}
+#'
+#'@section Details:
+#'This function calls \code{extarct_dbscan}, hence eps_prime can be added as an optional parameter.
 #'
 #'@export
 

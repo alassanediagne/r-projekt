@@ -19,3 +19,8 @@ Plot using \code{ggplot2}
 \description{
 Plots 2-dimensional data and colors the clusters obtained by the OPTICS algorithm accordingly.
 }
+\section{Details}{
+
+This function calls \code{extarct_dbscan}, hence eps_prime can be added as an optional parameter.
+}
+
