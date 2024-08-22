@@ -31,7 +31,7 @@ optics <- function(data, eps, minPts) {
 
   ordered_list <- integer(0) #List to maintain the order of points
 
-  #First we define a function to calculate the core distance of a given point.
+  #We define a function to calculate the core distance of a given point.
 
   core_distance <- function(point) {
     distances <- sqrt(colSums((data - data[,point])^2))
@@ -93,7 +93,7 @@ optics <- function(data, eps, minPts) {
 #'extract_dbscan
 #'
 #'Extracts clusters from the result of OPTICS algorithm. Clusters are found by 'horizontally cutting' the
-#'reachability plot with a
+#'reachability plot with an eps value.
 #'
 #'@param optics_result Uses the result of the OPTIC algorithm (see 'optics')
 #'@param eps_prime (optional) value to extract clusters, default is \code{eps} of optics_result.
@@ -118,7 +118,7 @@ extract_dbscan <- function(optics_result, eps_prime = optics_result$eps) {
   for (point in seq_along(ordered_reachability)) {
     if (ordered_reachability[point] > eps_prime) {
       #New cluster, if reachability distance is larger than eps and postprocessing a point, if its NOISE or not
-      if (point < n && ordered_reachability[point+1] != Inf) {
+      if (point < n && ordered_reachability[point+1] <=eps_prime) {
         cluster_id <- cluster_id + 1
         clusters[point] <- cluster_id
 
@@ -131,7 +131,8 @@ extract_dbscan <- function(optics_result, eps_prime = optics_result$eps) {
     }
 
   }
-  return(list(ordered_labels = clusters, labels = clusters[sort(optics_result$ordered_list)] ))
+  return(list(ordered_labels = clusters,
+              labels = clusters[sort(optics_result$ordered_list)] ))
 }
 
 
@@ -183,8 +184,8 @@ plot_reachability <- function(optics_result) {
 #'
 #'@export
 
-plot_optics_2d <- function(data, optics_result){
-  clustering <- extract_dbscan(optics_result)
+plot_optics_2d <- function(data, optics_result, eps_prime=optics_result$eps){
+  clustering <- extract_dbscan(optics_result, eps_prime)
   data <- tibble::tibble(x = data[,1], y = data[,2])
   ggplot2::ggplot() +
     ggplot2::geom_point(data = data, ggplot2::aes(x = x, y = y, color = factor(clustering$labels)), size=1) +

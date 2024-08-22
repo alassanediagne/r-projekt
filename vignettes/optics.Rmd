@@ -1,0 +1,19 @@
+---
+title: "Overview for OPTICS"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Overview for OPTICS}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(Clustering)
+```
