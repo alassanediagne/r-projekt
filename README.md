@@ -14,7 +14,7 @@
   ! object 'irisPetals' not found
   ```
 - [ ] Make sure all methods use the same data in- and output format
-- [ ] Make sure all`@exported¸ methods have helpful roxygen comments
+- [ ] Make sure all`@exported`¸ methods have helpful roxygen comments
 - [ ] Make sure all Tests pass successfully
 - [ ] Implement hierarchical clustering
 
