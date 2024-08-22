@@ -1,21 +1,20 @@
-gausskernel <- function(x,y){               #Gausskern definieren
-    h <- 10
-    exp(-h*(norm(x-y, type="2"))^2)
-}
-
 #'Algorithmus: spectral_clustering
 #'
 #'berechnet k-dimensionale Projektionen zu gegebenen Daten
 #'
 #'@param data Matrix mit Daten die geclustered werden sollen. Jede Zeile enthält einen Messwert in R^d
 #'@param num_cluster int. Anzahl der Cluster
-#'@param f_kernel (optional) function.Kernfunktion. Default: Gauss-Kern mit Abstieg h
+#'@param h (optional) int. Abstiegsparameter des Gauss-Kerns
 #'@param dim (optional) int. Dimension der erstellten k-dimensionalen Projektionen durch spektrales Clustern. Default: 2
 #'
 #'@return k-dimensionale Projektionen (selbes Format wie data)
 #'@export
 
-spectral_clustering <- function(data, num_cluster, f_kernel = gausskernel, dim = 2){
+spectral_clustering <- function(data, num_cluster, dim = 2, h = 50){
+
+    gausskernel <- function(x,y){               #Gausskern definieren
+      exp(-h*(norm(x-y, type="2"))^2)
+    }
 
 
     n <- nrow(data)
@@ -23,7 +22,7 @@ spectral_clustering <- function(data, num_cluster, f_kernel = gausskernel, dim =
 
     for (i in 1:n){
         for (j in 1:n)
-            {affinity_matrix[i,j]=f_kernel(data[i,], data[j,])} #Gewichte zwischen Daten bestimmen
+            {affinity_matrix[i,j]=gausskernel(data[i,], data[j,])} #Gewichte zwischen Daten bestimmen
     }
 
 
@@ -32,7 +31,7 @@ spectral_clustering <- function(data, num_cluster, f_kernel = gausskernel, dim =
     for(i in 1:n){
         a <- 0
         for (j in 1:n){
-            a <- a+f_kernel(data[i,],data[j,]) #Werte der Diagonalmatrix bestimmen
+            a <- a+gausskernel(data[i,],data[j,]) #Werte der Diagonalmatrix bestimmen
             diagonal_matrix[i,i]=a
         }
     }
@@ -68,15 +67,15 @@ spectral_clustering <- function(data, num_cluster, f_kernel = gausskernel, dim =
 #'
 #'@param data Matrix mit Daten die geclustered werden sollen. Jede Zeile enthält einen Messwert in R^d
 #'@param num_cluster int. Anzahl der Cluster
-#'@param f_kernel (optional) function. Kernfunktion. Default: Gauss-Kern mit Abstieg h
+#'@param h (optional) int. Abstiegsparameter des Gauss-Kerns
 #'@param dim (optional) int. Dimension der erstellten k-dimensionalen Projektionen durch spektrales Clustern. Default: 2
 #'
 #'@return Liste mit Konvergenz logical, Anzahl an Iterationen, Clustermittelpunkten, sowie Labels
 #'@export
 
-k_means_spectral_clustering <- function(data, num_cluster, f_kernel = gausskernel, dim = 2){
+k_means_spectral_clustering <- function(data, num_cluster, dim = 2, h = 50){
 
-    k_spectral_projections <- spectral_clustering(data, num_cluster, f_kernel = gausskernel, dim = 2)
+    k_spectral_projections <- spectral_clustering(data, num_cluster, dim = 2, h = h)
     k_means_spectral_clustering_result <- k_means(k_spectral_projections, num_cluster)
     return(k_means_spectral_clustering_result)
 }
@@ -88,12 +87,13 @@ k_means_spectral_clustering <- function(data, num_cluster, f_kernel = gausskerne
 #'
 #'@param data Matrix mit Daten die geclustered werden sollen. Jede Zeile enthält einen Messwert in R^d
 #'@param num_cluster int. Anzahl der Cluster
-#'@param f_kernel (optional) function. Kernfunktion. Default: Gauss-Kern mit Abstieg h
+#'@param h (optional) int. Abstiegsparameter des Gauss-Kerns
 #'@param dim (optional) int. Dimension der erstellten k-dimensionalen Projektionen durch spektrales Clustern. Default: 2
 #'
 #'@return Plot der Cluster-Zuteilung
 #'@export
 
-plot_spectral_clustering <- function(data, num_cluster, f_kernel = gausskernel, dim = 2){
-    clustering <- k_means_spectral_clustering(data, num_cluster, f_kernel, dim)$labels
+plot_spectral_clustering <- function(data, num_cluster, dim = 2, h =50 ){
+
+    clustering <- k_means_spectral_clustering(data, num_cluster, dim=2, h = h)$labels
     plot(data, col=clustering, pch=19)}

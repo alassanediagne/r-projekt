@@ -7,9 +7,11 @@
 plot_optics_2d(data, optics_result, eps_prime = optics_result$eps)
 }
 \arguments{
-\item{data}{The data to be plotted}
+\item{data}{The data to be clustered. A matrix, each row being a point in R^d.}
 
 \item{optics_result}{Uses the result of the OPTIC algorithm (see 'optics'), make sure it was run on \code{data}}
+
+\item{eps_prime}{(optional) value to extract clusters, default is \code{eps} of optics_result.}
 }
 \value{
 Plot using \code{ggplot2}
