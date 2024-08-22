@@ -101,10 +101,24 @@ k_means <- function(data, num_cluster, m0 = NULL, return_labels=TRUE,
 
 
   if(is.null(m0)){
-    m0 <- k_means_pp(data, num_cluster)
+    m0 <- k_means_pp(data, num_cluster) # k-means ++ if m0 not specified
   }
 
+  if(num_cluster > nrow(data)){
+    stop(sprintf("tried to generate %i clusters with %i data points", num_cluster, nrow(data)))
+  }
+
+  if(ncol(m0) != ncol(data)){
+    stop(sprintf("data has dimension %i but initial values have dimension %i", ncol(m0), ncol(data)))
+  }
+
+  if(nrow(m0) != num_cluster){
+    stop(sprintf("initial values do not match number of clusters %i vs. %i", nrow(m0), num_cluster))
+  }
+
+
   data <- t(data)
+
 
   n_iter <- 0L # counter
 
@@ -175,7 +189,7 @@ k_means_predict <- function(x, means){
       stop(sprintf("x does not have the right dimension (%i vs %i)", ncol(means),d))
     }
     num_cluster <- nrow(means)
-    x <- matrix(rep(x, each=num_cluster), ncol=d)
+    x <- matrix(rep(x, each=num_cluster), nrow=num_cluster, ncol=d)
     dists <- abs(x-means)
     dists <- dists |> apply(1,\(x) sqrt(sum(x^2)))
     pred_label <- which.min(dists)
@@ -211,3 +225,5 @@ plot_k_means_2d <- function(data, num_cluster, max_iter=50L){
     ggplot2::theme_bw() +
     ggplot2::theme(legend.position="none")
 }
+
+
