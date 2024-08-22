@@ -11,6 +11,8 @@
 #' The \code{ordered_list} being an indices vector, of the ordering obtained by the OPTICS algorithm and
 #' the \code{reachability} being a vector of the reachability distances for each point of \code{data} as obtained by the OPTICS algorithm.
 #'
+#'@examples data
+
 #'
 #' @export
 
@@ -132,7 +134,7 @@ extract_dbscan <- function(optics_result, eps_prime = optics_result$eps) {
 
   }
   return(list(ordered_labels = clusters,
-              labels = clusters[sort(optics_result$ordered_list)] ))
+              labels = clusters[order(optics_result$ordered_list)] ))
 }
 
 
