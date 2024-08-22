@@ -7,7 +7,7 @@
 optics(data, eps, minPts)
 }
 \arguments{
-\item{data}{The data to be clustered.}
+\item{data}{The data to be clustered. A matrix, each row being a point in R^d.}
 
 \item{eps}{The distance defining the neighborhood of a point.}
 
@@ -21,7 +21,15 @@ the \code{reachability} being a vector of the reachability distances for each po
 \description{
 This is an implementation of the OPTICS (Ordering Points To Identify Clustering Structure) Algorithm
 }
+\section{Source}{
+
+For more information visit [this website](https://de.wikipedia.org/wiki/OPTICS).
+}
+
 \examples{
-data <-
+data <- gen_clusters(50, matrix(c(0,1,2,1,0,1,2,0),ncol=2), 0.3)
+eps <- 0.5
+minPts <- 3
+optics(data, eps, minPts)
 
 }

@@ -4,16 +4,16 @@
 \alias{k_means_spectral_clustering}
 \title{k_means_spectral_clustering}
 \usage{
-k_means_spectral_clustering(data, num_cluster, f_kernel = gausskernel, dim = 2)
+k_means_spectral_clustering(data, num_cluster, dim = 2, h = 50)
 }
 \arguments{
 \item{data}{Matrix mit Daten die geclustered werden sollen. Jede Zeile enthält einen Messwert in R^d}
 
 \item{num_cluster}{int. Anzahl der Cluster}
 
-\item{f_kernel}{(optional) function. Kernfunktion. Default: Gauss-Kern mit Abstieg h}
-
 \item{dim}{(optional) int. Dimension der erstellten k-dimensionalen Projektionen durch spektrales Clustern. Default: 2}
+
+\item{h}{(optional) int. Abstiegsparameter des Gauss-Kerns}
 }
 \value{
 Liste mit Konvergenz logical, Anzahl an Iterationen, Clustermittelpunkten, sowie Labels
