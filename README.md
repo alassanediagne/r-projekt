@@ -6,9 +6,9 @@
 
 ## TODO 
 
-- [ ] Remove all `requirements` and `library` calls. 
-- [ ] Remove all `source` calls. 
-- [ ] Check that the packages lodes, atm something like this happens
+- [x] Remove all `requirements` and `library` calls. 
+- [x] Remove all `source` calls. 
+- [x] Check that the packages lodes, atm something like this happens
   ```
   Error in `load_all()`:
   ! Failed to load R/optics.R
@@ -25,7 +25,6 @@
 
 - [ ] Remove all commented code; this is bad style
 - [ ] Build package release
-
 
 ### Before each release
 
