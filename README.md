@@ -2,7 +2,7 @@
 
 ## Development flow
 
-- Load current package with `devtools::load_all()` or `Ctrl-Shift-L` this loads the package into the current R-Session. AFTERWARDS test the written functions in the console
+- Load current package with `devtools::load_all()` or `Ctrl-Shift-L` this loads the package into the current R-Session. AFTERWARDS test the written functions in the console. Don't add `library` and `source` calls to the Codebase. Maybe this [cheat-sheet](https://raw.githubusercontent.com/rstudio/cheatsheets/main/package-development.pdf) is helpful.
 
 ## TODO 
 
