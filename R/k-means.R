@@ -203,6 +203,15 @@ k_means_predict <- function(x, means){
   }
 }
 
+#' Title
+#'
+#' @param data
+#' @param num_cluster
+#' @param max_iter
+#'
+#' @return Führt k-Means_algorithmus aus und plottet Cluster
+#' @export
+#'
 plot_k_means_2d <- function(data, num_cluster, max_iter=50L){
   clustering <- k_means(data, num_cluster, return_labels = T, max_iter = max_iter)
   data <- tibble::tibble(x=data[,1], y= data[,2])
