@@ -1,4 +1,9 @@
-#'Algorithmus: spektrales Clustering
+gausskernel <- function(x,y){               #Gausskern definieren
+    h <- 10
+    exp(-h*(norm(x-y, type="2"))^2)
+}
+
+#'Algorithmus: spectral_clustering
 #'
 #'berechnet k-dimensionale Projektionen zu gegebenen Daten
 #'
@@ -9,11 +14,6 @@
 #'
 #'@return k-dimensionale Projektionen (selbes Format wie data)
 #'@export
-gausskernel <- function(x,y){               #Gausskern definieren
-    h <- 100
-    exp(-h*(norm(x-y, type="2"))^2)
-}
-
 
 spectral_clustering <- function(data, num_cluster, f_kernel = gausskernel, dim = 2){
 
