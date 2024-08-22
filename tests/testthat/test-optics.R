@@ -4,7 +4,7 @@ get_2d_iris_test_data <- function() {
       data.matrix()
 }
 
-get_optics_result <-function {
+get_optics_result <- function() {
   optics(get_2d_iris_test_data(), 0.5, 3)
 }
 
