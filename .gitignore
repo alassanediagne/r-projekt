@@ -13,6 +13,6 @@
 *.log
 *.mem
 *.noisy
-
+Rplots.pdf
 
 inst/doc
