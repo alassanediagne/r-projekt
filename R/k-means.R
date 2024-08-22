@@ -216,6 +216,9 @@ k_means_predict <- function(x, means){
 #' @export
 #'
 plot_k_means_2d <- function(data, num_cluster, max_iter=50L){
+  if(ncol(data) != 2){
+    stop("function only plots 2d data")
+  }
   clustering <- k_means(data, num_cluster, return_labels = T, max_iter = max_iter)
   data <- tibble::tibble(x=data[,1], y= data[,2])
   means <- tibble::tibble(x=clustering$means[,1], y = clustering$means[,2])

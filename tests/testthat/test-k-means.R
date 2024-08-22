@@ -68,3 +68,7 @@ test_that("k_means_predict works for matrix input", {
   test_data <- rbind(c(1,3), c(4,4), c(-1,-7))
   expect_no_error(k_means_predict(test_data,km))
 })
+
+test_that("plot_k_means_2d works for matrix input", {
+  expect_error(plot_k_means_2d(t(data),2))
+})
