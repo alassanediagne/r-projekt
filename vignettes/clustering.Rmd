@@ -37,9 +37,9 @@ ggplot() +
   theme_bw()
 ```
 
-Based on this plot we can conduct that irises of the species virginica tend to have large petals while irises of the species setosa have rather smaller petals. In the above plot these species form their own clusters.
+Based on this plot one can easily conduct that irises of the species virginica tend to have large petals while irises of the species setosa have rather smaller petals. In the above plot these species form their own clusters.
 
-The objective of clustering would be to find these clusters - without knowing about the species of the instances. It does not help us telling, which species a specific iris belongs to. But it would tell us that these irises have something in common and some algorithms even allow us to predict, given a petal length and width, which cluster a new instance would belong to.
+The objective of a clustering algorithm would be to find these clusters without any previous knowledge of the data. And some algorithms even allow us to predict, given a petal length and width, which cluster a new instance would belong to.
 
 There are multiple clustering algorithms, each with its different strengths and weaknesses which will be illustrated here.
 
