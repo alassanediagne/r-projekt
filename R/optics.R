@@ -189,13 +189,24 @@ plot_reachability <- function(optics_result) {
 #'
 #'@export
 
-plot_optics_2d <- function(data, optics_result, eps_prime=optics_result$eps){
+plot_optics_2d <- function(data, optics_result, eps_prime = optics_result$eps) {
+
   clustering <- extract_dbscan(optics_result, eps_prime)
   data <- tibble::tibble(x = data[,1], y = data[,2])
-  ggplot2::ggplot() +
-    ggplot2::geom_point(data = data, ggplot2::aes(x = x, y = y, color = ifelse(clustering$label == 0, "black", as.factor(clustering$label))), size=1) +
-    ggplot2::theme_bw() +
-    ggplot2::theme(legend.position="none")
-}
+  data$label <- clustering$labels
+  unique_labels <- unique(data$label[data$label != 0])
 
+  colors <- c("black", scales::hue_pal()(length(unique_labels))) #Generate colors: black for label 0 (noise), and a palette for the rest
+  names(colors) <- c(0, unique_labels) #Create a named vector for the color scale
+
+  legend_labels <- c("Noise", paste("Cluster", seq_along(unique_labels)))
+  names(legend_labels) <- c(0, unique_labels)
+
+  ggplot2::ggplot() +
+    ggplot2::geom_point(data = data, ggplot2::aes(x = x, y = y, color = factor(label)), size = 1) +
+    ggplot2::scale_color_manual(values = colors, labels = legend_labels) +
+    ggplot2::theme_bw() +
+    ggplot2::theme(legend.position = "right") +
+    ggplot2::labs(color = "Clusters")
+}
 
