@@ -11,17 +11,11 @@
 #' The \code{ordered_list} being an indices vector, of the ordering obtained by the OPTICS algorithm and
 #' the \code{reachability} being a vector of the reachability distances for each point of \code{data} as obtained by the OPTICS algorithm.
 #'
+#' @import magrittr
+#' @import tibble
+#' @import dplyr
+#'
 #' @export
-
-require(magrittr)
-require(tibble)
-require(ggplot2)
-require(dplyr)
-
-
-# First we implement the OPTICS algorithm, which returns a clustering of given data, w.r.t eps and minPts.
-# The return is an 'ordered list' and  a 'reachability list'.
-
 optics <- function(data, eps, minPts) {
   stopifnot(
     "minPts has to be equal or bigger than 1"= minPts>=1
@@ -148,8 +142,10 @@ plot_reachability <- function(optics_result = optics_r) {
           )
 }
 
-optics_r <- optics(irisPetals, 0.5, 2)
+### TODO Sorry for removing this but it brakes the package build
+### Need adaptation
 
+#' @import ggplot2
 plot_optics_2d <- function(data, optics_result = optics_r ){
   clustering <- extract_dbscan(optics_result)
   data <- tibble(x = data[,1], y = data[,2])
@@ -158,12 +154,3 @@ plot_optics_2d <- function(data, optics_result = optics_r ){
     theme_bw() +
     theme(legend.position="none")
 }
-
-iris
-
-irisPetals <- iris %>%
-  select(c(Petal.Length,Petal.Width)) %>%
-  data.matrix()
-
-plot_optics_2d(irisPetals)
-extract_dbscan()

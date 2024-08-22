@@ -8,3 +8,10 @@
 .Rhistory
 .RData
 
+# From testing
+*.dat
+*.log
+*.mem
+*.noisy
+
+
