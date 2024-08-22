@@ -23,9 +23,9 @@ set.seed(13)
 
 This package implements the main clustering algorithms.
 
-Clustering is a main task in unsupervised learning.
+Clustering is a key technique in unsupervised learning, because it helps in discovering structure in data.
 
-In supervised learning, the best known sub discipline of machine learning the aim is to predict the output $\bar{Y}$ of a model given the input variables $\bar{X}$. We achieve this by training a machine learning algorithm on training data $(X_i, Y_i), i=1,..,n$ to which we know the response.
+In supervised learning, the best known sub discipline of machine learning, the aim is to predict the output $\bar{Y}$ of a model given the input variables $\bar{X}$. We achieve this by training a machine learning algorithm on training data $(X_i, Y_i), i=1,..,n$ to which we know the response.
 
 In contrast, unsupervised learning aims to find patterns in a training set $X_i, i=1,...,n$ without any (or minimal) external information and in some cases can even make predictions based on that.
 
