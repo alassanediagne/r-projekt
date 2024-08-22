@@ -3,7 +3,7 @@
 #'
 #' This is an implementation of the OPTICS (Ordering Points To Identify Clustering Structure) Algorithm
 #'
-#' @param data The data to be clustered.
+#' @param data The data to be clustered. A matrix, each row being a point in R^d.
 #' @param eps The distance defining the neighborhood of a point.
 #' @param minPts The minimum point count needed to form a dense region.
 #'
@@ -11,8 +11,13 @@
 #' The \code{ordered_list} being an indices vector, of the ordering obtained by the OPTICS algorithm and
 #' the \code{reachability} being a vector of the reachability distances for each point of \code{data} as obtained by the OPTICS algorithm.
 #'
-#'@examples data <-
-
+#' @examples data <- gen_clusters(50, matrix(c(0,1,2,1,0,1,2,0),ncol=2), 0.3)
+#' eps <- 0.5
+#' minPts <- 3
+#' optics(data, eps, minPts)
+#'
+#' @section Source:
+#' For more information visit [this website](https://de.wikipedia.org/wiki/OPTICS).
 #'
 #' @export
 
@@ -22,7 +27,14 @@
 
 optics <- function(data, eps, minPts) {
   stopifnot(
-    "minPts has to be equal or bigger than 1"= minPts>=1
+    "'minPts' has to be equal or bigger than 1."= minPts>=1,
+    "'minPts' has to be numeric." = is.numeric(minPts),
+    "'minPts' has to be an integer." = minPts == as.integer(minPts),
+    "'minPts' can't be larger then nrow('data')" = minPts <= nrow(data),
+    "'eps' has to be positive."= eps>=0,
+    "'eps' has to be numeric."= is.numeric(eps),
+    "'data' has to be a matrix or vector." = is.matrix(data)|is.vector(data),
+    "'data' has to be numeric." = is.numeric(data)
   )
   data <- t(data)
   n <- ncol(data)
@@ -95,7 +107,7 @@ optics <- function(data, eps, minPts) {
 #'extract_dbscan
 #'
 #'Extracts clusters from the result of OPTICS algorithm. Clusters are found by 'horizontally cutting' the
-#'reachability plot with an eps value.
+#'reachability plot with an eps_prime value.
 #'
 #'@param optics_result Uses the result of the OPTIC algorithm (see 'optics')
 #'@param eps_prime (optional) value to extract clusters, default is \code{eps} of optics_result.
@@ -109,7 +121,8 @@ optics <- function(data, eps, minPts) {
 extract_dbscan <- function(optics_result, eps_prime = optics_result$eps) {
 
   stopifnot(
-    "eps_prime must be smaller or equal to eps"=eps_prime<=optics_result$eps
+    "'eps_prime' must be smaller or equal to eps"=eps_prime<=optics_result$eps,
+    "'eps_prime' must be positive" = eps_prime>=0
   )
 
   ordered_reachability <- optics_result$reachability[optics_result$ordered_list]
@@ -182,8 +195,9 @@ plot_reachability <- function(optics_result) {
 #'
 #'Plots 2-dimensional data and colors the clusters obtained by the OPTICS algorithm accordingly.
 #'
-#'@param data The data to be plotted
+#'@param data The data to be clustered. A matrix, each row being a point in R^d.
 #'@param optics_result Uses the result of the OPTIC algorithm (see 'optics'), make sure it was run on \code{data}
+#'@param eps_prime (optional) value to extract clusters, default is \code{eps} of optics_result.
 #'
 #'@return Plot using \code{ggplot2}
 #'
