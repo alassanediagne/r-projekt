@@ -193,8 +193,9 @@ plot_optics_2d <- function(data, optics_result, eps_prime=optics_result$eps){
   clustering <- extract_dbscan(optics_result, eps_prime)
   data <- tibble::tibble(x = data[,1], y = data[,2])
   ggplot2::ggplot() +
-    ggplot2::geom_point(data = data, ggplot2::aes(x = x, y = y, color = factor(clustering$labels)), size=1) +
+    ggplot2::geom_point(data = data, ggplot2::aes(x = x, y = y, color = ifelse(clustering$label == 0, "black", as.factor(clustering$label))), size=1) +
     ggplot2::theme_bw() +
     ggplot2::theme(legend.position="none")
 }
+
 

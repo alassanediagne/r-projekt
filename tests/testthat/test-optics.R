@@ -7,7 +7,7 @@ get_2d_iris_test_data <- function() {
 
 get_optics_result <- function() {
   optics(get_2d_iris_test_data(), 0.5, 3)
-
+}
 
 get_simple_test_data <- function() {
   rbind(
