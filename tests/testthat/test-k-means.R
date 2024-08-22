@@ -1,4 +1,22 @@
-data <- gen_clusters(50, matrix(c(0,1,2,0,1,2),ncol=2),0.3)
+data <- rbind(
+    c(1,0),
+    c(1.1,0),
+    c(1.3,0),
+    c(1.4,0),
+    c(1,0.2),
+    c(1.1,0.2),
+    c(1.3,0.4),
+    c(1.4,-0.2),
+    c(2,0),
+    c(2.1,0),
+    c(2,0.4),
+    c(2.1,0.6),
+    c(2,0.3),
+    c(2.1,0.1),
+    c(2.3,0),
+    c(-3,2),
+    c(1.6, 3)
+  )
 
 # Daten mit sehr geringem Lärm um (0,0), (1,0), (0,1), (1,1). Erwarte ungefähr diese Clusterzentren bei k-means mit k=3
 

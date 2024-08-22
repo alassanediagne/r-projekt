@@ -84,7 +84,7 @@ update_means <- function(x,C,num_cluster){
 #'@param num_cluster int. Anzahl der Cluster
 #'@param m0 (optional) Matrix mit Anfangswerten zur Initialisierung des Algorithmus. Falls nicht angegeben werden die Startwerte automatisch gewaehlt
 #'@param save_history (optional) logical. Gibt Cluster-Mittelpunkte und Labels in jeder Iteration zurueck. Default: FALSE
-#'@param return_labels (optional) logical. Gibt zu jedem Messwert das Clusterlabel zurueck. Default: FALSE
+#'@param return_labels (optional) logical. Gibt zu jedem Messwert das Clusterlabel zurueck. Default: TRUE
 #'@param max_iter (optinal) int. Legt maximale Anzahl an Iterationen fest. Default: 50
 #'@param tol (optinal) float. Toleranz zur Festlegung der Konvergenz. Default: 1e-8
 #'@param verbose (optional) logical. Falls TRUE wird die Anzahl der Iterationen und Konvergenz als Nachricht ausgegeben
@@ -99,7 +99,7 @@ update_means <- function(x,C,num_cluster){
 #'@export
 
 k_means <- function(data, num_cluster, m0 = NULL, save_history = FALSE,
-                    return_labels=FALSE, max_iter = 50L, tol = 1e-8, verbose = FALSE){
+                    return_labels=TRUE, max_iter = 50L, tol = 1e-8, verbose = FALSE){
 
 
   if(is.null(m0)){
@@ -222,5 +222,3 @@ plot_k_means_2d <- function(data, num_cluster, max_iter=50L){
     ggplot2::theme_bw() +
     ggplot2::theme(legend.position="none")
 }
-
-
