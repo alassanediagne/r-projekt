@@ -63,9 +63,16 @@ update_m <- function(x,C,num_cluster){
 
   for(k in 1:num_cluster){
     mask <- C == k # pruefe fuer welche der x_i ob k aktuelles argmin ist
-    mask <- mask |> rep(each=d) |> matrix(ncol=n, nrow=d)
-    x_relevant <- x[mask] |> matrix(nrow=d) # maskiere alle x_i deren aktuellen argmin nicht k ist
-    m[,k] <- apply(x_relevant, 1, mean,na.rm=TRUE) # update mean
+    if(sum(mask)==0){
+      # Falls aktuell keine Punkte dem Cluster zugewiesen sind nehme zufälligen Clustermittelpunkt
+      random_idx <- sample(1:n, 1)
+      m[,k] <- x[,random_idx]
+    }
+    else{
+      mask <- mask |> rep(each=d) |> matrix(ncol=n, nrow=d)
+      x_relevant <- x[mask] |> matrix(nrow=d) # maskiere alle x_i deren aktuellen argmin nicht k ist
+      m[,k] <- apply(x_relevant, 1, mean,na.rm=TRUE) # update mean
+    }
   }
   return(m)
 }
@@ -120,7 +127,7 @@ k_means <- function(data, num_cluster, m0 = NULL, save_history = FALSE,
       history <- append(history,list(iteration = n_iter, means = t(m), argmins=current_arg_mins))
     }
 
-    if(norm(m-m_old, type='1') < tol) {
+    if(norm(m - m_old, type="i") < tol) {
       # pruefe konvergenz
       converged <- TRUE
       break
@@ -195,7 +202,6 @@ k_means_predict <- function(x, means){
     stop(sprintf("x muss ein Vektor oder eine Matrix sein, ist jedoch von der Klasse %s", class(x)))
   }
 }
-
 
 plot_k_means_2d <- function(data, num_cluster, max_iter=50L){
   clustering <- k_means(data, num_cluster, return_labels = T, max_iter = max_iter)
