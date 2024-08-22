@@ -2,6 +2,10 @@
 
 ## Thema 6 - Clustering
 
+### Development flow
+
+- Load current package with `devtools::load_all()` or `Ctrl-Shift-L` this loads the package into the current R-Session. AFTERWARDS test the written functions in the console
+
 ### TODO 
 
 - [ ] Remove all `requirements` and `library` calls. 
@@ -21,9 +25,14 @@
 
 #### At the end
 
-- [ ] Remove all commented code this is bad style
+- [ ] Remove all commented code; this is bad style
 - [ ] Build package release
 
+
+#### Before each release
+
+- [ ] Check documentation is up to date generate with `devtools::document()`
+- [ ] Run tests with `devtools::test()` or `Ctrl-Shift-T`
 
 ### Literatur
 
