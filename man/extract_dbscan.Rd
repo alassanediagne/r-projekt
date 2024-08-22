@@ -16,5 +16,5 @@ Returns a list of 2 elements \code{ordered_labels} and \code{labels}
 }
 \description{
 Extracts clusters from the result of OPTICS algorithm. Clusters are found by 'horizontally cutting' the
-reachability plot with a
+reachability plot with an eps value.
 }

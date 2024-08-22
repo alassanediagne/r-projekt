@@ -87,9 +87,7 @@ update_m <- function(x,C,num_cluster){
 #' k_means(data,4)
 #'@examples
 #' data <- gen_clusters(100, matrix(c(0,0,1,1,1,0,0,1), ncol=2),0.3)
-#' plot(data)
 #' plot_k_means_2d(data,4)
-#'@examples
 #'
 #'@export
 

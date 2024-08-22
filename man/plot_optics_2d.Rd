@@ -4,7 +4,7 @@
 \alias{plot_optics_2d}
 \title{plot_optics_2d}
 \usage{
-plot_optics_2d(data, optics_result)
+plot_optics_2d(data, optics_result, eps_prime = optics_result$eps)
 }
 \arguments{
 \item{data}{The data to be plotted}

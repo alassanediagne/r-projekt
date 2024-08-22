@@ -41,4 +41,8 @@ Implementierung des k-Means-Algorithmus aus Richter mit zusaetzlich automatische
 \examples{
 data <- gen_clusters(50, matrix(c(0,1,2,1,0,1,2,0),ncol=2), 0.3)
 k_means(data,4)
+data <- gen_clusters(100, matrix(c(0,0,1,1,1,0,0,1), ncol=2),0.3)
+plot(data)
+plot_k_means_2d(data,4)
+
 }
