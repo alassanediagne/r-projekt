@@ -163,11 +163,6 @@ plot_reachability <- function(optics_result) {
 }
 
 
-### TODO Sorry for removing this but it brakes the package build
-### Need adaptation
-
-#' @import ggplot2
-
 
 plot_optics_2d <- function(data, optics_result){
   clustering <- extract_dbscan(optics_result)
