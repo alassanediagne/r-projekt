@@ -18,6 +18,7 @@ knitr::opts_chunk$set(
 library(Clustering)
 library(ggplot2)
 library(dplyr)
+set.seed(13)
 ```
 
 This package implements the main clustering algorithms.
@@ -46,7 +47,7 @@ There are multiple clustering algorithms, each with its different strengths and 
 
 `k_means` clustering is an iterative algorithm and the most widespread clustering algorithm. Having complexity $O(n)$ it is very efficient even for huge data sets.
 
-The algorithm takes besides the data the integer`k` (in this package for better readability `num_cluster`) as input, which sets the desired number of clusters. The algorithm then finds `k` approximately optimal cluster centers and each point in the data set is being assigned to the closest cluster centroid. This optimality is with respect to the minimal euclidian intra-cluster distance, meaning that the points which are very close to each other will most likely get clustered together.
+The algorithm takes besides the data the integer `k` (in this package for better readability `num_cluster`) as input, which sets the desired number of clusters. The algorithm then finds `k` approximately optimal cluster centers and each point in the data set is being assigned to the closest cluster centroid. This optimality is with respect to the minimal euclidian intra-cluster distance, meaning that the points which are very close to each other will most likely get clustered together.
 
 The k-means algorithm expects a matrix as input. To come back to the example in the beginning, we are going to take a look at the petal sizes in the iris data set.
 
@@ -62,8 +63,30 @@ In this case we have seen a plot of the data and know, that clustering in the da
 
 ```{r}
 k_means(irisPetals, 3)
-plot_2d_k_means(irisPetals,3)
 ```
 
+Apart from the cluster means, the k-means algorithm also returned a logical indicating that it converged and the number of iterations it needed till convergence. Optionally we could also retrieve the cluster means in every iteration.
 
+The package also implemented a function which performs k-means clustering on 2d data and immediately plots the clusters using ggplot:
 
+```{r}
+plot_k_means_2d(irisPetals, 3)
+```
+
+As we can see, this plot resembles the plot we saw above a lot. Apart of a few outliers, the algorithm has clustered the right instances together.
+
+We can now also predict, to which cluster two irises with petal lengths $2$ and $6$ and petal widths $0.5$ and $2.7$ would belong to:
+
+```{r}
+petals_km <- k_means(irisPetals, 3)
+new_irises <- rbind(c(2,0.5), c(6,2.7))
+k_means_predict(new_irises, petals_km$means)
+```
+
+Of course, to make sense of these labels, we have to take a look at the means and see which other instances have been clustered to this group:
+
+```{r}
+petals_km
+```
+
+It is important to note that the algorithm uses a probabilistic method (called `k-means ++`) to find good initial values and assure fast convergence, thus the results may vary if the code is exectuted multiple times. This can be prevented by `set.seed()`.
