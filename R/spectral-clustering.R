@@ -10,7 +10,7 @@
 #'@return k-dimensionale Projektionen (selbes Format wie data)
 #'@export
 gausskernel <- function(x,y){               #Gausskern definieren
-    h <- 50
+    h <- 100
     exp(-h*(norm(x-y, type="2"))^2)
 }
 
@@ -77,7 +77,7 @@ spectral_clustering <- function(data, num_cluster, f_kernel = gausskernel, dim =
 k_means_spectral_clustering <- function(data, num_cluster, f_kernel = gausskernel, dim = 2){
 
     k_spectral_projections <- spectral_clustering(data, num_cluster, f_kernel = gausskernel, dim = 2)
-    k_means_spectral_clustering_result <- k_means(k_spectral_projections, num_cluster, return_labels = TRUE)
+    k_means_spectral_clustering_result <- k_means(k_spectral_projections, num_cluster)
     return(k_means_spectral_clustering_result)
 }
 
