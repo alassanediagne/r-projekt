@@ -26,6 +26,7 @@
 
 - [ ] Remove all commented code; this is bad style
 - [ ] Build package release
+- [ ] Check `DESCRIPTION` file: Add authors etc.
 
 ### Before each release
 
