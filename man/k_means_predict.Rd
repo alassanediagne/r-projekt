@@ -7,12 +7,12 @@
 k_means_predict(x, means)
 }
 \arguments{
-\item{x}{Ein atomarer Vektor oder eine Matrix mit Messwerten}
+\item{x}{atomic vector or matrix with measurements}
 
-\item{means}{Clustermittelpunkte (z.B. aus dem k-Means-Algorithmus)}
+\item{means}{cluster means (e.g. from k-means algorithm)}
 }
 \value{
-erwartete Klassenlabel der neuen Messwerte
+predicted labels of new measurements
 }
 \description{
 k_means_predict

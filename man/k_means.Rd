@@ -2,41 +2,38 @@
 % Please edit documentation in R/k-means.R
 \name{k_means}
 \alias{k_means}
-\title{k-Means-Algorithmus}
+\title{k-means algorithm}
 \usage{
 k_means(
   data,
   num_cluster,
   m0 = NULL,
+  return_labels = TRUE,
   save_history = FALSE,
-  return_labels = FALSE,
   max_iter = 50L,
-  tol = 1e-08,
-  verbose = FALSE
+  tol = 1e-08
 )
 }
 \arguments{
-\item{data}{Matrix mit Daten die geclustered werden sollen. Jede Zeile enthaelt einen Messwert in R^d}
+\item{data}{matrix. Every row contains a point}
 
-\item{num_cluster}{int. Anzahl der Cluster}
+\item{num_cluster}{int. number of clusters desired}
 
-\item{m0}{(optional) Matrix mit Anfangswerten zur Initialisierung des Algorithmus. Falls nicht angegeben werden die Startwerte automatisch gewaehlt}
+\item{m0}{(optional) matrix with initial values. Will be chosen automatically if not specified}
 
-\item{save_history}{(optional) logical. Gibt Cluster-Mittelpunkte und Labels in jeder Iteration zurueck. Default: FALSE}
+\item{return_labels}{(optional) logical. returns cluster label of each instance. Default: TRUE}
 
-\item{return_labels}{(optional) logical. Gibt zu jedem Messwert das Clusterlabel zurueck. Default: FALSE}
+\item{save_history}{(optional) logical. returns iteration history}
 
-\item{max_iter}{(optinal) int. Legt maximale Anzahl an Iterationen fest. Default: 50}
+\item{max_iter}{(optinal) int. sets maximum number of iterations. Default: 50}
 
-\item{tol}{(optinal) float. Toleranz zur Festlegung der Konvergenz. Default: 1e-8}
-
-\item{verbose}{(optional) logical. Falls TRUE wird die Anzahl der Iterationen und Konvergenz als Nachricht ausgegeben}
+\item{tol}{(optinal) float. tolerance to conclude convergence Default: 1e-8}
 }
 \value{
-Liste mit Konvergenz logical, Anzahl an Iterationen, Clustermittelpunkten, sowie, falls erwuenscht Labels, einzelnen Iterationen und Nachricht
+list containing logical indicating wether the algorithm converged, number of iterations, cluster means and labels
 }
 \description{
-Implementierung des k-Means-Algorithmus aus Richter mit zusaetzlich automatischer Startwertwahl
+Implementation of the k-means algorithm with automatic initial values (Richter, algorithm 9.10)
 }
 \examples{
 data <- gen_clusters(50, matrix(c(0,1,2,1,0,1,2,0),ncol=2), 0.3)

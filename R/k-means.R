@@ -2,13 +2,13 @@ k_means_pp <- function(data, num_cluster){
   n <- nrow(data)
   d <- ncol(data)
 
-  init_vals <- matrix(0, ncol=d, nrow=num_cluster) #hier werden die Anfangswerte gespeichert
+  init_vals <- matrix(0, ncol=d, nrow=num_cluster) # matrix for initial values
 
   random_idx <- sample(1:n, 1)
-  init_vals[1,] <- data[random_idx, ] # erster Anfangswert ist ein zufaelliger Punkt
+  init_vals[1,] <- data[random_idx, ] # first selection is a random point
 
   eucl_dist <- function(data, point) {
-    # Funktion zur Berechnung des Abstands
+    # auxiliary function to compute distance
     return(sqrt(rowSums((data - point) ^ 2)))
   }
 
@@ -18,7 +18,7 @@ k_means_pp <- function(data, num_cluster){
     prob <- min_distances^2
     prob <- prob/sum(prob)
     new_idx <- sample(1:n, 1, prob = prob)
-    # Wahrscheinlichkeit ist gewichtet, proportianal zu quadriertener Distanz
+    # probability is proporitional to d^2
     init_vals[i,] <- data[new_idx,]
     current_distances <- eucl_dist(data, init_vals[i,])
     dist_to_update <- current_distances < min_distances
@@ -29,26 +29,25 @@ k_means_pp <- function(data, num_cluster){
 
 
 update_arg_mins <- function(x, m){
-  # x dxn Matrix mit Daten, m dxK Matrix mit aktuellen means
-
+  # initialize variables
   n <- ncol(x)
   d <- nrow(x)
   num_cluster <- ncol(m)
 
-  # initalisiere Variablen
-  # Wir setzen die aktuellen argmins und minimalen Distanzen auf das erste mean
-  current_arg_mins <- rep(1L, times=n) # hier speichern wir die aktuellen argmins
+
+  # set current labels to 1 and min distances to first mean
+  current_arg_mins <- rep(1L, times=n) # vector to save current arg mins
   current_min_dist <- x - matrix(m[,1], nrow = d, ncol = n)
-  current_min_dist <- apply(current_min_dist, 2, \(x) sum(x^2,na.rm = TRUE)) # hier speichern wir die aktuellen minimalen Distanzen
+  current_min_dist <- apply(current_min_dist, 2, \(x) sum(x^2,na.rm = TRUE)) # vector saving current min distances
 
   for(k in 2:num_cluster){
-    # gehe alle means ab dem zweiten durch
+    # itearte through all means starting at the second
     current_mean <- matrix(m[,k], nrow = d, ncol = n)
-    dist_to_mean <- x - current_mean #subrahiere den aktuellen mean
-    dist_to_mean <- apply(dist_to_mean, 2, \(x) sum(x^2)) # bestimme alle quadrierten eukl. Normen
-    to_update <- dist_to_mean < current_min_dist # bestimme die Indizes zu denen eine kleinere Distanz gefunden wurde
+    dist_to_mean <- x - current_mean
+    dist_to_mean <- apply(dist_to_mean, 2, \(x) sum(x^2)) # compute all squared eucl. distances
+    to_update <- dist_to_mean < current_min_dist # compute indices for which we have found a closer cluster
     current_arg_mins[to_update] <- rep(k, times=sum(to_update)) # update argmins
-    current_min_dist[to_update] <- dist_to_mean[to_update] # update minimale Distanzen
+    current_min_dist[to_update] <- dist_to_mean[to_update] # update min distances
   }
   return(current_arg_mins)
 }
@@ -56,15 +55,15 @@ update_arg_mins <- function(x, m){
 
 
 update_means <- function(x,C,num_cluster){
-  # x dxn Matrix mit Daten, C: Vektor mit aktuellen argmins, num_cluster: Anzahl der Cluster
+
   n <- ncol(x)
   d <- nrow(x)
   m <- matrix(nrow=d, ncol=num_cluster)
 
   for(k in 1:num_cluster){
-    mask <- C == k # pruefe fuer welche der x_i ob k aktuelles argmin ist
+    mask <- C == k # check which points are in the kth cluster
     if(sum(mask)==0){
-      # Falls aktuell keine Punkte dem Cluster zugewiesen sind nehme zufälligen Clustermittelpunkt
+      # if the cluster is empty, choose a random point
       random_idx <- sample(1:n, 1)
       m[,k] <- x[,random_idx]
     }
@@ -78,17 +77,16 @@ update_means <- function(x,C,num_cluster){
 }
 
 #'@name k_means
-#'@title k-Means-Algorithmus
-#'@description Implementierung des k-Means-Algorithmus aus Richter mit zusaetzlich automatischer Startwertwahl
-#'@param data Matrix mit Daten die geclustered werden sollen. Jede Zeile enthaelt einen Messwert in R^d
-#'@param num_cluster int. Anzahl der Cluster
-#'@param m0 (optional) Matrix mit Anfangswerten zur Initialisierung des Algorithmus. Falls nicht angegeben werden die Startwerte automatisch gewaehlt
-#'@param save_history (optional) logical. Gibt Cluster-Mittelpunkte und Labels in jeder Iteration zurueck. Default: FALSE
-#'@param return_labels (optional) logical. Gibt zu jedem Messwert das Clusterlabel zurueck. Default: TRUE
-#'@param max_iter (optinal) int. Legt maximale Anzahl an Iterationen fest. Default: 50
-#'@param tol (optinal) float. Toleranz zur Festlegung der Konvergenz. Default: 1e-8
-#'@param verbose (optional) logical. Falls TRUE wird die Anzahl der Iterationen und Konvergenz als Nachricht ausgegeben
-#'@return Liste mit Konvergenz logical, Anzahl an Iterationen, Clustermittelpunkten, sowie, falls erwuenscht Labels, einzelnen Iterationen und Nachricht
+#'@title k-means algorithm
+#'@description Implementation of the k-means algorithm with automatic initial values (Richter, algorithm 9.10)
+#'@param data matrix. Every row contains a point
+#'@param num_cluster int. number of clusters desired
+#'@param m0 (optional) matrix with initial values. Will be chosen automatically if not specified
+#'@param return_labels (optional) logical. returns cluster label of each instance. Default: TRUE
+#'@param save_history (optional) logical. returns iteration history
+#'@param max_iter (optinal) int. sets maximum number of iterations. Default: 50
+#'@param tol (optinal) float. tolerance to conclude convergence Default: 1e-8
+#'@return list containing logical indicating wether the algorithm converged, number of iterations, cluster means and labels
 #'@examples
 #' data <- gen_clusters(50, matrix(c(0,1,2,1,0,1,2,0),ncol=2), 0.3)
 #' k_means(data,4)
@@ -98,8 +96,8 @@ update_means <- function(x,C,num_cluster){
 #'
 #'@export
 
-k_means <- function(data, num_cluster, m0 = NULL, save_history = FALSE,
-                    return_labels=TRUE, max_iter = 50L, tol = 1e-8, verbose = FALSE){
+k_means <- function(data, num_cluster, m0 = NULL, return_labels=TRUE,
+                    save_history = FALSE, max_iter = 50L, tol = 1e-8){
 
 
   if(is.null(m0)){
@@ -108,7 +106,7 @@ k_means <- function(data, num_cluster, m0 = NULL, save_history = FALSE,
 
   data <- t(data)
 
-  n_iter <- 0L # zaehlt Iterationen
+  n_iter <- 0L # counter
 
   m <- t(m0)
 
@@ -119,7 +117,7 @@ k_means <- function(data, num_cluster, m0 = NULL, save_history = FALSE,
   converged <- FALSE
 
   while(n_iter <= max_iter){
-    m_old <- m # speichere m zum vergleichen
+    m_old <- m # save m to compare
     current_arg_mins <- update_arg_mins(data,m) # update argmins
     m <- update_means(data,current_arg_mins,num_cluster) # update means
 
@@ -128,7 +126,7 @@ k_means <- function(data, num_cluster, m0 = NULL, save_history = FALSE,
     }
 
     if(norm(m - m_old, type="i") < tol) {
-      # pruefe konvergenz
+      # check convergence
       converged <- TRUE
       break
     }
@@ -152,15 +150,6 @@ k_means <- function(data, num_cluster, m0 = NULL, save_history = FALSE,
     out$labels <- current_arg_mins
   }
 
-  if(verbose){
-    if(converged){
-      out$msg <- sprintf("Methode konvergiert nach %i Iterationen", n_iter)
-    }
-    else{
-      out$msg <- sprintf("Maximale Anzahl an Iterationen erreicht")
-    }
-  }
-
   return(out)
 }
 
@@ -169,10 +158,10 @@ k_means <- function(data, num_cluster, m0 = NULL, save_history = FALSE,
 
 #' k_means_predict
 #'
-#' @param x Ein atomarer Vektor oder eine Matrix mit Messwerten
-#' @param means Clustermittelpunkte (z.B. aus dem k-Means-Algorithmus)
+#' @param x atomic vector or matrix with measurements
+#' @param means cluster means (e.g. from k-means algorithm)
 #'
-#' @return erwartete Klassenlabel der neuen Messwerte
+#' @return predicted labels of new measurements
 #' @export
 #'
 #' @examples data <- gen_clusters(50, matrix(c(0,1,2,0,1,2)), 0.3)
@@ -183,7 +172,7 @@ k_means_predict <- function(x, means){
   predict_instance <- function(x, means){
     d <- length(x)
     if(d != ncol(means)){
-      stop(sprintf("x hat nicht die richtige Dimension (%i vs %i)", ncol(means),d))
+      stop(sprintf("x does not have the right dimension (%i vs %i)", ncol(means),d))
     }
     num_cluster <- nrow(means)
     x <- matrix(rep(x, each=num_cluster), ncol=d)
@@ -199,17 +188,17 @@ k_means_predict <- function(x, means){
     return(apply(x, 1, \(xi) predict_instance(xi,means)))
   }
   else{
-    stop(sprintf("x muss ein Vektor oder eine Matrix sein, ist jedoch von der Klasse %s", class(x)))
+    stop(sprintf("x has to be an atomic vector or a matrix but is of class %s", class(x)))
   }
 }
 
 #' plot_k_means_2d
 #'
-#' @param data
-#' @param num_cluster
-#' @param max_iter
+#' @param data data that should be clustered and plotted
+#' @param num_cluster number of clusters for k-means
+#' @param max_iter maximum iterations
 #'
-#' @return Führt k-Means-Algorithmus aus und plottet Cluster
+#' @return Performs k-means algorithm on data and plots clusters
 #' @export
 #'
 plot_k_means_2d <- function(data, num_cluster, max_iter=50L){

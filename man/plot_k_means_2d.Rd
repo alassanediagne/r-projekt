@@ -2,16 +2,20 @@
 % Please edit documentation in R/k-means.R
 \name{plot_k_means_2d}
 \alias{plot_k_means_2d}
-\title{Title}
+\title{plot_k_means_2d}
 \usage{
 plot_k_means_2d(data, num_cluster, max_iter = 50L)
 }
 \arguments{
-\item{max_iter}{}
+\item{data}{data that should be clustered and plotted}
+
+\item{num_cluster}{number of clusters for k-means}
+
+\item{max_iter}{maximum iterations}
 }
 \value{
-Führt k-Means_algorithmus aus und plottet Cluster
+Performs k-means algorithm on data and plots clusters
 }
 \description{
-Title
+plot_k_means_2d
 }
