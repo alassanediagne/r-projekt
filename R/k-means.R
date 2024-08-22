@@ -82,8 +82,15 @@ update_m <- function(x,C,num_cluster){
 #'@param tol (optinal) float. Toleranz zur Festlegung der Konvergenz. Default: 1e-8
 #'@param verbose (optional) logical. Falls TRUE wird die Anzahl der Iterationen und Konvergenz als Nachricht ausgegeben
 #'@return Liste mit Konvergenz logical, Anzahl an Iterationen, Clustermittelpunkten, sowie, falls erwuenscht Labels, einzelnen Iterationen und Nachricht
-#'@examples data <- gen_clusters(50, matrix(c(0,1,2,1,0,1,2,0),ncol=2), 0.3)
+#'@examples
+#' data <- gen_clusters(50, matrix(c(0,1,2,1,0,1,2,0),ncol=2), 0.3)
 #' k_means(data,4)
+#'@examples
+#' data <- gen_clusters(100, matrix(c(0,0,1,1,1,0,0,1), ncol=2),0.3)
+#' plot(data)
+#' plot_k_means_2d(data,4)
+#'@examples
+#'
 #'@export
 
 k_means <- function(data, num_cluster, m0 = NULL, save_history = FALSE,
