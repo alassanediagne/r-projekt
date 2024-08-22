@@ -223,3 +223,4 @@ plot_k_means_2d <- function(data, num_cluster, max_iter=50L){
     ggplot2::theme(legend.position="none")
 }
 
+
