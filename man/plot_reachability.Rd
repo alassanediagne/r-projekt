@@ -16,3 +16,13 @@ bar representing a datapoint, they are orderd by \code{ordered_list} of \code{op
 \description{
 Plots the reachability-plot of the OPTICS algithm. A special kind of 'dendogram'
 }
+\examples{
+data <- gen_clusters(50, matrix(c(0,1,2,1,0,1,2,0),ncol=2), 0.3)
+eps <- 0.5
+minPts <- 3
+#Obtain an optics result
+optics_result <- optics(data, eps, minPts)
+#Plot reachability:
+plot_reachability(optics_result)
+
+}

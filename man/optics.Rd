@@ -2,7 +2,7 @@
 % Please edit documentation in R/optics.R
 \name{optics}
 \alias{optics}
-\title{This is an implementation of the OPTICS Algorithm}
+\title{optics}
 \usage{
 optics(data, eps, minPts)
 }
@@ -14,16 +14,16 @@ optics(data, eps, minPts)
 \item{minPts}{The minimum point count needed to form a dense region.}
 }
 \value{
-Returns a list of 2 elements \code{list(ordered_list, reachability)}.
+Returns a list of 2 elements \code{list(ordered_list, reachability)}.\cr
 The \code{ordered_list} being an indices vector, of the ordering obtained by the OPTICS algorithm and
 the \code{reachability} being a vector of the reachability distances for each point of \code{data} as obtained by the OPTICS algorithm.
 }
 \description{
-This is an implementation of the OPTICS (Ordering Points To Identify Clustering Structure) Algorithm
+This is an implementation of the OPTICS (Ordering Points To Identify Clustering Structure) algorithm
 }
 \section{Source}{
 
-For more information visit [this website](https://de.wikipedia.org/wiki/OPTICS).
+For more information visit \href{https://de.wikipedia.org/wiki/OPTICS}{this website}.
 }
 
 \examples{

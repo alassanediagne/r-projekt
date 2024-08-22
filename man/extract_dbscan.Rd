@@ -15,6 +15,16 @@ extract_dbscan(optics_result, eps_prime = optics_result$eps)
 Returns a list of 2 elements \code{ordered_labels} and \code{labels}
 }
 \description{
-Extracts clusters from the result of OPTICS algorithm. Clusters are found by 'horizontally cutting' the
+Extract clusters from the result of OPTICS algorithm. Clusters are found by 'horizontally cutting' the
 reachability plot with an eps_prime value.
+}
+\examples{
+data <- gen_clusters(50, matrix(c(0,1,2,1,0,1,2,0),ncol=2), 0.3)
+eps <- 0.5
+minPts <- 3
+#Obtain an optics result
+optics_result <- optics(data, eps, minPts)
+#execute function with default eps_prime
+extract_dbscan(optics_result)
+
 }

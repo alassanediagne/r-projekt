@@ -31,9 +31,7 @@ In the following we present some examples of the implemented algorithm and furth
 related functions.
 
 ```{r}
-data <- get_2d_iris_test_data()
 
-plot(data)
 ```
 
 
