@@ -11,7 +11,7 @@
 #' The \code{ordered_list} being an indices vector, of the ordering obtained by the OPTICS algorithm and
 #' the \code{reachability} being a vector of the reachability distances for each point of \code{data} as obtained by the OPTICS algorithm.
 #'
-#'@examples data
+#'@examples data <-
 
 #'
 #' @export
@@ -161,6 +161,9 @@ extract_dbscan <- function(optics_result, eps_prime = optics_result$eps) {
 #'@export
 
 plot_reachability <- function(optics_result) {
+  stopifnot(
+    "No reachable points"=any(optics_result$reachability != Inf)
+  )
   ordered_reachability <- optics_result$reachability[optics_result$ordered_list]
   max_value <- 2*max(ordered_reachability[!ordered_reachability == Inf])
   ordered_reachability[ordered_reachability == Inf] <- max_value
