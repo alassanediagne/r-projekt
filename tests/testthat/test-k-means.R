@@ -1,12 +1,4 @@
-data <- matrix(ncol=2, nrow=200)
-data[1:50,1] <- seq(-0.1,0.1,length.out=50)
-data[1:50,2] <- seq(0.1,-0.1,length.out=50)
-data[51:100,1] <- seq(0.9,1.1,length.out=50)
-data[51:100,2] <- seq(0.1,-0.1,length.out=50)
-data[101:150,1] <- seq(-0.1,0.1,length.out=50)
-data[101:150,2] <- seq(1.1,0.9,length.out=50)
-data[151:200,1] <- seq(0.9,1.1,length.out=50)
-data[151:200,1] <- seq(1.1,0.9,length.out=50)
+data <- gen_clusters(50, matrix(c(0,1,2,0,1,2),ncol=2),0.3)
 
 # Daten mit sehr geringem Lärm um (0,0), (1,0), (0,1), (1,1). Erwarte ungefähr diese Clusterzentren bei k-means mit k=3
 

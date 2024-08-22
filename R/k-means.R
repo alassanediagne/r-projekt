@@ -28,7 +28,7 @@ k_means_pp <- function(data, num_cluster){
 }
 
 
-update_C_kmeans <- function(x, m){
+update_arg_mins <- function(x, m){
   # x dxn Matrix mit Daten, m dxK Matrix mit aktuellen means
 
   n <- ncol(x)
@@ -55,7 +55,7 @@ update_C_kmeans <- function(x, m){
 
 
 
-update_m_kmeans_kmeans <- function(x,C,num_cluster){
+update_means <- function(x,C,num_cluster){
   # x dxn Matrix mit Daten, C: Vektor mit aktuellen argmins, num_cluster: Anzahl der Cluster
   n <- ncol(x)
   d <- nrow(x)
@@ -120,8 +120,8 @@ k_means <- function(data, num_cluster, m0 = NULL, save_history = FALSE,
 
   while(n_iter <= max_iter){
     m_old <- m # speichere m zum vergleichen
-    current_arg_mins <- update_C_kmeans(data,m) # update argmins
-    m <- update_m_kmeans_kmeans_kmeans(data,current_arg_mins,num_cluster) # update means
+    current_arg_mins <- update_arg_mins(data,m) # update argmins
+    m <- update_means(data,current_arg_mins,num_cluster) # update means
 
     if(save_history){
       history <- append(history,list(iteration = n_iter, means = t(m), argmins=current_arg_mins))
@@ -203,7 +203,7 @@ k_means_predict <- function(x, means){
   }
 }
 
-#' Title
+#' plot_k_means_2d
 #'
 #' @param data
 #' @param num_cluster
