@@ -17,10 +17,10 @@
 - [ ] Make sure all`@exported`¸ methods have helpful roxygen comments
 - [ ] Make sure all Tests pass successfully
 - [ ] Implement hierarchical clustering
+- [ ] Replace magrittr pipe calls where possible to native ones
 
 
 ### Literatur
 
 - [Richter](https://link.springer.com/book/10.1007/978-3-662-59354-7)
 - [James](https://link.springer.com/book/10.1007/978-1-0716-1418-1)
-
