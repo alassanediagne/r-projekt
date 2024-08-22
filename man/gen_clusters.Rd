@@ -2,20 +2,30 @@
 % Please edit documentation in R/gen_clusters.R
 \name{gen_clusters}
 \alias{gen_clusters}
-\title{gen_clusters}
+\title{Diese Funktion generiert Beispiel Cluster}
 \usage{
-gen_clusters(n, means, deviation)
+gen_clusters(n, means, deviation = 1)
 }
 \arguments{
-\item{n}{Anzahl an Punkten pro Cluster}
+\item{n}{Anzahl an Punkten aus denen ein Cluster bestehen soll}
 
-\item{means}{Mittelpunkte der Cluster}
+\item{means}{Mittelwerte der einzelnen Cluster in einer Matrix, dessen Zeilen
+jeweils ein Mittelwert angeben.
+Durch die Zeilenanzahl wird die Anzahl der Cluster gesteuert.}
 
-\item{deviation}{Standardabweichung bei Lärm}
+\item{deviation}{Gibt die Standardabweichung der Werte vom Clustermittelpunt
+an. Standardtmäßig ist diese 1.}
 }
 \value{
-data
+Gibt eine double Matrix aus, dessen Zeielen die einzelnen
+   Punkte bilden.
 }
 \description{
-gen_clusters
+Diese Funktion generiert Beispiel Cluster
+}
+\examples{
+# means <- rbind(c(0, 10), c(5, 5))
+# gen_clusters(40, means)
+# gen_clusters(30, means, 0.9)
+
 }

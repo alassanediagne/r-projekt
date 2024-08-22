@@ -19,5 +19,5 @@ k_means_spectral_clustering(data, num_cluster, f_kernel = gausskernel, dim = 2)
 Liste mit Konvergenz logical, Anzahl an Iterationen, Clustermittelpunkten, sowie Labels
 }
 \description{
-k_means_spectral_clustering
+Wendet k-means-Algorithmus auf die k-dimesionalen Projektionen zu gegebenen Daten an
 }

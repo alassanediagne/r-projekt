@@ -16,8 +16,8 @@ gausskernel(x, y)
 \item{dim}{(optional) int. Dimension der erstellten k-dimensionalen Projektionen durch spektrales Clustern. Default: 2}
 }
 \value{
-Cluster-Zuordnung
+k-dimensionale Projektionen (selbes Format wie data)
 }
 \description{
-Algorithmus: spektrales Clustering
+berechnet k-dimensionale Projektionen zu gegebenen Daten
 }

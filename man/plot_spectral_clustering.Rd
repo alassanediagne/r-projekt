@@ -19,5 +19,5 @@ plot_spectral_clustering(data, num_cluster, f_kernel = gausskernel, dim = 2)
 Plot der Cluster-Zuteilung
 }
 \description{
-plot_spectral_clustering
+veranschaulicht Ergebnis des k-means-Algortithmus angewendet auf die Daten, die durch spektrales Clustering erhalten wurden
 }
