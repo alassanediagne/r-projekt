@@ -11,8 +11,6 @@
 #' The \code{ordered_list} being an indices vector, of the ordering obtained by the OPTICS algorithm and
 #' the \code{reachability} being a vector of the reachability distances for each point of \code{data} as obtained by the OPTICS algorithm.
 #'
-#' @import tibble
-#' @import dplyr
 #'
 #' @export
 
@@ -100,7 +98,7 @@ optics <- function(data, eps, minPts) {
 #'@param optics_result Uses the result of the OPTIC algorithm (see 'optics')
 #'@param eps_prime (optional) value to extract clusters, default is \code{eps} of optics_result.
 #'
-#'@return Returns a list of 2 elements \code{ordered_clusters} and \code{labels}
+#'@return Returns a list of 2 elements \code{ordered_labels} and \code{labels}
 #'
 #'@export
 
@@ -133,7 +131,7 @@ extract_dbscan <- function(optics_result, eps_prime = optics_result$eps) {
     }
 
   }
-  return(list(ordered_clusters = clusters, labels = clusters[sort(optics_result$ordered_list)] ))
+  return(list(ordered_labels = clusters, labels = clusters[sort(optics_result$ordered_list)] ))
 }
 
 
@@ -147,6 +145,17 @@ extract_dbscan <- function(optics_result, eps_prime = optics_result$eps) {
 #  }
 #  return(cluster)
 #}
+
+#'
+#'plot_reachability
+#'
+#'Plots the reachability-plot of the OPTICS algithm. A special kind of 'dendogram'
+#'
+#'@param optics_result Uses the result of the OPTIC algorithm (see 'optics')
+#'
+#'@return Barplot with height given by \code{reachability} of \code{optics_result} and each
+#'bar representing a datapoint, they are orderd by \code{ordered_list} of \code{optics_result}
+#'@export
 
 plot_reachability <- function(optics_result) {
   ordered_reachability <- optics_result$reachability[optics_result$ordered_list]
@@ -162,7 +171,17 @@ plot_reachability <- function(optics_result) {
           )
 }
 
-
+#'
+#'plot_optics_2d
+#'
+#'Plots 2-dimensional data and colors the clusters obtained by the OPTICS algorithm accordingly.
+#'
+#'@param data The data to be plotted
+#'@param optics_result Uses the result of the OPTIC algorithm (see 'optics'), make sure it was run on \code{data}
+#'
+#'@return Plot using \code{ggplot2}
+#'
+#'@export
 
 plot_optics_2d <- function(data, optics_result){
   clustering <- extract_dbscan(optics_result)

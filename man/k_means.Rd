@@ -11,7 +11,8 @@ k_means(
   save_history = FALSE,
   return_labels = FALSE,
   max_iter = 50L,
-  tol = 1e-08
+  tol = 1e-08,
+  verbose = FALSE
 )
 }
 \arguments{
@@ -28,9 +29,11 @@ k_means(
 \item{max_iter}{(optinal) int. Legt maximale Anzahl an Iterationen fest. Default: 50}
 
 \item{tol}{(optinal) float. Toleranz zur Festlegung der Konvergenz. Default: 1e-8}
+
+\item{verbose}{(optional) logical. Falls TRUE wird die Anzahl der Iterationen und Konvergenz als Nachricht ausgegeben}
 }
 \value{
-Liste mit Konvergenznachricht, Clustermittelpunkten, sowie, falls erwuenscht Labels und Iterationen
+Liste mit Konvergenz logical, Anzahl an Iterationen, Clustermittelpunkten, sowie, falls erwuenscht Labels, einzelnen Iterationen und Nachricht
 }
 \description{
 Implementierung des k-Means-Algorithmus aus Richter mit zusaetzlich automatischer Startwertwahl
