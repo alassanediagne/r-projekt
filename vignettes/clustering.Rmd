@@ -26,7 +26,7 @@ Clustering is a main task in unsupervised learning.
 
 In supervised learning, the best known sub discipline of machine learning the aim is to predict the output $\bar{Y}$ of a model given the input variables $\bar{X}$. We achieve this by training a machine learning algorithm on test data $(X_i, Y_i), i=1,..,n$ to which we know the response.
 
-In contrast, unsupervised learning aims to find patterns in a training set $X_i, i=1,...,n$ without any (or minimal) external information and in some cases make predictions based on that. 
+In contrast, unsupervised learning aims to find patterns in a training set $X_i, i=1,...,n$ without any (or minimal) external information and in some cases make predictions based on that.
 
 This is best illustrated by an example. Let us take a look the `iris` data set. It contains the sepal lengths and widths, petal lengths and widths and species of different irises. If you take a closer look at the petal lengths and widths in relation to the species, we find that they are closely correlated:
 
@@ -42,8 +42,28 @@ The objective of clustering would be to find these clusters - without knowing ab
 
 There are multiple clustering algorithms, each with its different strengths and weaknesses which will be illustrated here.
 
-
 ## k-means clustering
+
+`k_means` clustering is an iterative algorithm and the most widespread clustering algorithm. Having complexity $O(n)$ it is very efficient even for huge data sets.
+
+The algorithm takes besides the data the integer`k` (in this package for better readability `num_cluster`) as input, which sets the desired number of clusters. The algorithm then finds `k` approximately optimal cluster centers and each point in the data set is being assigned to the closest cluster centroid. This optimality is with respect to the minimal euclidian intra-cluster distance, meaning that the points which are very close to each other will most likely get clustered together.
+
+The k-means algorithm expects a matrix as input. To come back to the example in the beginning, we are going to take a look at the petal sizes in the iris data set.
+
+As an unsupervised learning algorithm, `k_means` only needs the petal length and width as input which we transform into a matrix:
+
+```{r}
+irisPetals <- iris |> select(c(Petal.Length,Petal.Width)) |> data.matrix()
+```
+
+Now we need the second input for the `k_means` function, the desired number of clusters. Here we run into the main bottle neck of k-means clustering, since we need to manually choose the best number for `num_cluster`. Therefore we do need some additional information about the data otherwise we could also get a good number of clusters by trial and error.
+
+In this case we have seen a plot of the data and know, that clustering in the data into three clusters is sensible.
+
+```{r}
+k_means(irisPetals, 3)
+plot_2d_k_means(irisPetals,3)
+```
 
 
 
