@@ -21,3 +21,7 @@ the \code{reachability} being a vector of the reachability distances for each po
 \description{
 This is an implementation of the OPTICS (Ordering Points To Identify Clustering Structure) Algorithm
 }
+\examples{
+data
+
+}
