@@ -17,3 +17,20 @@ knitr::opts_chunk$set(
 ```{r setup}
 library(Clustering)
 ```
+
+#Overview on OPTICS Algorithm
+
+The 'clustering' package includes an implementation of the Ordering points to identify the clustering structure (OPTICS) algorithm.
+
+It is an algorithm for finding density based clusters in spatial data. 
+
+A broader overview to the functionality of this algorithm can be found [here](https://de.wikipedia.org/wiki/OPTICS).
+
+
+
+
+
+
+
+
+
