@@ -1,8 +1,27 @@
+#'Algorithmus: spektrales Clustering
+#'
+#'
+#'
+#'@param data Matrix mit Daten die geclustered werden sollen. Jede Zeile enthält einen Messwert in R^d
+#'@param num_cluster int. Anzahl der Cluster
+#'@param f_kernel (optional) function.Kernfunktion. Default: Gauss-Kern mit Abstieg h
+#'@param dim (optional) int. Dimension der erstellten k-dimensionalen Projektionen durch spektrales Clustern. Default: 2
+#'
+#'@return Cluster-Zuordnung
+#'
+#'
+#'@export
 
-gausskernel <- function(x,y) {exp(-h*(norm(x-y, type="2"))^2)} #Gausskern definieren
-h <- 50
 
-spectral_clustering <- function(data, f_kernel, k,clusters){
+
+gausskernel <- function(x,y){               #Gausskern definieren
+    h <- 50
+    exp(-h*(norm(x-y, type="2"))^2)
+} 
+
+
+spectral_clustering <- function(data, num_cluster, f_kernel=gausskernel, dim=2){
+
     
     n <- nrow(data) 
     affinity_matrix <- matrix(0, nrow=n, ncol=n) #Gewichtsmatrix initialisieren
@@ -43,8 +62,22 @@ spectral_clustering <- function(data, f_kernel, k,clusters){
         {spectral_projections[,i] = (n^(1/2))*normalized_diagonal_matrix%*%eigenvectors_L[,i]}        
     
     
-    k_spectral_projections <- spectral_projections[,2:(k+1)] #optimale k-dimensionale Projektionen bestimmen
+    k_spectral_projections <- spectral_projections[,2:(dim+1)] #optimale k-dimensionale Projektionen bestimmen
     
-    spectral_clustering_result <- kmeans(k_spectral_projections, centers = clusters)$cluster
-    plot(data, col=spectral_clustering_result, pch=19)
+    spectral_clustering_result <- kmeans(k_spectral_projections, centers = num_cluster)$cluster
+    return(spectral_clustering_result)
 }
+
+
+#'plot_spectral_clustering
+#'
+#'@param data Matrix mit Daten die geclustered werden sollen. Jede Zeile enthält einen Messwert in R^d
+#'@param num_cluster int. Anzahl der Cluster
+#'@param f_kernel (optional) function. Kernfunktion. Default: Gauss-Kern mit Abstieg h
+#'@param dim (optional) int. Dimension der erstellten k-dimensionalen Projektionen durch spektrales Clustern. Default: 2
+#'
+#'@return Plot der Cluster-Zuteilung
+
+plot_spectral_clustering <- function(data, num_cluster, f_kernel=gausskernel,dim=2){
+    clustering <- spectral_clustering(data, num_cluster, f_kernel, dim)
+    plot(data, col=clustering, pch=19)}
