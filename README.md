@@ -20,6 +20,7 @@
 - [ ] Make sure all Tests pass successfully
 - [ ] Implement hierarchical clustering
 - [ ] Replace magrittr pipe calls where possible with native ones
+- [ ] Add some helpful `stops`
 
 ### At the end
 
