@@ -1,6 +1,3 @@
-library(tidyverse)
-library(R6)
-
 # Function to compute distance matrix
 compute_distances <- function(data) {
   dist(data, method = "euclidean") %>% as.matrix()
