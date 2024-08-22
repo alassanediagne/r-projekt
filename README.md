@@ -19,6 +19,11 @@
 - [ ] Implement hierarchical clustering
 - [ ] Replace magrittr pipe calls where possible with native ones
 
+#### At the end
+
+- [ ] Remove all commented code this is bad style
+- [ ] Build package release
+
 
 ### Literatur
 
