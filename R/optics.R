@@ -11,11 +11,15 @@
 #' The \code{ordered_list} being an indices vector, of the ordering obtained by the OPTICS algorithm and
 #' the \code{reachability} being a vector of the reachability distances for each point of \code{data} as obtained by the OPTICS algorithm.
 #'
-#' @import magrittr
 #' @import tibble
 #' @import dplyr
 #'
 #' @export
+
+
+# First we implement the OPTICS algorithm, which returns a clustering of given data, w.r.t eps and minPts.
+# The return is an 'ordered list' and  a 'reachability list'.
+
 optics <- function(data, eps, minPts) {
   stopifnot(
     "minPts has to be equal or bigger than 1"= minPts>=1
@@ -87,10 +91,26 @@ optics <- function(data, eps, minPts) {
 }
 
 
-# Function to extract clusters from the result of the OPTICS algorithm
+#'
+#'extract_dbscan
+#'
+#'Extracts clusters from the result of OPTICS algorithm. Clusters are found by 'horizontally cutting' the
+#'reachability plot with a
+#'
+#'@param optics_result Uses the result of the OPTIC algorithm (see 'optics')
+#'@param eps_prime (optional) value to extract clusters, default is \code{eps} of optics_result.
+#'
+#'@return Returns a list of 2 elements \code{ordered_clusters} and \code{labels}
+#'
+#'@export
 
 
-extract_dbscan <- function(optics_result = optics_r, eps = optics_r$eps) {
+
+extract_dbscan <- function(optics_result, eps_prime = optics_result$eps) {
+
+  stopifnot(
+    "eps_prime must be smaller or equal to eps"=eps_prime<=optics_result$eps
+  )
 
   ordered_reachability <- optics_result$reachability[optics_result$ordered_list]
   n <- length(ordered_reachability)
@@ -98,17 +118,17 @@ extract_dbscan <- function(optics_result = optics_r, eps = optics_r$eps) {
   cluster_id <- 0
 
   for (point in seq_along(ordered_reachability)) {
-    if (ordered_reachability[point] > eps) {
-      #new cluster, if reachability distance is larger than eps and postprocessing a point, if its NOISE or not
+    if (ordered_reachability[point] > eps_prime) {
+      #New cluster, if reachability distance is larger than eps and postprocessing a point, if its NOISE or not
       if (point < n && ordered_reachability[point+1] != Inf) {
         cluster_id <- cluster_id + 1
         clusters[point] <- cluster_id
 
       } else {
-        clusters[point] <- 0 #point is in cluster "0" if noise
+        clusters[point] <- 0 #Point is in cluster "0", if noise
       }
     } else {
-      #point is assigned to current cluster
+      #Point is assigned to current cluster
       clusters[point] <- cluster_id
     }
 
@@ -128,7 +148,7 @@ extract_dbscan <- function(optics_result = optics_r, eps = optics_r$eps) {
 #  return(cluster)
 #}
 
-plot_reachability <- function(optics_result = optics_r) {
+plot_reachability <- function(optics_result) {
   ordered_reachability <- optics_result$reachability[optics_result$ordered_list]
   max_value <- 2*max(ordered_reachability[!ordered_reachability == Inf])
   ordered_reachability[ordered_reachability == Inf] <- max_value
@@ -142,15 +162,19 @@ plot_reachability <- function(optics_result = optics_r) {
           )
 }
 
+
 ### TODO Sorry for removing this but it brakes the package build
 ### Need adaptation
 
 #' @import ggplot2
-plot_optics_2d <- function(data, optics_result = optics_r ){
+
+
+plot_optics_2d <- function(data, optics_result){
   clustering <- extract_dbscan(optics_result)
-  data <- tibble(x = data[,1], y = data[,2])
-  ggplot() +
-    geom_point(data = data, aes(x = x, y = y, color = factor(clustering$labels)), size=1) +
-    theme_bw() +
-    theme(legend.position="none")
+  data <- tibble::tibble(x = data[,1], y = data[,2])
+  ggplot2::ggplot() +
+    ggplot2::geom_point(data = data, ggplot2::aes(x = x, y = y, color = factor(clustering$labels)), size=1) +
+    ggplot2::theme_bw() +
+    ggplot2::theme(legend.position="none")
 }
+
