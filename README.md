@@ -7,7 +7,7 @@
 ## TODO 
 
 - [ ] Remove all `requirements` and `library` calls. 
-- [ ] Remove all `source` calls use: Imports, Depends, or Suggests; there's also `usethis::use_r()`
+- [ ] Remove all `source` calls. 
 - [ ] Check that the packages lodes, atm something like this happens
   ```
   Error in `load_all()`:
