@@ -1,12 +1,10 @@
-# R Projekt SS 2024
+# R Projekt SS 2024 - Thema 6 - Clustering
 
-## Thema 6 - Clustering
-
-### Development flow
+## Development flow
 
 - Load current package with `devtools::load_all()` or `Ctrl-Shift-L` this loads the package into the current R-Session. AFTERWARDS test the written functions in the console
 
-### TODO 
+## TODO 
 
 - [ ] Remove all `requirements` and `library` calls. 
 - [ ] Remove all `source` calls use: Imports, Depends, or Suggests; there's also `usethis::use_r()`
@@ -23,18 +21,18 @@
 - [ ] Implement hierarchical clustering
 - [ ] Replace magrittr pipe calls where possible with native ones
 
-#### At the end
+### At the end
 
 - [ ] Remove all commented code; this is bad style
 - [ ] Build package release
 
 
-#### Before each release
+### Before each release
 
 - [ ] Check documentation is up to date generate with `devtools::document()`
 - [ ] Run tests with `devtools::test()` or `Ctrl-Shift-T`
 
-### Literatur
+## Literatur
 
 - [Richter](https://link.springer.com/book/10.1007/978-3-662-59354-7)
 - [James](https://link.springer.com/book/10.1007/978-1-0716-1418-1)
