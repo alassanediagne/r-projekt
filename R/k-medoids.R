@@ -60,16 +60,12 @@ k_medoids <- function(data, num_cluster, max_iter = 50L, tol = 1e-8) {
     n_iter <- n_iter + 1L
   }
 
-  if (converged) {
-    message <- sprintf("Method converged after %i iterations", n_iter)
-  } else {
-    message <- "Maximum number of iterations reached"
-  }
 
   return(list(
-    message = message,
+    converged = converged,
+    n_iter = n_iter,
     medoids = data[medoids, , drop = FALSE],
-    clusters = C
+    labels = C
   ))
 }
 
