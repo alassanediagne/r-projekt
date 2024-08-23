@@ -45,7 +45,7 @@ There are multiple clustering algorithms, each with its different strengths and 
 
 `k_means` clustering is an iterative algorithm and the most widespread clustering algorithm. Having complexity $O(n)$ it is very efficient even for huge data sets.
 
-The algorithm takes besides the data an integer `k` (in this package for better readability `num_cluster`) as input, which sets the desired number of clusters. The algorithm then finds `k` approximately optimal cluster centers and each point in the data set is being assigned to the closest cluster centroid. This optimality is with respect to the minimal euclidian distance between clusters, resulting in that the points which are very close to each other will most likely get clustered together.
+The algorithm takes, besides the data, an integer `k` (in this package for better readability `num_cluster`) as input, which sets the desired number of clusters. The algorithm then finds `k` approximately optimal cluster centers and each point in the data set is being assigned to the closest cluster centroid. This optimality is with respect to the minimal euclidian distance between clusters, resulting in that the points which are very close to each other will most likely get clustered together.
 
 The k-means algorithm expects a matrix as input. To come back to the example in the beginning, we are going to take a look at the petal sizes in the iris data set.
 
