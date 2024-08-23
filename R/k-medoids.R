@@ -1,16 +1,13 @@
-# Function to compute distance matrix
 compute_distances <- function(data) {
   dist(data, method = "euclidean") %>% as.matrix()
 }
 
-# Function to update cluster assignments
 update_C <- function(distance_matrix, medoids) {
   apply(distance_matrix, 1, function(x) {
     which.min(x[medoids])
   })
 }
 
-# Function to update medoids
 update_medoids <- function(data, C, num_cluster) {
   medoids <- numeric(num_cluster)
   for (k in 1:num_cluster) {
@@ -28,7 +25,6 @@ update_medoids <- function(data, C, num_cluster) {
   return(medoids)
 }
 
-# k-Medoids function
 k_medoids <- function(data, num_cluster, max_iter = 50L, tol = 1e-8) {
 
   distance_matrix <- compute_distances(data)
