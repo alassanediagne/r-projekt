@@ -37,14 +37,14 @@ test_that("k_medoids assigns labels to all data points", {
 
 test_that("k_medoids converges for test data", {
   result <- k_medoids(data, 4)
-  expect_match(result$message, "converged")
+  expect_true(result$converged)
 })
 
 test_that("k_medoids throws an error if too many clusters are requested", {
   expect_error(k_medoids(data, 100))
 })
 
-test_that("k_medoids handles edge cases with empty clusters gracefully", {
+test_that("k_medoids handles edge cases with empty clusters", {
   # Creating a scenario where a cluster might have no points
   result <- k_medoids(data, 4)
   expect_true(all(result$medoids != 0))
