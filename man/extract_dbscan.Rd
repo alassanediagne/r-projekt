@@ -7,7 +7,7 @@
 extract_dbscan(optics_result, eps_prime = optics_result$eps)
 }
 \arguments{
-\item{optics_result}{Uses the result of the OPTIC algorithm (see 'optics')}
+\item{optics_result}{result of the OPTICS algorithm (see '\code{?optics}')}
 
 \item{eps_prime}{(optional) value to extract clusters, default is \code{eps} of optics_result.}
 }

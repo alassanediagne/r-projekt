@@ -19,7 +19,7 @@ gen_clusters <- function(n, means, deviation=0.5){
   data <- NULL
   for(i in 1:nrow(means)){
     x <- matrix(rep(means[i,],each=n), ncol=ncol(means), nrow=n) +
-      matrix(rnorm(n*ncol(means), sd=deviation), nrow=n)
+      matrix(stats::rnorm(n*ncol(means), sd=deviation), nrow=n)
     data <- rbind(data, x)
   }
   return(data)

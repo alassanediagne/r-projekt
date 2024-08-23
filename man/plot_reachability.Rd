@@ -7,7 +7,11 @@
 plot_reachability(optics_result, extract_dbscan = FALSE, eps_prime = NULL)
 }
 \arguments{
-\item{optics_result}{Uses the result of the OPTIC algorithm (see 'optics')}
+\item{optics_result}{result of the OPTICS algorithm (see '\code{?optics}')}
+
+\item{extract_dbscan}{(optional) logical. runs 'extract_dbscan'. Default: FALSE}
+
+\item{eps_prime}{(optional) value to extract clusters when running 'extract_dbscan', default is \code{eps} of optics_result.}
 }
 \value{
 Barplot with height given by \code{reachability} of \code{optics_result} and each
