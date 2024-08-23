@@ -8,20 +8,21 @@ update_C <- function(distance_matrix, medoids) {
   })
 }
 
-update_medoids <- function(data, C, num_cluster) {
+update_medoids <- function(distance_matrix, C, num_cluster) {
   medoids <- numeric(num_cluster)
   for (k in 1:num_cluster) {
-    cluster_points <- data[C == k, , drop = FALSE]
-    if (nrow(cluster_points) > 0) {
-      medoid <- apply(cluster_points, 1, function(point) {
-        sum(rowSums((cluster_points - point) ^ 2))
-      })
-      medoids[k] <- which.min(medoid)
+    cluster_indices <- which(C == k)
+
+    if (length(cluster_indices) > 0) {
+      cluster_distances <- distance_matrix[cluster_indices, cluster_indices, drop = FALSE]
+      medoid_index <- which.min(rowSums(cluster_distances))
+      medoids[k] <- cluster_indices[medoid_index]
     } else {
-      # Handle the case where a cluster has no points assigned to it
-      medoids[k] <- sample(1:nrow(data), 1)
+      # If a cluster has no points, randomly reassign the medoid
+      medoids[k] <- sample(1:nrow(distance_matrix), 1)
     }
   }
+
   return(medoids)
 }
 
@@ -29,8 +30,8 @@ update_medoids <- function(data, C, num_cluster) {
 #' @name k_medoids
 #' @param data data matrix. Every row contains a point
 #' @param num_cluster int. number of clusters desired
-#' @param max_iter (optinal) int. sets maximum number of iterations. Default: 50
-#' @param tol (optinal) float. tolerance to conclude convergence Default: 1e-8
+#' @param max_iter (optional) int. sets maximum number of iterations. Default: 50
+#' @param tol (optional) float. tolerance to conclude convergence Default: 1e-8
 #'
 #' @return list containing logical indicating whether the algorithm converged, number of iterations, cluster medoids
 #' @export
@@ -49,7 +50,7 @@ k_medoids <- function(data, num_cluster, max_iter = 50L, tol = 1e-8) {
 
   while (n_iter <= max_iter && !converged) {
     C <- update_C(distance_matrix, medoids)
-    new_medoids <- update_medoids(data, C, num_cluster)
+    new_medoids <- update_medoids(distance_matrix, C, num_cluster)
 
     if (all(medoids == new_medoids)) {
       converged <- TRUE
@@ -60,7 +61,6 @@ k_medoids <- function(data, num_cluster, max_iter = 50L, tol = 1e-8) {
     n_iter <- n_iter + 1L
   }
 
-
   return(list(
     converged = converged,
     n_iter = n_iter,
@@ -68,7 +68,3 @@ k_medoids <- function(data, num_cluster, max_iter = 50L, tol = 1e-8) {
     labels = C
   ))
 }
-
-
-
-
