@@ -20,8 +20,7 @@
 #' minPts <- 3
 #' optics(data, eps, minPts)
 #'
-#' @section Source:
-#' For more information visit \href{https://de.wikipedia.org/wiki/OPTICS}{this website}.
+#' @references For more information visit \href{https://de.wikipedia.org/wiki/OPTICS}{this website}.
 #'
 #' @export
 

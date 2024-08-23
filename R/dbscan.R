@@ -39,9 +39,9 @@ dbscan <- function(data, eps, minPts) {
 
   while(!all(visited)) {
     # Get index of first unvisited Node
-    univisited_node <- seq_along(visited)[visited==FALSE] %>% gdata::first()
+    univisited_node <- seq_along(visited)[visited==FALSE] |> gdata::first()
     # Get index of first unvisited Node
-    i <- seq_along(visited)[visited==FALSE] %>% gdata::first()
+    i <- seq_along(visited)[visited==FALSE] |> gdata::first()
 
     current_cluster <- c()
     dbscan_bfs(i)
