@@ -245,6 +245,11 @@ plot_reachability <- function(optics_result, extract_dbscan = FALSE, eps_prime =
 
 plot_optics_2d <- function(data, optics_result, eps_prime = optics_result$eps) {
 
+  stopifnot(
+    "This function only works for 2-d data points."= 2==ncol(data),
+    "'data' has to be numeric." = is.numeric(data)
+  )
+
   clustering <- extract_dbscan(optics_result, eps_prime)
   data <- tibble::tibble(x = data[,1], y = data[,2])
   data$label <- clustering$labels
