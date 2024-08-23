@@ -22,4 +22,9 @@ data <- gen_clusters(50, matrix(c(0,1,2,0,1,2), ncol=2), 0.3)
  clustering <- k_means(data,3)
  k_means_predict(c(1.2,0.8), clustering$means)
 
+data <- gen_clusters(100,matrix(1:30, ncol=6),0.2)
+result <- k_means(data,5)$means
+test_data <- rbind(c(2,1,4,3,2,2),c(11,22,33,33,22,11), c(15,21,25,34,1,4))
+k_means_predict(test_data, result)
+
 }

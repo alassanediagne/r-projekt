@@ -44,6 +44,8 @@ data <- gen_clusters(50, matrix(c(0,1,2,1,0,1,2,0),ncol=2), 0.3)
 k_means(data,4)
 data <- gen_clusters(100, matrix(c(0,0,1,1,1,0,0,1), ncol=2),0.3)
 plot_k_means_2d(data,4)
+data <- gen_clusters(100,matrix(1:30, ncol=6),0.2)
+k_means(data,5)
 }
 \references{
 \href{https://link.springer.com/book/10.1007/978-3-662-59354-7}{Richter, 2019}

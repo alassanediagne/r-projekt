@@ -98,6 +98,9 @@ update_means <- function(x,C,num_cluster){
 #'@examples
 #' data <- gen_clusters(100, matrix(c(0,0,1,1,1,0,0,1), ncol=2),0.3)
 #' plot_k_means_2d(data,4)
+#' @examples
+#' data <- gen_clusters(100,matrix(1:30, ncol=6),0.2)
+#' k_means(data,5)
 #'@references \href{https://link.springer.com/book/10.1007/978-3-662-59354-7}{Richter, 2019}
 #'@export
 
@@ -183,9 +186,16 @@ k_means <- function(data, num_cluster, m0 = NULL, return_labels=TRUE,
 #' @return predicted labels of new measurements
 #' @export
 #'
-#' @examples data <- gen_clusters(50, matrix(c(0,1,2,0,1,2), ncol=2), 0.3)
+#' @examples
+#' data <- gen_clusters(50, matrix(c(0,1,2,0,1,2), ncol=2), 0.3)
 #'  clustering <- k_means(data,3)
 #'  k_means_predict(c(1.2,0.8), clustering$means)
+#'
+#'@examples
+#'data <- gen_clusters(100,matrix(1:30, ncol=6),0.2)
+#' result <- k_means(data,5)$means
+#' test_data <- rbind(c(2,1,4,3,2,2),c(11,22,33,33,22,11), c(15,21,25,34,1,4))
+#' k_means_predict(test_data, result)
 #'
 k_means_predict <- function(x, means){
   predict_instance <- function(x, means){
