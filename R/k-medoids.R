@@ -25,7 +25,19 @@ update_medoids <- function(data, C, num_cluster) {
   return(medoids)
 }
 
-#hi
+#' @title k-medoids clustering
+#' @name k_medoids
+#' @param data data matrix. Every row contains a point
+#' @param num_cluster int. number of clusters desired
+#' @param max_iter (optinal) int. sets maximum number of iterations. Default: 50
+#' @param tol (optinal) float. tolerance to conclude convergence Default: 1e-8
+#'
+#' @return list containing logical indicating whether the algorithm converged, number of iterations, cluster medoids
+#' @export
+#'
+#' @examples
+#' data <- gen_clusters(50, matrix(c(0,1,2,1,0,1,2,0),ncol=2), 0.2)
+#' k_medoids(data,4)
 
 k_medoids <- function(data, num_cluster, max_iter = 50L, tol = 1e-8) {
 
