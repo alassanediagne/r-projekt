@@ -209,7 +209,7 @@ plot_reachability <- function(optics_result, extract_dbscan = FALSE, eps_prime =
 
 
 
-  barplot(height = ordered_reachability,
+  graphics::barplot(height = ordered_reachability,
           width = (4 / n),
           space = 0,
           xlim = c(0, 4),
@@ -218,12 +218,12 @@ plot_reachability <- function(optics_result, extract_dbscan = FALSE, eps_prime =
           ylab = "Reachability",
           main = "OPTICS: Reachability Plot",
           col = col,
-          border = F
+          border = NA
   )
 
   if (!is.null(cut)) {
-    abline(h = cut, col = "red", lty = 2)  # add dotted line at eps value
-    text(x = 0.1, y = cut + 0.05 * max_value, labels = paste("eps ≈", cut) , col = "red", pos = 4)
+    graphics::abline(h = cut, col = "red", lty = 2)  # add dotted line at eps value
+    graphics::text(x = 0.1, y = cut + 0.05 * max_value, labels = paste("eps ≈", cut) , col = "red", pos = 4)
   }
 }
 

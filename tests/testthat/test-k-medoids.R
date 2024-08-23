@@ -27,7 +27,7 @@ test_that("k_medoids does not throw errors", {
 
 test_that("k_medoids generates the correct number of clusters", {
   result <- k_medoids(data, 4)
-  expect_equal(length(unique(result$clusters)), 4)
+  expect_equal(length(unique(result$labels)), 4)
 })
 
 test_that("k_medoids assigns labels to all data points", {
