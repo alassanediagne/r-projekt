@@ -32,6 +32,7 @@ This is best illustrated by an example. Let us take a look the `iris` data set. 
 ```{r, fig.width=5, fig.height=4, fig.align='center'}
 ggplot() + 
   geom_point(data=iris, aes(x=Petal.Length, y=Petal.Width, color=Species)) +
+  ggtitle("Iris Petals") + 
   theme_bw()
 ```
 
