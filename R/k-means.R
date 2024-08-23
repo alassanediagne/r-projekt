@@ -241,8 +241,8 @@ plot_k_means_2d <- function(data, num_cluster, max_iter=50L){
   data <- tibble::tibble(x=data[,1], y= data[,2])
   means <- tibble::tibble(x=clustering$means[,1], y = clustering$means[,2])
   ggplot2::ggplot() +
-    ggplot2::geom_point(data = data, ggplot2::aes(x = x, y = y, color = factor(clustering$labels)), size=1) +
-    ggplot2::geom_point(data = means, ggplot2::aes(x = x, y = y), color="red", shape="x", size=5) +
+    ggplot2::geom_point(data = data, ggplot2::aes(x = "x", y = "y", color = factor(clustering$labels)), size=1) +
+    ggplot2::geom_point(data = means, ggplot2::aes(x = "x", y = "y"), color="red", shape="x", size=5) +
     ggplot2::theme_bw() +
     ggplot2::theme(legend.position="none")
 }
