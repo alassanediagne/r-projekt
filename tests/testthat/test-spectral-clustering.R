@@ -54,7 +54,6 @@ test_that("plot_k_means_spectral_clustering does not throw errors", {
   expect_no_error(plot_k_means_spectral_clustering(data, 4))
   expect_no_warning(plot_k_means_spectral_clustering(data, 4))
 })
-plot_k_means_spectral_clustering
 
 data2 <- rbind(
   c(1,0),
@@ -74,13 +73,13 @@ data2 <- rbind(
   c(2.3,0)
 )
 
-test_that("plot_twoclusters_mean does not throw errors", {
-  expect_no_error(plot_twoclusters_mean(data2))
-  expect_no_warning(plot_twoclusters_mean(data2))
+test_that("plot_spectral_clustering_twoclusters does not throw errors", {
+  expect_no_error(plot_spectral_clustering_twoclusters(data2))
+  expect_no_warning(plot_spectral_clustering_twoclusters(data2))
 })
 
-test_that("plot_twoclusters_mean assigns correct clusters",{
-  labels <- plot_twoclusters_mean(data2)
+test_that("plot_spectral_clustering_twoclusters assigns correct clusters",{
+  labels <- plot_spectral_clustering_twoclusters(data2)
   for(i in 1:8){
     expect_true(labels[1]==labels[i])
     expect_true(labels[9]!=labels[i])
