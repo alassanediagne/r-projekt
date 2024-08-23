@@ -6,7 +6,7 @@ Author: Aysegul Pekozsoy, Robin Klotzbucher, Felix Joeken, Timo Weber, Alassane 
 Maintainer: Alassane Diagne <alassane.diagne@stud.uni-heidelberg.de>
 Depends: R (>= 4.1.0)
 Description: This library offers implementations of popular clustering algorithms with extensive documentations and vignettes.
-License: GNU GPL (>=2)
+License: GPL (>=2)
 Encoding: UTF-8
 LazyData: true
 Suggests: 
