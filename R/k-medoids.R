@@ -39,49 +39,36 @@ update_medoids <- function(data, C, num_cluster) {
 #' data <- gen_clusters(50, matrix(c(0,1,2,1,0,1,2,0),ncol=2), 0.2)
 #' k_medoids(data,4)
 
-k_medoids <- function(data, k) {
-  # Initialization
-  n <- nrow(data)
-  medoids <- sample(1:n, k)
-  clusters <- rep(0, n)
-  prev_medoids <- NULL
-  n_iter <- 0
+k_medoids <- function(data, num_cluster, max_iter = 50L, tol = 1e-8) {
+
+  distance_matrix <- compute_distances(data)
+  medoids <- sample(1:nrow(data), num_cluster)
+
+  n_iter <- 0L
   converged <- FALSE
 
-  # Iterative process
-  while (!converged && n_iter < 100) {
-    n_iter <- n_iter + 1
+  while (n_iter <= max_iter && !converged) {
+    C <- update_C(distance_matrix, medoids)
+    new_medoids <- update_medoids(data, C, num_cluster)
 
-    # Assign points to the nearest medoid
-    for (i in 1:n) {
-      distances <- apply(data[medoids, ], 1, function(medoid) sum((data[i, ] - medoid)^2))
-      clusters[i] <- which.min(distances)
+    if (all(medoids == new_medoids)) {
+      converged <- TRUE
+    } else {
+      medoids <- new_medoids
     }
 
-    # Update medoids
-    new_medoids <- sapply(1:k, function(c) {
-      cluster_points <- data[clusters == c, , drop = FALSE]
-      if (nrow(cluster_points) == 0) return(medoids[c])  # Avoid empty clusters
-      distances <- as.matrix(dist(cluster_points))
-      medoid_index <- which.min(rowSums(distances))
-      rownames(cluster_points)[medoid_index]
-    })
-
-    # Check for convergence
-    converged <- all(medoids == new_medoids)
-    medoids <- new_medoids
-
-    # Debugging output
-    print(paste("Iteration:", n_iter))
-    print("Medoids:")
-    print(medoids)
-    print("Clusters:")
-    print(clusters)
-
-    # Prevent infinite loop in case of non-convergence
-    if (n_iter > 100) break
+    n_iter <- n_iter + 1L
   }
 
-  # Return result
-  return(list(medoids = medoids, clusters = clusters, converged = converged, n_iter = n_iter))
+
+  return(list(
+    converged = converged,
+    n_iter = n_iter,
+    medoids = data[medoids, , drop = FALSE],
+    labels = C
+  ))
 }
+
+
+
+
