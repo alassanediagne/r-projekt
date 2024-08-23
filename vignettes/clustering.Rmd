@@ -88,3 +88,4 @@ petals_km
 ```
 
 It is important to note that the algorithm uses a probabilistic method (called `k-means ++`) to find good initial values and assure fast convergence, thus the results may vary if the code is executed multiple times (i.e. slightly different results, rows in `\$means` swapped) . This can be prevented by `set.seed()`.
+
