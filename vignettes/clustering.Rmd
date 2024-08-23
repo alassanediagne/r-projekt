@@ -103,13 +103,15 @@ The result of this function is a matrix, that consists the spectral projections 
 
 In the following we present some examples of the implemented algorithm and further related functions.
 
-```{r}
-irisPetals <- iris |> select(c(Petal.Length,Petal.Width)) |> data.matrix()
-```
+Looking at the given `iris_Petal` data lets us realize quickly, that our algorithm should separate the points of the following clusters:
 
+<<<<<<< Updated upstream
 Looking at the given data closely lets us realize quickly, that our algorithm should separate the points of the following clusters:
 
 ```{r}
+=======
+```{r, fig.width=5, fig.height=4, fig.align='center'}
+>>>>>>> Stashed changes
 cluster_iris <- 1:150
 cluster_iris[1:50] <- 1
 cluster_iris[51:150] <- 2
@@ -119,14 +121,14 @@ plot(irisPetals, col = cluster_iris, pch = 19)
 
 We now apply the spectral clustering algorithm and we can see, that the two clusters have been separated successfully. The colors show us the initial position of the respective point. (Note: Because of the projection very close to each other the black dot on the left side represents all points of the black cluster)
 
-```{r}
+```{r, fig.width=5, fig.height=4, fig.align='center'}
 iris_sc <- spectral_clustering(irisPetals)
 plot(iris_sc, col = cluster_iris, pch = 19)
 ```
 
 In the above example the resulting projections are still two-dimensional. In the following graph, you can see, what happens if we let our algorithm compute a one-dimensional embedding of the data.
 
-```{r}
+```{r, fig.width=5, fig.height=4, fig.align='center'}
 iris_sc <- spectral_clustering(irisPetals, dim = 1)
 plot(spectral_clustering(irisPetals, dim = 1), col = cluster_iris, pch = 19)
 ```
@@ -135,13 +137,13 @@ We can see, that the algorithm separated the two clusters successfully. Until no
 
 The function plot_spectral_clustering_twoclusters is a simple function to get two clusters out of given data. The function runs the spectral clustering algorithm with $\mathbb dim = 1$ and assigns a cluster to each point by comparing it to the mean of all received onedimensional projections. Applied to the above iris_Petal data the algorithm successfully finds the two clusters. It also returns a vector which shows the cluster assignment for each point.
 
-```{r}
+```{r, fig.width=5, fig.height=4, fig.align='center'}
 plot_spectral_clustering_twoclusters(irisPetals)
 ```
 
 Following there is another example with two half moons
 
-```{r}
+```{r, fig.width=5, fig.height=4, fig.align='center'}
 set.seed(123)
 n <- 150
 theta <- runif(n, 0, pi)
@@ -158,14 +160,14 @@ plot(data, col = cluster_halfmoon, pch = 19)
 
 And the following results. On the left we can see the onedimensional projection and on the right the assignment of clusters. As we can see the three points between both halfmoons are getting assigned "wrongly". An understandable mistake, considering them being close to both clusters.
 
-```{r, fig.show='hold'}
+```{r, fig.width=5, fig.height=4, fig.align='center'}
 plot(spectral_clustering(data, dim=1), col = cluster_halfmoon, pch=19)
 plot_spectral_clustering_twoclusters(data)
 ```
 
 Included in the package are also the functions `k_means_spectral_clustering` and `plot_k_means_spectral_clustering`. They compute the spectral projections by calling the `spectral_clustering` function and then assign clusters by using the `k_means` function, that is also included in the `Clustering` package.
 
-```{r}
+```{r, fig.width=5, fig.height=4, fig.align='center'}
 testdata <- rbind(
   c(1,0),
   c(1.1,0),
@@ -196,7 +198,7 @@ k_means_spectral_clustering(testdata,4)
 
 `plot_k_means_spectral_clustering` visualizes the clusters as follows.
 
-```{r}
+```{r, fig.width=5, fig.height=4, fig.align='center'}
 plot_k_means_spectral_clustering(testdata, 4)
 ```
 
