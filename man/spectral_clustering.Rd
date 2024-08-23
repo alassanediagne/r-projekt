@@ -4,12 +4,10 @@
 \alias{spectral_clustering}
 \title{Algorithmus: spectral_clustering}
 \usage{
-spectral_clustering(data, num_cluster, dim = 2, h = 20)
+spectral_clustering(data, dim = 2, h = 20)
 }
 \arguments{
 \item{data}{Matrix mit Daten die geclustered werden sollen. Jede Zeile enthält einen Messwert in R^d}
-
-\item{num_cluster}{int. Anzahl der Cluster}
 
 \item{dim}{(optional) int. Dimension der erstellten k-dimensionalen Projektionen durch spektrales Clustern. Default: 2}
 
