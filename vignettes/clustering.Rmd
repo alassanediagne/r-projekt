@@ -44,6 +44,8 @@ The objective of a clustering algorithm would be to find these clusters without 
 
 There are multiple clustering algorithms, each with its different strengths and weaknesses which will be illustrated here.
 
+Each of these algorithm takes as first input a data.matrix `data`, where each row represents a data point in $\mathbb{R}^d$.
+
 ## Overview k-means clustering
 
 `k_means` clustering is an iterative algorithm and the most widespread clustering algorithm. Having complexity $O(n)$ it is very efficient even for huge data sets.
@@ -92,21 +94,13 @@ It is important to note that the algorithm uses a probabilistic method (called `
 
 ## Overview k-medoids clustering
 
-K-Medoids, similar to k-means is an iterative partitional algorithm, but is NP-hard and offers robustness against outliers.
+K-Medoids, similar to k-means is an iterative partitional algorithm, but it offers robustness against outliers.
 
 ### Implementation
 
-The algorithm takes as input a data matrix, where each row represents a data point, and an integer num_cluster that specifies the desired number of clusters. Optionally, you can set a maximum number of iterations via the max_iter parameter, which has a default value of 100.  Each data point is then assigned to the closest medoid based on Euclidean distance. For each cluster, the algorithm selects the point within the cluster that minimizes the total distance to all other points in that cluster. This point becomes the new medoid. The algorithm iterates these steps until the medoids stop changing, meaning the algorithm has converged.
+Additionally to the `data` matrix, `k_medoids` takes an integer num_cluster as input, that specifies the desired number of clusters. Optionally, you can set a maximum number of iterations via the max_iter parameter, which has a default value of 100. Each data point is then assigned to the closest medoid based on Euclidean distance. For each cluster, the algorithm selects the point within the cluster that minimizes the total distance to all other points in that cluster. This point becomes the new medoid. The algorithm iterates these steps until the medoids stop changing, meaning the algorithm has converged.
 
-Let’s go back to the iris dataset and focus on clustering based on petal size. First, we prepare the data by selecting the petal length and width:
-
-```{r}
-
-irisPetals <- iris |> select(c(Petal.Length, Petal.Width)) |> data.matrix()
-
-```
-
-Now, we perform k_medoids clustering with 3 clusters, which is most suitable for the iris dataset:
+Let's go back to the iris dataset and focus on clustering based on petal size and perform k_medoids clustering with 3 clusters, which is most suitable for the iris dataset:
 
 ```{r}
 
@@ -119,16 +113,13 @@ The output of the algorithm is a list that includes a logical value indicating w
 
 In order to visualise the results, we can use the plot_k_medoids_2d function, which performs k_medoids clustering on 2D data and plots the results:
 
-```{r}
-
+```{r,fig.width=5, fig.height=4, fig.align='center'}
 plot_k_medoids_2d(irisPetals, 3)
-
 ```
 
 In the plot, we see that the data points are grouped into clusters, and the medoids represent the centres of each cluster. The clusters align well with the natural separation in the data.
 
 K_medoids algorithm's utilisation of medoids for data clustering, offers robustness against outliers which makes it particularly useful in datasets where outliers might skew results in k-means. However, this robustness comes at a cost: k-medoids is generally slower and less efficient than k-means, especially with large datasets, due to the need to compute distances between all points in a cluster. While both algorithms share the same goal of minimizing within cluster distances, the choice between them depends on the dataset size and the presence of outliers.
-
 
 ## Overview spectral-clustering algorithm
 
