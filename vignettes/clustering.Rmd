@@ -103,10 +103,8 @@ Additionally to the `data` matrix, `k_medoids` takes an integer num_cluster as i
 Let's go back to the iris dataset and focus on clustering based on petal size and perform k_medoids clustering with 3 clusters, which is most suitable for the iris dataset:
 
 ```{r}
-
 petals_kmedoids <- k_medoids(irisPetals, 3)
 petals_kmedoids
-
 ```
 
 The output of the algorithm is a list that includes a logical value indicating whether it converged, the number of iterations, the final medoids, and the cluster labels for each data point. If the algorithm converged, the selected medoids represent the centres of the clusters.
