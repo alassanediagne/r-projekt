@@ -179,23 +179,49 @@ extract_dbscan <- function(optics_result, eps_prime = optics_result$eps) {
 #'
 #'@export
 
-plot_reachability <- function(optics_result) {
+plot_reachability <- function(optics_result, extract_dbscan = FALSE, eps_prime = NULL) {
   stopifnot(
-    "No reachable points"=any(optics_result$reachability != Inf)
+    "No reachable points" = any(optics_result$reachability != Inf)
   )
+
+  # extract clustering results if required
+  if (extract_dbscan) {
+    if (is.null(eps_prime)) {
+      db <- extract_dbscan(optics_result)
+      cut <- optics_result$eps
+    } else {
+      db <- extract_dbscan(optics_result, eps_prime)
+      cut <- eps_prime
+    }
+    col <- factor(db$ordered_labels)
+  } else {
+    col <- rep("grey", length(optics_result$reachability)) # default color if no clustering
+    cut <- NULL
+  }
+
   ordered_reachability <- optics_result$reachability[optics_result$ordered_list]
-  max_value <- 2*max(ordered_reachability[!ordered_reachability == Inf])
+  max_value <- 2 * max(ordered_reachability[!ordered_reachability == Inf])
   ordered_reachability[ordered_reachability == Inf] <- max_value
   n <- length(ordered_reachability)
+
+
+
   barplot(height = ordered_reachability,
-          width = (4/n),
+          width = (4 / n),
           space = 0,
-          xlim=c(0,4),
-          ylim=c(0,max_value),
-          xlab="ordered data",
-          ylab="reachability",
-          main = "OPTICS: Reachability Plot"
-          )
+          xlim = c(0, 4),
+          ylim = c(0, max_value),
+          xlab = "Ordered Data",
+          ylab = "Reachability",
+          main = "OPTICS: Reachability Plot",
+          col = col,
+          border = F
+  )
+
+  if (!is.null(cut)) {
+    abline(h = cut, col = "red", lty = 2)  # add dotted line at eps value
+    text(x = 0.1, y = cut + 0.05 * max_value, labels = paste("eps ≈", cut) , col = "red", pos = 4)
+  }
 }
 
 #'

@@ -28,6 +28,8 @@ It's basic idea is similiar to the DBSCAN algorithm, both algorithm 'group' obje
 
 However, while DBSCAN uses a fixed radius to form clusters, OPTICS builds an ordering of the data points and a reachability to handle varying densities of clusters more flexibly.
 
+The clusters then can be extracted later on.
+
 A broader overview to the functionality of this algorithm can be found [here](https://de.wikipedia.org/wiki/OPTICS).
 
 ### Implementation
@@ -46,7 +48,20 @@ related functions.
 irisPetals <- iris |> select(c(Petal.Length,Petal.Width)) |> data.matrix()
 ```
 
-To run the optics algorithm and find a suitable 
+The optics algorithm can be run to obtain the exact clustering as DBSCAN. In this case we use the same 'eps',
+the same 'minPts'.
+
+```{r}
+eps <- 0.5
+minPts <- 3
+
+optics_result <- optics(irisPetals, 0.5, 3)
+
+plot_optics_2d(irisPetals, optics_result)
+
+```
+
+When using 'optics' in a more typical fashion, a rather large 'eps' value (e.g. 13) is used to obtain smoother reachability distances. 
 
 
 
