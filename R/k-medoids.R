@@ -67,5 +67,29 @@ k_medoids <- function(data, num_cluster, max_iter = 100L) {
 }
 
 
-
+#' plot_k_medoids_2d
+#'
+#' @param data data matrix. Every row contains a point
+#' @param num_cluster int. number of clusters desired
+#' @param max_iter (optinal) int. sets maximum number of iterations. Default: 100
+#'
+#' @return performs k-medoids clustering and plots results
+#' @export
+#'
+#' @examples
+#' data <- gen_clusters(50, matrix(c(0,1,2,1,0,1,2,0),ncol=2), 0.2)
+#' plot_k_medoids_2d(data,3)
+plot_k_medoids_2d <- function(data, num_cluster, max_iter=100L){
+  km <- k_medoids(data,num_cluster,max_iter = max_iter)
+  if(!km$converged){
+    warning("k-medoids did not converge")
+  }
+  data <- tibble::tibble(x= data[,1], y= data[,2])
+  medoids <- tibble::tibble(x= km$medoids[,1], y= km$medoids[,2])
+  ggplot2::ggplot() +
+    ggplot2::geom_point(data = data, ggplot2::aes(x = x, y = y, color = factor(km$labels)), size=1) +
+    ggplot2::geom_point(data = medoids, ggplot2::aes(x = x, y = y), color="red", shape="x", size=5) +
+    ggplot2::theme_bw() +
+    ggplot2::theme(legend.position="none")
+}
 
