@@ -18,6 +18,7 @@ knitr::opts_chunk$set(
 library(Clustering)
 library(ggplot2)
 library(dplyr)
+library(datasets)
 set.seed(13)
 ```
 
@@ -30,6 +31,7 @@ Unsupervised learning aims to find patterns in a training set $X \in \mathbb{R}^
 This is best illustrated by an example. Let us take a look the `iris` data set. It contains the sepal lengths and widths, petal lengths and widths and species of different irises. If you take a closer look at the petal lengths and widths in relation to the species, we find that they are closely correlated:
 
 ```{r, fig.width=5, fig.height=4, fig.align='center'}
+iris <- datasets::iris
 ggplot() + 
   geom_point(data=iris, aes(x=Petal.Length, y=Petal.Width, color=Species)) +
   ggtitle("Iris Petals") + 
