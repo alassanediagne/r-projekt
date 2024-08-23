@@ -1,6 +1,6 @@
 update_labels <- function(data, medoids) {
   # updates labels of data
-  distances <- as.matrix(dist(data, method = "euclidean"))[, medoids]
+  distances <- as.matrix(stats::dist(data, method = "euclidean"))[, medoids]
   labels <- apply(distances, 1, which.min)
   return(labels)
 }
@@ -13,7 +13,7 @@ update_medoids <- function(data, num_cluster, labels, medoids) {
     cluster_idx <- which(labels == i)
     if (length(cluster_idx) > 0) {
       cluster_points <- data[cluster_idx, ]
-      distances <- as.matrix(dist(cluster_points))
+      distances <- as.matrix(stats::dist(cluster_points))
       distances <- colSums(distances)
       new_medoids[i] <- cluster_idx[which.min(distances)]
     } else {
