@@ -3,8 +3,11 @@ title: "Overview for spectral-clustering"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Vignette Title}
-  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  markdown: 
+    wrap: 72
 ---
 
 ```{r setup, include = FALSE}
@@ -14,39 +17,57 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
+```{r setup2}
 library(Clustering)
 library(dplyr)
 ```
 
 ## Overview spectral-clustering algorithm
 
-`spectral_clustering`is a graph-based algorithm, that rearranges given data by giving projections for every point. Often the data gets embedded in a lower dimension, where clusters in the data are more widely separated and can be found easily by applying another algorithm like `k_means`.
+`spectral_clustering`is a graph-based algorithm, that rearranges given
+data by giving projections for every point. Often the data gets embedded
+in a lower dimension, where clusters in the data are more widely
+separated and can be found easily by applying another algorithm like
+`k_means`.
 
-The projections are based on eigenvectors of a Laplacian matrix. We receive the Laplacian matrix as a result of an affinity graph that models the neighborhood relationships between data points. To demonstrate the distance relations between the points a kernel function is being used, the Gauß kernel. The goal is thereby not to represent and simplify the location of every point, but the distance between points.
+The projections are based on eigenvectors of a Laplacian matrix. We
+receive the Laplacian matrix as a result of an affinity graph that
+models the neighborhood relationships between data points. To
+demonstrate the distance relations between the points a kernel function
+is being used, the Gauß kernel. The goal is thereby not to represent and
+simplify the location of every point, but the distance between points.
 
-
-While doing so, the points are getting separated, depending on which cluster they are in, which makes it easier for other algorithms to now assign a cluster to each point.
+While doing so, the points are getting separated, depending on which
+cluster they are in, which makes it easier for other algorithms to now
+assign a cluster to each point.
 
 ### Implementation
 
-In this package the spectral clustering algorithm can be called as a function 'spectral_clustering'.
+In this package the spectral clustering algorithm can be called as a
+function 'spectral_clustering'.
 
-As input it takes `data` a matrix in $\mathbb{R}^n \times \mathbb{R}^d$, where each row represents a data point.
-A second input is a parameter `dim` in $\mathbb{N}^+$, which is the dimension in which the points shall be represented.
-A third input is a parameter `h` in $\mathbb{R}^+$, which is the descent parameter of the gausskernel, that is used to build the affinity matrix.
+As input it takes `data` a matrix in $\mathbb{R}^n \times \mathbb{R}^d$,
+where each row represents a data point. A second input is a parameter
+`dim` in $\mathbb{N}^+$, which is the dimension in which the points
+shall be represented. A third input is a parameter `h` in
+$\mathbb{R}^+$, which is the descent parameter of the gausskernel, that
+is used to build the affinity matrix.
 
-The result of this function is a matrix, that consists the spectral projections computed by the spectral clustering algorithm. They are in the same form as the initial data, meaning each row represents one point. This matrix is in $\mathbb{R}^n \times \mathbb{R}^{dim}$, which shows the embedding in the chosen dimension.
+The result of this function is a matrix, that consists the spectral
+projections computed by the spectral clustering algorithm. They are in
+the same form as the initial data, meaning each row represents one
+point. This matrix is in $\mathbb{R}^n \times \mathbb{R}^{dim}$, which
+shows the embedding in the chosen dimension.
 
-In the following we present some examples of the implemented algorithm and further
-related functions.
+In the following we present some examples of the implemented algorithm
+and further related functions.
 
 ```{r}
 irisPetals <- iris |> select(c(Petal.Length,Petal.Width)) |> data.matrix()
 ```
 
-Looking at the given data closely lets us realize quickly, that our algorithm 
-should separate the points of the following clusters:
+Looking at the given data closely lets us realize quickly, that our
+algorithm should separate the points of the following clusters:
 
 ```{r}
 cluster_iris <- 1:150
@@ -56,22 +77,39 @@ cluster_iris[51:150] <- 2
 plot(irisPetals, col = cluster_iris, pch = 19)
 ```
 
-We now apply the spectral clustering algorithm and we can see, that the two clusters have been separated successfully. The colors show us the initial position of the respective point. (Note: Because of the projection very close to each other the black dot on the left side represents all points of the black cluster)
+We now apply the spectral clustering algorithm and we can see, that the
+two clusters have been separated successfully. The colors show us the
+initial position of the respective point. (Note: Because of the
+projection very close to each other the black dot on the left side
+represents all points of the black cluster)
 
 ```{r}
 iris_sc <- spectral_clustering(irisPetals)
 plot(iris_sc, col = cluster_iris, pch = 19)
 ```
-In the above example the resultig projections are still two-dimensional. In the following graph, you can see, what happens if we let our algorithm compute a one-dimensional embedding of the data.
+
+In the above example the resulting projections are still
+two-dimensional. In the following graph, you can see, what happens if we
+let our algorithm compute a one-dimensional embedding of the data.
 
 ```{r}
 iris_sc <- spectral_clustering(irisPetals, dim = 1)
 plot(spectral_clustering(irisPetals, dim = 1), col = cluster_iris, pch = 19)
 ```
-We can see, that the algorithm separated the two clusters successfully. Until now the colors in the plots have been added with knowing in which cluster each points lies to demonstrate the separating.
-Now we want to see, how we can get the cluster assignment by computation after applying the spectral clustering.
 
-The function plot_spectral_clustering_twoclusters is a simple function to get two clusters out of given data. The function runs the spectral clustering algorithm with $\mathbb dim = 1$ and assigns a cluster to each point by comparing it to the mean of all received onedimensional projections. Applied to the above iris_Petal data the algorithm successfully finds the two clusters. It also returns a vector which shows the cluster assignment for each point.
+We can see, that the algorithm separated the two clusters successfully.
+Until now the colors in the plots have been added with knowing in which
+cluster each points lies to demonstrate the separating. Now we want to
+see, how we can get the cluster assignment by computation after applying
+the spectral clustering.
+
+The function plot_spectral_clustering_twoclusters is a simple function
+to get two clusters out of given data. The function runs the spectral
+clustering algorithm with $\mathbb dim = 1$ and assigns a cluster to
+each point by comparing it to the mean of all received onedimensional
+projections. Applied to the above iris_Petal data the algorithm
+successfully finds the two clusters. It also returns a vector which
+shows the cluster assignment for each point.
 
 ```{r}
 plot_spectral_clustering_twoclusters(irisPetals)
@@ -94,40 +132,36 @@ cluster_halfmoon[224] <-1
 plot(data, col = cluster_halfmoon, pch = 19)
 ```
 
-And the following results. On the left we can see the onedimensional projection and on the right the assignment of clusters. As we can see the three points between both halfmoons are getting assigned "wrongly". An understandable mistake, considering them being close to both clusters.
+And the following results. On the left we can see the onedimensional
+projection and on the right the assignment of clusters. As we can see
+the three points between both halfmoons are getting assigned "wrongly".
+An understandable mistake, considering them being close to both
+clusters.
 
 ```{r, fig.show='hold'}
 plot(spectral_clustering(data, dim=1), col = cluster_halfmoon, pch=19)
 plot_spectral_clustering_twoclusters(data)
 ```
+Included in the package there is also the function 'k_means_spectral_clustering'
 
-
-## Figures
-
-The figure sizes have been customised so that you can easily put two images side-by-side. 
-
-```{r, fig.show='hold'}
-plot(1:10)
-plot(10:1)
+```{r}
+data <- rbind(
+  c(1,0),
+  c(1.1,0),
+  c(1.3,0),
+  c(1.4,0),
+  c(1,0.2),
+  c(1.1,0.2),
+  c(1.3,0.4),
+  c(1.4,-0.2),
+  c(2,0),
+  c(2.1,0),
+  c(2,0.4),
+  c(2.1,0.6),
+  c(2,0.3),
+  c(2.1,0.1),
+  c(2.3,0),
+  c(-3,2),
+  c(1.6, 3)
+)
 ```
-
-You can enable figure captions by `fig_caption: yes` in YAML:
-
-    output:
-      rmarkdown::html_vignette:
-        fig_caption: yes
-
-Then you can use the chunk option `fig.cap = "Your figure caption."` in **knitr**.
-
-## More Examples
-
-You can write math expressions, e.g. $Y = X\beta + \epsilon$, footnotes^[A footnote here.], and tables, e.g. using `knitr::kable()`.
-
-```{r, echo=FALSE, results='asis'}
-knitr::kable(head(mtcars, 10))
-```
-
-Also a quote using `>`:
-
-> "He who gives up [code] safety for [code] speed deserves neither."
-([via](https://twitter.com/hadleywickham/status/504368538874703872))
