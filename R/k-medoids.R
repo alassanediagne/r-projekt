@@ -64,7 +64,7 @@ k_medoids <- function(data, num_cluster, max_iter = 50L, tol = 1e-8) {
   return(list(
     converged = converged,
     n_iter = n_iter,
-    medoids = data[medoids, , drop = FALSE],
+    medoids = data[medoids,],
     labels = C
   ))
 }
