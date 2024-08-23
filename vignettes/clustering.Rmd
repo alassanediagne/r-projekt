@@ -106,7 +106,6 @@ In the following we present some examples of the implemented algorithm and furth
 
 Looking at the given `iris_Petal` data lets us realize quickly, that our algorithm should separate the points of the following clusters:
 
-
 Looking at the given data closely lets us realize quickly, that our algorithm should separate the points of the following clusters:
 
 ```{r, fig.width=5, fig.height=4, fig.align='center'}
