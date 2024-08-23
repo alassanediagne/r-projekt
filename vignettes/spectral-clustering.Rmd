@@ -65,8 +65,8 @@ plot(iris_sc, col = cluster_iris, pch = 19)
 In the above example the resultig projections are still two-dimensional. In the following graph, you can see, what happens if we let our algorithm compute a one-dimensional embedding of the data.
 
 ```{r}
-iris_sc1 <- spectral_clustering(irisPetals, dim = 1)
-plot(iris_sc1, col = cluster_iris, pch = 19)
+iris_sc <- spectral_clustering(irisPetals, dim = 1)
+plot(spectral_clustering(irisPetals, dim = 1), col = cluster_iris, pch = 19)
 ```
 We can see, that the algorithm separated the two clusters successfully. Until now the colors in the plots have been added with knowing in which cluster each points lies to demonstrate the separating.
 Now we want to see, how we can get the cluster assignment by computation after applying the spectral clustering.
@@ -77,6 +77,29 @@ The function plot_spectral_clustering_twoclusters is a simple function to get tw
 plot_spectral_clustering_twoclusters(irisPetals)
 ```
 
+Following there is another example with two half moons
+
+```{r}
+set.seed(123)
+n <- 150
+theta <- runif(n, 0, pi)
+x1 <- cbind(cos(theta) + rnorm(n, sd = 0.1), sin(theta) + rnorm(n, sd = 0.1))
+x2 <- cbind(1 - cos(theta) + rnorm(n, sd = 0.1), 1 - sin(theta) - 0.5 + rnorm(n, sd = 0.1))
+data <- rbind(x1, x2)
+
+cluster_halfmoon <- 1:300
+cluster_halfmoon[1:150] <- 1
+cluster_halfmoon[151:300] <- 2
+cluster_halfmoon[224] <-1
+plot(data, col = cluster_halfmoon, pch = 19)
+```
+
+And the following results. On the left we can see the onedimensional projection and on the right the assignment of clusters. As we can see the three points between both halfmoons are getting assigned "wrongly". An understandable mistake, considering them being close to both clusters.
+
+```{r, fig.show='hold'}
+plot(spectral_clustering(data, dim=1), col = cluster_halfmoon, pch=19)
+plot_spectral_clustering_twoclusters(data)
+```
 
 
 ## Figures
