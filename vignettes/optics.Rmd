@@ -54,7 +54,7 @@ irisPetals <- iris |> dplyr::select(c(Petal.Length,Petal.Width)) |> data.matrix(
 The optics algorithm can be run to obtain the exact clustering as DBSCAN. In this case we use the same `eps`,
 the same `minPts`. As the following example using the `iris` data set shows.
 
-```{r, fig.width=6, fig.height=4, echo=T,message=F}
+```{r, fig.width=6, fig.height=4, echo=T,message=F, eval = FALSE}
 eps <- 0.5
 minPts <- 3
 
@@ -63,10 +63,13 @@ optics_result <- optics(irisPetals, 0.5, 3)
 plot_optics_2d(irisPetals, optics_result)
 
 ```
+<div style="text-align: center;">
+  <img src="figures/optics_iris.png" style="width:60%;" alt="irisPetals clustered with OPTICS">
+</div>
 
 When using `optics` in a more typical fashion, a rather large `eps` value (e.g. 10) is used to obtain smoother reachability distances. For this we regard some more data
 
-```{r, fig.width=6, fig.height=5, echo=T, message=F}
+```{r, fig.width=6, fig.height=5, echo=T, message=F, eval= F}
 set.seed(2)
 n <- 400
 x <- cbind(x = runif(4, 0, 1) + rnorm(n, sd = 0.1),y = runif(4, 0, 1) + rnorm(n, sd = 0.1) )
@@ -75,7 +78,9 @@ res <- optics(x, 10, 6)
 
 plot_reachability(res)
 ```
-
+<div style="text-align: center;">
+  <img src="figures/reach_plot1.png" style="width:60%;" alt="Reachability with eps = 10,, minPts = 6">
+</div>
 
 There are different approaches to extracting the density clusters from the reachability distances obtained.
 In this package there is only a relatively 'simple' function `extract_dbscan` implemented, which identifies clusters by 'horizontally' cutting the reachability plot with an `eps_prime` value in $[0,\text{eps}]$.
@@ -84,9 +89,12 @@ This function works, but for a few border points. It is also callable when using
 
 For the example above we obtain a relatively good clustering, if we use a value of `eps_prime` = 0.05 .
 
-```{r, fig.width=6, fig.height=5, echo=T,message=T}
+```{r, fig.width=6, fig.height=5, echo=T,message=T, eval=FALSE}
 plot_reachability(optics_result = res, extract_dbscan = TRUE, eps_prime = 0.05)
 ```
+<div style="text-align: center;">
+  <img src="figures/reach_plot2.png" style="width:60%;" alt="Reachability with eps_prime = 0.05">
+</div>
 
 For further visualization, one can plot these clusters for data with points in 2 dimensions with the function `plot_optics_2d`.
 
@@ -94,20 +102,28 @@ The function `extract_dbscan` is also executed when calling this function. So on
 optics algorithm.
 
 
-```{r, fig.width=6, fig.height=4, echo=T,message=T}
+```{r, fig.width=6, fig.height=4, echo=T,message=T, eval =FALSE}
 plot_optics_2d(x, optics_result = res, eps_prime = 0.05)
 ```
+<div style="text-align: center;">
+  <img src="figures/optics_1.png" style="width:60%;" alt="Cluster with eps_prime = 0.05">
+</div>
 
 That different `eps_prime` will extract different clusterings can be seen, when for example chosing `eps_prime` = 0.07 .
 
-```{r, fig.width=6, fig.height=4, echo=T,message=T}
+```{r, fig.width=6, fig.height=4, echo=T,message=T, eval =FALSE}
 plot_optics_2d(x, optics_result = res, eps_prime = 0.07)
 ```
+<div style="text-align: center;">
+  <img src="figures/optics_2.png" style="width:60%;" alt="Cluster with eps_prime = 0.07">
+</div>
 
-```{r, fig.width=6, fig.height=5, echo=T,message=T}
+```{r, fig.width=6, fig.height=5, echo=T,message=T, eval=FALSE}
 plot_reachability(optics_result = res, extract_dbscan = TRUE, eps_prime = 0.07)
 ```
+<div style="text-align: center;">
+  <img src="figures/reach_plot3.png" style="width:60%;" alt="Reachability with eps_prime = 0.07">
+</div>
 
 Extracting clusters with different `eps_prime` values allows us to identify clusters of different density, after running `optics` just once.
-
 
