@@ -1,5 +1,5 @@
 compute_distances <- function(data) {
-  dist(data, method = "euclidean") %>% as.matrix()
+  stats::dist(data, method = "euclidean") %>% as.matrix()
 }
 
 update_C <- function(distance_matrix, medoids) {
