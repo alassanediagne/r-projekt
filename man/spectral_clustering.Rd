@@ -2,22 +2,20 @@
 % Please edit documentation in R/spectral-clustering.R
 \name{spectral_clustering}
 \alias{spectral_clustering}
-\title{Algorithmus: spectral_clustering}
+\title{spectral_clustering}
 \usage{
-spectral_clustering(data, num_cluster, dim = 2, h = 20)
+spectral_clustering(data, dim = 2, h = 20)
 }
 \arguments{
-\item{data}{Matrix mit Daten die geclustered werden sollen. Jede Zeile enthält einen Messwert in R^d}
+\item{data}{matrix. Every row contains a point}
 
-\item{num_cluster}{int. Anzahl der Cluster}
+\item{dim}{(optional) int. desired dimension of computed projections. Default: 2}
 
-\item{dim}{(optional) int. Dimension der erstellten k-dimensionalen Projektionen durch spektrales Clustern. Default: 2}
-
-\item{h}{(optional) int. Abstiegsparameter des Gauss-Kerns}
+\item{h}{(optional) int. descent parameter of Gauss kernel}
 }
 \value{
-k-dimensionale Projektionen (selbes Format wie data)
+matrix containing k-dimensional projections (every row contains a point).
 }
 \description{
-berechnet k-dimensionale Projektionen zu gegebenen Daten
+computes k_dimensional projections of given data by spectral-clustering
 }
