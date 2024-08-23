@@ -48,12 +48,12 @@ optics <- function(data, eps, minPts) {
   #We define a function to calculate the core distance of a given point.
 
   core_distance <- function(point) {
-    distances <- sqrt(colSums((data - data[,point])^2))
-    sorted_distances <- sort(distances)
-    if (sorted_distances[minPts] <= eps) {
-      return(sorted_distances[minPts]) # This is the 'smallest distance' in question, if the given point is in fact a core point
+    distances <- sqrt(colSums((data - data[,point])^2)) #Computes the euclidean distances to all data points
+    sorted_distances <- sort(distances) #Pretty self-explanantory
+    if (sorted_distances[minPts] <= eps) { #Checks if the point is a core point with its minPts-th neighbor
+      return(sorted_distances[minPts]) #Returns the actual core-distance
     } else {
-      return(Inf) # This is the case if the point is either a 'border point' or 'NOISE'
+      return(Inf) #This is the case if the point is either a 'border point' or 'NOISE'
     }
   }
 
@@ -80,7 +80,7 @@ optics <- function(data, eps, minPts) {
 
   for (i in 1:n) {
     if (!processed[i]) {
-      neighbors <- which(sqrt(colSums((data - data[,i])^2)) <= eps)
+      neighbors <- which(sqrt(colSums((data - data[,i])^2)) <= eps) #neighborhood of point i using euclidean distance
       processed[i] <- TRUE
       ordered_list <- c(ordered_list, i)
       if (length(neighbors) >= minPts) {
@@ -158,17 +158,6 @@ extract_dbscan <- function(optics_result, eps_prime = optics_result$eps) {
               labels = clusters[order(optics_result$ordered_list)] ))
 }
 
-
-
-#extract_cluster <-function(data, optics_result = optics_r, res) {
-#  num_clusters <- length(unique(res))-1
-#  cluster <- list()
-#  ordered_data <- data[optics_result$ordered_list,]
-#  for (i in 1:num_clusters) {
-#    cluster <- c(cluster, list(ordered_data[res == i, ]))
-#  }
-#  return(cluster)
-#}
 
 #'
 #'plot_reachability
