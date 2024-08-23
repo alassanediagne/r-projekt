@@ -263,7 +263,7 @@ plot_optics_2d <- function(data, optics_result, eps_prime = optics_result$eps) {
   names(legend_labels) <- c(0, unique_labels)
 
   ggplot2::ggplot() +
-    ggplot2::geom_point(data = data, ggplot2::aes(x = "x", y = "y", color = factor("label")), size = 1) +
+    ggplot2::geom_point(data = data, ggplot2::aes(x = x, y = y, color = factor(label)), size = 1) +
     ggplot2::scale_color_manual(values = colors, labels = legend_labels) +
     ggplot2::theme_bw() +
     ggplot2::theme(legend.position = "right") +

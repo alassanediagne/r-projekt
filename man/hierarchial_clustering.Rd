@@ -3,11 +3,13 @@
 \name{hierarchial_clustering}
 \alias{hierarchial_clustering}
 \title{This is an implementation of a Hierarchical Clustering Algorithm. This
-implementation is agglomerative / bottom-up}
+implementation is agglomerative / bottom-up and single linkage and returns a
+dendogram}
 \usage{
-hierarchial_clustering(data, metric = "euclidian", type = "complete")
+hierarchial_clustering(data)
 }
 \description{
 This is an implementation of a Hierarchical Clustering Algorithm. This
-implementation is agglomerative / bottom-up
+implementation is agglomerative / bottom-up and single linkage and returns a
+dendogram
 }
