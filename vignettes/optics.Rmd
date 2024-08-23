@@ -18,25 +18,35 @@ knitr::opts_chunk$set(
 library(Clustering)
 ```
 
-## Overview on OPTICS Algorithm
+## Overview OPTICS algorithm
 
 The 'clustering' package includes an implementation of the Ordering points to identify the clustering structure (OPTICS) algorithm.
 
 It is an algorithm for finding density based clusters in spatial data. 
 
+It's basic idea is similiar to the DBSCAN algorithm, both algorithm 'group' objects, by identifying core points with sufficient neighbors and expand clusters from these core points.
+
+However, while DBSCAN uses a fixed radius to form clusters, OPTICS builds an ordering of the data points and a reachability to handle varying densities of clusters more flexibly.
+
 A broader overview to the functionality of this algorithm can be found [here](https://de.wikipedia.org/wiki/OPTICS).
+
+### Implementation
+
+In this package the OPTICS algorithm can be called as a function 'optics'.
+
+As input it takes 'data' a matrix in $\mathbb{R}^n \times \mathbb{R}^d$, where each row represents a data point.
+A second input is a parameter 'eps' in $\mathbb{R}^+$, which is used to find the neighborhood of a point using the euclidean distance.
+A third input is 'minPts', the minimum number of data points q in the neighborhood of a data point p (including p itslef), such that p is a core point.
 
 
 In the following we present some examples of the implemented algorithm and further
 related functions.
 
 ```{r}
-
+irisPetals <- iris |> select(c(Petal.Length,Petal.Width)) |> data.matrix()
 ```
 
-
-
-
+To run the optics algorithm and find a suitable 
 
 
 
