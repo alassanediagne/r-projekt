@@ -190,7 +190,7 @@ cluster_halfmoon[224] <-1
 plot(data, col = cluster_halfmoon, pch = 19)
 ```
 
-And the following results. On the left we can see the onedimensional projection and on the right the assignment of clusters. As we can see the three points between both halfmoons are getting assigned "wrongly". An understandable mistake, considering them being close to both clusters.
+And the following results. On the left we can see the onedimensional projection, in the middle the assignment of clusters and on the right the final plot of the clusters. As we can see the three points between both halfmoons are getting assigned "wrongly". An understandable mistake, considering them being close to both clusters.
 
 ```{r, fig.width=5, fig.height=4, fig.align='center'}
 plot(spectral_clustering(data, dim=1), col = cluster_halfmoon, pch=19)
