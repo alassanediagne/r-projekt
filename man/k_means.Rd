@@ -2,7 +2,7 @@
 % Please edit documentation in R/k-means.R
 \name{k_means}
 \alias{k_means}
-\title{k-means algorithm}
+\title{k_means}
 \usage{
 k_means(
   data,
@@ -25,20 +25,26 @@ k_means(
 
 \item{save_history}{(optional) logical. returns iteration history}
 
-\item{max_iter}{(optinal) int. sets maximum number of iterations. Default: 50}
+\item{max_iter}{(optional) int. sets maximum number of iterations. Default: 50}
 
-\item{tol}{(optinal) float. tolerance to conclude convergence Default: 1e-8}
+\item{tol}{(optional) float. tolerance to conclude convergence Default: 1e-8}
 }
 \value{
-list containing logical indicating whether the algorithm converged, number of iterations, cluster means and labels
+List containing \itemize{
+\item \code{converged} (logical) indicating whether the algorithm converged
+\item  \code{n_iter} (integer) number of iterations,
+\item  \code{means} (matrix) cluster means
+\item  \code{labels} labels of each data point }
 }
 \description{
-Implementation of the k-means algorithm with automatic initial values (Richter, algorithm 9.10)
+This is an implementation of the k-means algorithm with automatic initial values.
 }
 \examples{
 data <- gen_clusters(50, matrix(c(0,1,2,1,0,1,2,0),ncol=2), 0.3)
 k_means(data,4)
 data <- gen_clusters(100, matrix(c(0,0,1,1,1,0,0,1), ncol=2),0.3)
 plot_k_means_2d(data,4)
-
+}
+\references{
+\href{https://link.springer.com/book/10.1007/978-3-662-59354-7}{Richter, 2019}
 }

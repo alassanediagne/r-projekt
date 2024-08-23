@@ -77,23 +77,27 @@ update_means <- function(x,C,num_cluster){
 }
 
 #'@name k_means
-#'@title k-means algorithm
-#'@description Implementation of the k-means algorithm with automatic initial values (Richter, algorithm 9.10)
+#'@title k_means
+#'@description This is an implementation of the k-means algorithm with automatic initial values.
 #'@param data matrix. Every row contains a point
 #'@param num_cluster int. number of clusters desired
 #'@param m0 (optional) matrix with initial values. Will be chosen automatically if not specified
 #'@param return_labels (optional) logical. returns cluster label of each instance. Default: TRUE
 #'@param save_history (optional) logical. returns iteration history
-#'@param max_iter (optinal) int. sets maximum number of iterations. Default: 50
-#'@param tol (optinal) float. tolerance to conclude convergence Default: 1e-8
-#'@return list containing logical indicating whether the algorithm converged, number of iterations, cluster means and labels
+#'@param max_iter (optional) int. sets maximum number of iterations. Default: 50
+#'@param tol (optional) float. tolerance to conclude convergence Default: 1e-8
+#'@return List containing \itemize{
+#'\item \code{converged} (logical) indicating whether the algorithm converged
+#'\item  \code{n_iter} (integer) number of iterations,
+#'\item  \code{means} (matrix) cluster means
+#'\item  \code{labels} labels of each data point }
 #'@examples
 #' data <- gen_clusters(50, matrix(c(0,1,2,1,0,1,2,0),ncol=2), 0.3)
 #' k_means(data,4)
 #'@examples
 #' data <- gen_clusters(100, matrix(c(0,0,1,1,1,0,0,1), ncol=2),0.3)
 #' plot_k_means_2d(data,4)
-#'
+#'@references \href{https://link.springer.com/book/10.1007/978-3-662-59354-7}{Richter, 2019}
 #'@export
 
 k_means <- function(data, num_cluster, m0 = NULL, return_labels=TRUE,
