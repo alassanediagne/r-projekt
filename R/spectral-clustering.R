@@ -60,17 +60,17 @@ spectral_clustering <- function(data, dim = 2, h = 20){
     return(k_spectral_projections)
 }
 
-#'plot_twoclusters_mean
+#'plot_spectral_clustering_twoclusters
 #'
 #'computes onedimensional projections with spectral clustering and assigns two clusters by comparing to mean.
 #'
 #'@param data Matrix mit Daten die geclustered werden sollen. Jede Zeile enthält einen Messwert in R^d
 #'@param h (optional) int. Abstiegsparameter des Gauss-Kerns
 #'
-#'@return plot of cluster-assignment
+#'@return cluster-assignment and plot
 #'@export
 
-plot_twoclusters_mean <- function(data, h = 20){
+plot_spectral_clustering_twoclusters <- function(data, h = 20){
 
   k_spectral_projections <- spectral_clustering(data, dim = 1, h = h)
 
@@ -83,6 +83,7 @@ plot_twoclusters_mean <- function(data, h = 20){
   }
 
   plot(data, col = cluster, pch = 19)
+  return(cluster)
 }
 
 
@@ -108,7 +109,7 @@ k_means_spectral_clustering <- function(data, num_cluster, dim = 2, h = 20){
 }
 
 
-#'plot_spectral_clustering
+#'plot_k_means_spectral_clustering
 #'
 #'veranschaulicht Ergebnis des k-means-Algortithmus angewendet auf die Daten, die durch spektrales Clustering erhalten wurden
 #'
@@ -120,7 +121,7 @@ k_means_spectral_clustering <- function(data, num_cluster, dim = 2, h = 20){
 #'@return Plot der Cluster-Zuteilung
 #'@export
 
-plot_spectral_clustering <- function(data, num_cluster, dim = 2, h = 20){
+plot_k_means_spectral_clustering <- function(data, num_cluster, dim = 2, h = 20){
 
     clustering <- k_means_spectral_clustering(data, num_cluster, dim = dim, h = h)$labels
     plot(data, col=clustering, pch=19)}
