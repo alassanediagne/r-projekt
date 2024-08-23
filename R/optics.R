@@ -109,7 +109,7 @@ optics <- function(data, eps, minPts) {
 #'Extract clusters from the result of OPTICS algorithm. Clusters are found by 'horizontally cutting' the
 #'reachability plot with an eps_prime value.
 #'
-#'@param optics_result Uses the result of the OPTIC algorithm (see 'optics')
+#'@param optics_result result of the OPTICS algorithm (see '\code{?optics}')
 #'@param eps_prime (optional) value to extract clusters, default is \code{eps} of optics_result.
 #'
 #'@return Returns a list of 2 elements \code{ordered_labels} and \code{labels}
@@ -164,7 +164,10 @@ extract_dbscan <- function(optics_result, eps_prime = optics_result$eps) {
 #'
 #'Plots the reachability-plot of the OPTICS algithm. A special kind of 'dendogram'
 #'
-#'@param optics_result Uses the result of the OPTIC algorithm (see 'optics')
+#'@param optics_result result of the OPTICS algorithm (see '\code{?optics}')
+#'@param extract_dbscan (optional) logical. runs 'extract_dbscan'. Default: FALSE
+#'@param eps_prime (optional) value to extract clusters when running 'extract_dbscan', default is \code{eps} of optics_result.
+#'
 #'
 #'@return Barplot with height given by \code{reachability} of \code{optics_result} and each
 #'bar representing a datapoint, they are orderd by \code{ordered_list} of \code{optics_result}
@@ -230,7 +233,7 @@ plot_reachability <- function(optics_result, extract_dbscan = FALSE, eps_prime =
 #'Plots 2-dimensional data and colors the clusters obtained by the OPTICS algorithm accordingly.
 #'
 #'@param data The data to be clustered. A matrix, each row being a point in R^d.
-#'@param optics_result Uses the result of the OPTIC algorithm (see 'optics'), make sure it was run on \code{data}
+#'@param optics_result result of the OPTICS algorithm (see '\code{?optics}'), make sure it was run on \code{data}
 #'@param eps_prime (optional) value to extract clusters, default is \code{eps} of optics_result.
 #'
 #'@return Plot using \code{ggplot2}
