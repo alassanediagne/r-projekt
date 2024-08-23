@@ -3,14 +3,13 @@
 #'berechnet k-dimensionale Projektionen zu gegebenen Daten
 #'
 #'@param data Matrix mit Daten die geclustered werden sollen. Jede Zeile enthält einen Messwert in R^d
-#'@param num_cluster int. Anzahl der Cluster
 #'@param h (optional) int. Abstiegsparameter des Gauss-Kerns
 #'@param dim (optional) int. Dimension der erstellten k-dimensionalen Projektionen durch spektrales Clustern. Default: 2
 #'
 #'@return k-dimensionale Projektionen (selbes Format wie data)
 #'@export
 
-spectral_clustering <- function(data, num_cluster, dim = 2, h = 20){
+spectral_clustering <- function(data, dim = 2, h = 20){
 
     gausskernel <- function(x,y){               #Gausskern definieren
       exp(-h*(norm(x-y, type="2"))^2)
@@ -73,7 +72,7 @@ spectral_clustering <- function(data, num_cluster, dim = 2, h = 20){
 
 plot_twoclusters_mean <- function(data, h = 20){
 
-  k_spectral_projections <- spectral_clustering(data, 2, dim = 1, h = h)
+  k_spectral_projections <- spectral_clustering(data, dim = 1, h = h)
 
   cluster <- 1:nrow(data)
   for (i in 1:nrow(data)){
@@ -103,7 +102,7 @@ plot_twoclusters_mean <- function(data, h = 20){
 
 k_means_spectral_clustering <- function(data, num_cluster, dim = 2, h = 20){
 
-    k_spectral_projections <- spectral_clustering(data, num_cluster, dim = dim, h = h)
+    k_spectral_projections <- spectral_clustering(data, dim = dim, h = h)
     k_means_spectral_clustering_result <- k_means(k_spectral_projections, num_cluster)
     return(k_means_spectral_clustering_result)
 }
