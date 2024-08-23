@@ -18,6 +18,7 @@ Imports:
     gdata,
     ggplot2,
     scales,
-    tibble
+    tibble,
+    datasets
 RoxygenNote: 7.3.2
 VignetteBuilder: knitr
