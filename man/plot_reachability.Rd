@@ -4,7 +4,7 @@
 \alias{plot_reachability}
 \title{plot_reachability}
 \usage{
-plot_reachability(optics_result)
+plot_reachability(optics_result, extract_dbscan = FALSE, eps_prime = NULL)
 }
 \arguments{
 \item{optics_result}{Uses the result of the OPTIC algorithm (see 'optics')}

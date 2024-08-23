@@ -4,7 +4,7 @@
 \alias{plot_spectral_clustering}
 \title{plot_spectral_clustering}
 \usage{
-plot_spectral_clustering(data, num_cluster, dim = 2, h = 50)
+plot_spectral_clustering(data, num_cluster, dim = 2, h = 20)
 }
 \arguments{
 \item{data}{Matrix mit Daten die geclustered werden sollen. Jede Zeile enthält einen Messwert in R^d}

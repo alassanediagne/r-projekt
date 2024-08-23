@@ -30,7 +30,7 @@ k_means(
 \item{tol}{(optinal) float. tolerance to conclude convergence Default: 1e-8}
 }
 \value{
-list containing logical indicating wether the algorithm converged, number of iterations, cluster means and labels
+list containing logical indicating whether the algorithm converged, number of iterations, cluster means and labels
 }
 \description{
 Implementation of the k-means algorithm with automatic initial values (Richter, algorithm 9.10)

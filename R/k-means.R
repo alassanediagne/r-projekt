@@ -86,7 +86,7 @@ update_means <- function(x,C,num_cluster){
 #'@param save_history (optional) logical. returns iteration history
 #'@param max_iter (optinal) int. sets maximum number of iterations. Default: 50
 #'@param tol (optinal) float. tolerance to conclude convergence Default: 1e-8
-#'@return list containing logical indicating wether the algorithm converged, number of iterations, cluster means and labels
+#'@return list containing logical indicating whether the algorithm converged, number of iterations, cluster means and labels
 #'@examples
 #' data <- gen_clusters(50, matrix(c(0,1,2,1,0,1,2,0),ncol=2), 0.3)
 #' k_means(data,4)
