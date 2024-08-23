@@ -41,7 +41,7 @@ As input it takes `data` a matrix in $\mathbb{R}^n \times \mathbb{R}^d$, where e
 A second input is a parameter `eps` in $\mathbb{R}^+$, which is used to find the neighborhood of a point using the euclidean distance.
 A third input is `minPts`, the minimum number of data points q in the neighborhood of a data point p (including p itslef), such that p is a core point.
 
-The return of this function is a list of 3 elements, an `ordered_list` that returns an ordering of the indices of the `data` points as obtained by the algorithm. A veactor `reachability` which stores the reachability distances of the data points in the original order of the data and the eps value that was used to run `optics`.
+The return of this function is a list of 3 elements, an `ordered_list` that returns an ordering of the indices of the `data` points as obtained by the algorithm. A vector `reachability` which stores the reachability distances of the data points in the original order of the data and the eps value that was used to run `optics`.
 
 
 In the following we present some examples of the implemented algorithm and further
