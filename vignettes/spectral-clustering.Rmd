@@ -16,11 +16,90 @@ knitr::opts_chunk$set(
 
 ```{r setup}
 library(Clustering)
+library(dplyr)
 ```
 
 ## Overview spectral-clustering algorithm
 
 `spectral_clustering`is a graph-based algorithm, that rearranges given data by giving projections for every point. Often the data gets embedded in a lower dimension, where clusters in the data are more widely separated and can be found easily by applying another algorithm like `k_means`.
+
+The projections are based on eigenvectors of a Laplacian matrix. We receive the Laplacian matrix as a result of an affinity graph that models the neighborhood relationships between data points. To demonstrate the distance relations between the points a kernel function is being used, the Gauß kernel. The goal is thereby not to represent and simplify the location of every point, but the distance between points.
+
+
+While doing so, the points are getting separated, depending on which cluster they are in, which makes it easier for other algorithms to now assign a cluster to each point.
+
+### Implementation
+
+In this package the spectral clustering algorithm can be called as a function 'spectral_clustering'.
+
+As input it takes `data` a matrix in $\mathbb{R}^n \times \mathbb{R}^d$, where each row represents a data point.
+A second input is a parameter `dim` in $\mathbb{N}^+$, which is the dimension in which the points shall be represented.
+A third input is a parameter `h` in $\mathbb{R}^+$, which is the descent parameter of the gausskernel, that is used to build the affinity matrix.
+
+The result of this function is a matrix, that consists the spectral projections computed by the spectral clustering algorithm. They are in the same form as the initial data, meaning each row represents one point. This matrix is in $\mathbb{R}^n \times \mathbb{R}^{dim}$, which shows the embedding in the chosen dimension.
+
+In the following we present some examples of the implemented algorithm and further
+related functions.
+
+```{r}
+irisPetals <- iris |> select(c(Petal.Length,Petal.Width)) |> data.matrix()
+```
+
+Looking at the given data closely lets us realize quickly, that our algorithm 
+should separate the points of the following clusters:
+
+```{r}
+cluster_iris <- 1:150
+cluster_iris[1:50] <- 1
+cluster_iris[51:150] <- 2
+
+plot(irisPetals, col = cluster_iris, pch = 19)
+```
+
+We now apply the spectral clustering algorithm and we can see, that the two clusters have been separated successfully. The colors show us the initial position of the respective point. (Note: Because of the projection very close to each other the black dot on the left side represents all points of the black cluster)
+
+```{r}
+iris_sc <- spectral_clustering(irisPetals)
+plot(iris_sc, col = cluster_iris, pch = 19)
+```
+In the above example the resultig projections are still two-dimensional. In the following graph, you can see, what happens if we let our algorithm compute a one-dimensional embedding of the data.
+
+```{r}
+iris_sc <- spectral_clustering(irisPetals, dim = 1)
+plot(spectral_clustering(irisPetals, dim = 1), col = cluster_iris, pch = 19)
+```
+We can see, that the algorithm separated the two clusters successfully. Until now the colors in the plots have been added with knowing in which cluster each points lies to demonstrate the separating.
+Now we want to see, how we can get the cluster assignment by computation after applying the spectral clustering.
+
+The function plot_spectral_clustering_twoclusters is a simple function to get two clusters out of given data. The function runs the spectral clustering algorithm with $\mathbb dim = 1$ and assigns a cluster to each point by comparing it to the mean of all received onedimensional projections. Applied to the above iris_Petal data the algorithm successfully finds the two clusters. It also returns a vector which shows the cluster assignment for each point.
+
+```{r}
+plot_spectral_clustering_twoclusters(irisPetals)
+```
+
+Following there is another example with two half moons
+
+```{r}
+set.seed(123)
+n <- 150
+theta <- runif(n, 0, pi)
+x1 <- cbind(cos(theta) + rnorm(n, sd = 0.1), sin(theta) + rnorm(n, sd = 0.1))
+x2 <- cbind(1 - cos(theta) + rnorm(n, sd = 0.1), 1 - sin(theta) - 0.5 + rnorm(n, sd = 0.1))
+data <- rbind(x1, x2)
+
+cluster_halfmoon <- 1:300
+cluster_halfmoon[1:150] <- 1
+cluster_halfmoon[151:300] <- 2
+cluster_halfmoon[224] <-1
+plot(data, col = cluster_halfmoon, pch = 19)
+```
+
+And the following results. On the left we can see the onedimensional projection and on the right the assignment of clusters. As we can see the three points between both halfmoons are getting assigned "wrongly". An understandable mistake, considering them being close to both clusters.
+
+```{r, fig.show='hold'}
+plot(spectral_clustering(data, dim=1), col = cluster_halfmoon, pch=19)
+plot_spectral_clustering_twoclusters(data)
+```
 
 
 ## Figures
