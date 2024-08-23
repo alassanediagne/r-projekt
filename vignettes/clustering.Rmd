@@ -106,13 +106,10 @@ In the following we present some examples of the implemented algorithm and furth
 
 Looking at the given `iris_Petal` data lets us realize quickly, that our algorithm should separate the points of the following clusters:
 
-<<<<<<< Updated upstream
+
 Looking at the given data closely lets us realize quickly, that our algorithm should separate the points of the following clusters:
 
-```{r}
-=======
 ```{r, fig.width=5, fig.height=4, fig.align='center'}
->>>>>>> Stashed changes
 cluster_iris <- 1:150
 cluster_iris[1:50] <- 1
 cluster_iris[51:150] <- 2
