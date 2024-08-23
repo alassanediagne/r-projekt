@@ -48,3 +48,6 @@ plot_k_means_2d(data,4)
 \references{
 \href{https://link.springer.com/book/10.1007/978-3-662-59354-7}{Richter, 2019}
 }
+\author{
+Alassane Diagne
+}

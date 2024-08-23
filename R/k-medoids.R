@@ -24,8 +24,9 @@ update_medoids <- function(data, num_cluster, labels, medoids) {
   return(new_medoids)
 }
 
-#' @title k-medoids clustering
+#' @title k_medoids
 #' @name k_medoids
+#' @author Aysegul Pekozsoy
 #' @param data data matrix. Every row contains a point
 #' @param num_cluster int. number of clusters desired
 #' @param max_iter (optinal) int. sets maximum number of iterations. Default: 100

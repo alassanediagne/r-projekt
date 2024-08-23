@@ -79,6 +79,7 @@ update_means <- function(x,C,num_cluster){
 #'@name k_means
 #'@title k_means
 #'@description This is an implementation of the k-means algorithm with automatic initial values.
+#'@author Alassane Diagne
 #'@param data matrix. Every row contains a point
 #'@param num_cluster int. number of clusters desired
 #'@param m0 (optional) matrix with initial values. Will be chosen automatically if not specified

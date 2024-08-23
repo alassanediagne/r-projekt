@@ -2,7 +2,7 @@
 % Please edit documentation in R/k-medoids.R
 \name{k_medoids}
 \alias{k_medoids}
-\title{k-medoids clustering}
+\title{k_medoids}
 \usage{
 k_medoids(data, num_cluster, max_iter = 100L)
 }
@@ -17,9 +17,12 @@ k_medoids(data, num_cluster, max_iter = 100L)
 list containing logical indicating whether the algorithm converged, number of iterations, cluster medoids
 }
 \description{
-k-medoids clustering
+k_medoids
 }
 \examples{
 data <- gen_clusters(50, matrix(c(0,1,2,1,0,1,2,0),ncol=2), 0.2)
 k_medoids(data,4)
+}
+\author{
+Aysegul Pekozsoy
 }
