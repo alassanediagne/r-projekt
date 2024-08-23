@@ -142,10 +142,15 @@ clusters.
 plot(spectral_clustering(data, dim=1), col = cluster_halfmoon, pch=19)
 plot_spectral_clustering_twoclusters(data)
 ```
-Included in the package there is also the function 'k_means_spectral_clustering'
+
+Included in the package are also the functions
+`k_means_spectral_clustering` and `plot_k_means_spectral_clustering`.
+They compute the spectral projections by calling the
+`spectral_clustering` function and then assign clusters by using the
+`k_means` function, that is also included in the `Clustering` package.
 
 ```{r}
-data <- rbind(
+testdata <- rbind(
   c(1,0),
   c(1.1,0),
   c(1.3,0),
@@ -164,4 +169,19 @@ data <- rbind(
   c(-3,2),
   c(1.6, 3)
 )
+plot(testdata)
+```
+
+Looking at the data above, we are expecting four clusters, which leads
+the `k_means_spectral_clustering` function to the output, that shows the
+means of the clusters and the assignment/label for each point.
+
+```{r}
+k_means_spectral_clustering(testdata,4)
+```
+
+`plot_k_means_spectral_clustering` visualizes the clusters as follows.
+
+```{r}
+plot_k_means_spectral_clustering(testdata, 4)
 ```
