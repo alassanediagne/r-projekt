@@ -11,6 +11,10 @@
 
 spectral_clustering <- function(data, dim = 2, h = 20){
 
+    stopifnot("data must not be empty" = is.null(dim(data))==F,
+              "h must be positive" = h>0,
+              "dim must be positive" = dim>0)
+
     gausskernel <- function(x,y){               #Gausskern definieren
       exp(-h*(norm(x-y, type="2"))^2)
     }
