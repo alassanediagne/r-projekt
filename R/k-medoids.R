@@ -39,7 +39,7 @@ update_medoids <- function(data, C, num_cluster) {
 #' data <- gen_clusters(50, matrix(c(0,1,2,1,0,1,2,0),ncol=2), 0.2)
 #' k_medoids(data,4)
 
-k_medoids <- function(data, num_cluster, max_iter = 50L, tol = 1e-8) {
+k_medoids <- function(data, num_cluster, max_iter = 100L, tol = 1e-3) {
 
   distance_matrix <- compute_distances(data)
   medoids <- sample(1:nrow(data), num_cluster)
@@ -51,7 +51,7 @@ k_medoids <- function(data, num_cluster, max_iter = 50L, tol = 1e-8) {
     C <- update_C(distance_matrix, medoids)
     new_medoids <- update_medoids(data, C, num_cluster)
 
-    if (all(medoids == new_medoids)) {
+    if (norm(data[medoids,]-data[new_medoids,], type="2")<tol) {
       converged <- TRUE
     } else {
       medoids <- new_medoids

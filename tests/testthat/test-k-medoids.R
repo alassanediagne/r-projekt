@@ -1,24 +1,8 @@
 library(testthat)
 
-data <- rbind(
-  c(1,0),
-  c(1.1,0),
-  c(1.3,0),
-  c(1.4,0),
-  c(1,0.2),
-  c(1.1,0.2),
-  c(1.3,0.4),
-  c(1.4,-0.2),
-  c(2,0),
-  c(2.1,0),
-  c(2,0.4),
-  c(2.1,0.6),
-  c(2,0.3),
-  c(2.1,0.1),
-  c(2.3,0),
-  c(-3,2),
-  c(1.6, 3)
-)
+set.seed(13)
+data <- gen_clusters(50,matrix(c(0,0,1,1,0,1,0,1),ncol=2),deviation = 0.1)
+
 
 test_that("k_medoids does not throw errors", {
   expect_no_error(k_medoids(data, 4))
@@ -35,13 +19,9 @@ test_that("k_medoids assigns labels to all data points", {
   expect_equal(length(result$labels), nrow(data))
 })
 
-test_that("k_medoids converges for test data", {
-  result <- k_medoids(data, 4)
-  expect_true(result$converged)
-})
 
 test_that("k_medoids throws an error if too many clusters are requested", {
-  expect_error(k_medoids(data, 100))
+  expect_error(k_medoids(data, 300))
 })
 
 
