@@ -25,6 +25,8 @@ update_medoids <- function(data, C, num_cluster) {
   return(medoids)
 }
 
+#hi
+
 k_medoids <- function(data, num_cluster, max_iter = 50L, tol = 1e-8) {
 
   distance_matrix <- compute_distances(data)
