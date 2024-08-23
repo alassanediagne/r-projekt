@@ -19,6 +19,10 @@ test_that("k_medoids assigns labels to all data points", {
   expect_equal(length(result$labels), nrow(data))
 })
 
+test_that("k_medoids converges for test data", {
+  result <- k_medoids(data, 4)
+  expect_true(result$converged)
+})
 
 test_that("k_medoids throws an error if too many clusters are requested", {
   expect_error(k_medoids(data, 300))

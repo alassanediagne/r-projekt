@@ -4,16 +4,14 @@
 \alias{k_medoids}
 \title{k-medoids clustering}
 \usage{
-k_medoids(data, num_cluster, max_iter = 50L, tol = 1e-08)
+k_medoids(data, num_cluster, max_iter = 100L)
 }
 \arguments{
 \item{data}{data matrix. Every row contains a point}
 
 \item{num_cluster}{int. number of clusters desired}
 
-\item{max_iter}{(optinal) int. sets maximum number of iterations. Default: 50}
-
-\item{tol}{(optinal) float. tolerance to conclude convergence Default: 1e-8}
+\item{max_iter}{(optinal) int. sets maximum number of iterations. Default: 100}
 }
 \value{
 list containing logical indicating whether the algorithm converged, number of iterations, cluster medoids
