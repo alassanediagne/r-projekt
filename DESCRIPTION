@@ -3,7 +3,7 @@ Type: Package
 Title: Clustering
 Version: 0.1.0
 Author: Aysegul Pekozsoy, Robin Klotzbucher, Felix Joeken, Timo Weber, Alassane Diagne
-Maintainer: The Authors
+Maintainer: Alassane Diagne <alassane.diagne@stud.uni-heidelberg.de>
 Description: More about what it does (maybe more than one line)
     Implementation of popular clustering algorithms
 License: AFL-3.0
