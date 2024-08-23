@@ -11,6 +11,10 @@
 #' The \code{ordered_list} being an indices vector, of the ordering obtained by the OPTICS algorithm and
 #' the \code{reachability} being a vector of the reachability distances for each point of \code{data} as obtained by the OPTICS algorithm.
 #'
+#' @section Details:
+#' To compute the neighorhood of a data point with the \{eps} value, this function uses
+#' the euclidean distance
+#'
 #' @examples data <- gen_clusters(50, matrix(c(0,1,2,1,0,1,2,0),ncol=2), 0.3)
 #' eps <- 0.5
 #' minPts <- 3
