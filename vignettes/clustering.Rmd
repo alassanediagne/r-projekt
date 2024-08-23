@@ -337,3 +337,49 @@ plot_reachability(optics_result = res, extract_dbscan = TRUE, eps_prime = 0.07)
 :::
 
 Extracting clusters with different `eps_prime` values allows us to identify clusters of different density, after running `optics` just once.
+
+## Overview of hierarchial_clustering
+
+`hierarchial clustering` is an algorithm which doesn't have the greatest running
+time complexity. But is yet another way to not commit to a given number K of
+clusters, by producing a dendogram. 
+
+We just implemented the single link strategy that uses the minimal distance of 
+each subtree as subtree distance, due to time constraints. It returns a 
+dendogram as a nested linked list. 
+
+You can use it as follows: 
+
+
+```{r}
+sample_data <- rbind(
+    c(1,0),
+    c(1.1,0),
+    c(1.3,0),
+    c(1.4,0),
+    c(1,0.2),
+    c(1.1,0.2),
+    c(1.3,0.4),
+    c(1.4,-0.2),
+    c(2,0),
+    c(2.1,0),
+    c(2,0.4),
+    c(2.1,0.6),
+    c(2,0.3),
+    c(2.1,0.1),
+    c(2.3,0),
+    c(-3,2),
+    c(1.6, 3)
+  )
+
+hierarchial_clustering(sample_data)
+```
+
+## DBSCAN
+
+In addition to the OPTICS algorithm we also implemented a DBSCAN algorithm that
+uses bfs to reduce storage requirements ans also gain some runtime improvements.
+
+```{r}
+dbscan(sample_data, minPts = 3, eps = 0.3)
+```

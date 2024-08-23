@@ -3,6 +3,9 @@
 #' implementation is agglomerative / bottom-up and single linkage and returns a
 #' dendogram
 #'
+#'
+#' @return returns a dendogram as a nested linked list
+#'
 #' @export
 #'
 hierarchial_clustering <- function(data){

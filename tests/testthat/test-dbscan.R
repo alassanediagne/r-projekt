@@ -1,9 +1,9 @@
 get_two_point_data <- function() {
-  cbind(c(1, 0), c(2, 0))
+  rbind(c(1, 0), c(2, 0))
 }
 
 get_more_complex_sample_data <- function() {
-  cbind(
+  rbind(
     c(1,0),
     c(1.1,0),
     c(1.3,0),

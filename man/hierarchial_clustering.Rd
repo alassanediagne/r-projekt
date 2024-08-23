@@ -8,6 +8,9 @@ dendogram}
 \usage{
 hierarchial_clustering(data)
 }
+\value{
+returns a dendogram as a nested linked list
+}
 \description{
 This is an implementation of a Hierarchical Clustering Algorithm. This
 implementation is agglomerative / bottom-up and single linkage and returns a
