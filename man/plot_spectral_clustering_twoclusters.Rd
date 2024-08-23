@@ -7,9 +7,9 @@
 plot_spectral_clustering_twoclusters(data, h = 20)
 }
 \arguments{
-\item{data}{Matrix mit Daten die geclustered werden sollen. Jede Zeile enthält einen Messwert in R^d}
+\item{data}{matrix. Every row contains a point}
 
-\item{h}{(optional) int. Abstiegsparameter des Gauss-Kerns}
+\item{h}{(optional) int. descent parameter of Gauss kernel}
 }
 \value{
 cluster-assignment and plot

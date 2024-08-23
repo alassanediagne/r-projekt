@@ -1,12 +1,12 @@
-#'Algorithmus: spectral_clustering
+#'spectral_clustering
 #'
-#'berechnet k-dimensionale Projektionen zu gegebenen Daten
+#'@description computes k_dimensional projections of given data by spectral-clustering
 #'
-#'@param data Matrix mit Daten die geclustered werden sollen. Jede Zeile enthält einen Messwert in R^d
-#'@param h (optional) int. Abstiegsparameter des Gauss-Kerns
-#'@param dim (optional) int. Dimension der erstellten k-dimensionalen Projektionen durch spektrales Clustern. Default: 2
+#'@param data matrix. Every row contains a point
+#'@param h (optional) int. descent parameter of Gauss kernel
+#'@param dim (optional) int. desired dimension of computed projections. Default: 2
 #'
-#'@return k-dimensionale Projektionen (selbes Format wie data)
+#'@return matrix containing k-dimensional projections (every row contains a point).
 #'@export
 
 spectral_clustering <- function(data, dim = 2, h = 20){
@@ -62,10 +62,10 @@ spectral_clustering <- function(data, dim = 2, h = 20){
 
 #'plot_spectral_clustering_twoclusters
 #'
-#'computes onedimensional projections with spectral clustering and assigns two clusters by comparing to mean.
+#'@description computes onedimensional projections with spectral clustering and assigns two clusters by comparing to mean.
 #'
-#'@param data Matrix mit Daten die geclustered werden sollen. Jede Zeile enthält einen Messwert in R^d
-#'@param h (optional) int. Abstiegsparameter des Gauss-Kerns
+#'@param data matrix. Every row contains a point
+#'@param h (optional) int. descent parameter of Gauss kernel
 #'
 #'@return cluster-assignment and plot
 #'@export
@@ -90,14 +90,14 @@ plot_spectral_clustering_twoclusters <- function(data, h = 20){
 
 #'k_means_spectral_clustering
 #'
-#'Wendet k-means-Algorithmus auf die k-dimesionalen Projektionen zu gegebenen Daten an
+#'@description applies k-means algorithm on spectral projections computed by spectral-clustering
 #'
-#'@param data Matrix mit Daten die geclustered werden sollen. Jede Zeile enthält einen Messwert in R^d
-#'@param num_cluster int. Anzahl der Cluster
-#'@param h (optional) int. Abstiegsparameter des Gauss-Kerns
-#'@param dim (optional) int. Dimension der erstellten k-dimensionalen Projektionen durch spektrales Clustern. Default: 2
+#'@param data matrix. Every row contains a point
+#'@param num_cluster int. number of clusters desired
+#'@param h (optional) int. descent parameter of Gauss kernel
+#'@param dim (optional) int. desired dimension of computed projections. Default: 2
 #'
-#'@return Liste mit Konvergenz logical, Anzahl an Iterationen, Clustermittelpunkten, sowie Labels
+#'@return list containing logical indicating whether the algorithm converged, number of iterations, cluster means and labels
 #'@export
 
 
@@ -111,14 +111,14 @@ k_means_spectral_clustering <- function(data, num_cluster, dim = 2, h = 20){
 
 #'plot_k_means_spectral_clustering
 #'
-#'veranschaulicht Ergebnis des k-means-Algortithmus angewendet auf die Daten, die durch spektrales Clustering erhalten wurden
+#'@description visualizes results received from applying k-means algorithm on spectral projections computed by spectral-clustering
 #'
-#'@param data Matrix mit Daten die geclustered werden sollen. Jede Zeile enthält einen Messwert in R^d
-#'@param num_cluster int. Anzahl der Cluster
-#'@param h (optional) int. Abstiegsparameter des Gauss-Kerns
-#'@param dim (optional) int. Dimension der erstellten k-dimensionalen Projektionen durch spektrales Clustern. Default: 2
+#'@param data matrix. Every row contains a point
+#'@param num_cluster int. number of clusters desired
+#'@param h (optional) int. descent parameter of Gauss kernel
+#'@param dim (optional) int. desired dimension of computed projections. Default: 2
 #'
-#'@return Plot der Cluster-Zuteilung
+#'@return plot of cluster assignment
 #'@export
 
 plot_k_means_spectral_clustering <- function(data, num_cluster, dim = 2, h = 20){

@@ -7,17 +7,17 @@
 plot_k_means_spectral_clustering(data, num_cluster, dim = 2, h = 20)
 }
 \arguments{
-\item{data}{Matrix mit Daten die geclustered werden sollen. Jede Zeile enthält einen Messwert in R^d}
+\item{data}{matrix. Every row contains a point}
 
-\item{num_cluster}{int. Anzahl der Cluster}
+\item{num_cluster}{int. number of clusters desired}
 
-\item{dim}{(optional) int. Dimension der erstellten k-dimensionalen Projektionen durch spektrales Clustern. Default: 2}
+\item{dim}{(optional) int. desired dimension of computed projections. Default: 2}
 
-\item{h}{(optional) int. Abstiegsparameter des Gauss-Kerns}
+\item{h}{(optional) int. descent parameter of Gauss kernel}
 }
 \value{
-Plot der Cluster-Zuteilung
+plot of cluster assignment
 }
 \description{
-veranschaulicht Ergebnis des k-means-Algortithmus angewendet auf die Daten, die durch spektrales Clustering erhalten wurden
+visualizes results received from applying k-means algorithm on spectral projections computed by spectral-clustering
 }
