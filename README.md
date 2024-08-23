@@ -15,18 +15,19 @@
   Caused by error:
   ! object 'irisPetals' not found
   ```
-- [ ] Make sure all methods use the same data in- and output format
-- [ ] Make sure all`@exported`¸ methods have helpful roxygen comments
-- [ ] Make sure all Tests pass successfully
-- [ ] Implement hierarchical clustering
-- [ ] Replace magrittr pipe calls where possible with native ones
-- [ ] Add some helpful `stops`
+- [x] Make sure all`@exported`¸ methods have helpful roxygen comments
+- [x] Make sure all Tests pass successfully
+- [x] Implement hierarchical clustering
+- [x] Replace magrittr pipe calls where possible with native ones
+- [x] Add some helpful `stops`
+- [ ] Make sure all methods use the same data in- and output format, we ended up not doing this because many algorithms work differently
+
 
 ### At the end
 
-- [ ] Remove all commented code; this is bad style
-- [ ] Build package release
-- [ ] Check `DESCRIPTION` file: Add authors etc.
+- [x] Remove all commented code; this is bad style
+- [x] Build package release
+- [x] Check `DESCRIPTION` file: Add authors etc.
 
 ### Before each release
 
